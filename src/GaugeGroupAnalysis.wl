@@ -123,6 +123,19 @@ ComputeAutomorphisms[gs_?GraphStateQ, opts:OptionsPattern[]] := Module[
   n = gs["NodeCount"];
   adjMat = gs["AdjacencyMatrix"];
   
+  (* 
+     PERFORMANCE NOTE: FindGraphIsomorphism[g, g, All] computes the full
+     automorphism group, which can be O(n!) in the worst case. 
+     The threshold n <= 20 is chosen conservatively to ensure reasonable
+     computation times (typically < 1 second). For graphs with high symmetry
+     (e.g., complete graphs), even n=20 may be fast, while irregular graphs
+     may be slow even for smaller n.
+     
+     For production use with larger graphs, consider:
+       1. Using specialized graph automorphism algorithms (nauty, bliss)
+       2. Sampling random automorphisms (current heuristic approach)
+       3. Computing only local symmetries around specific vertices
+  *)
   If[exactComp && n <= 20,
     (* Use Mathematica's built-in graph functions *)
     g = AdjacencyGraph[adjMat];

@@ -234,12 +234,23 @@ estimateGradient[params_, history_] := Module[
   dGamma = Last[gammaValues] - First[gammaValues];
   
   (* Gradient direction: increase if improving, decrease if not *)
-  (* This is a simplified heuristic - proper gradient would require
-     evaluating Γ at perturbed parameter values *)
+  (* 
+     IMPLEMENTATION NOTE: This is a simplified heuristic gradient estimate.
+     A proper gradient computation would require:
+       1. Evaluating Γ at (params + δ) for each parameter
+       2. Computing ∂Γ/∂param ≈ (Γ(param+δ) - Γ(param)) / δ
+     
+     Current approach uses optimization history as a proxy for gradient direction.
+     This is a DOCUMENTED PROXY suitable for initial exploration but should be
+     replaced with numerical differentiation for production optimization.
+     
+     The sign-based approach provides directional guidance without magnitude,
+     relying on the learning rate for step size control.
+  *)
   <|
     "betaH" -> Sign[dGamma] * 0.01,
     "mu" -> Sign[dGamma] * 0.001,
-    "alpha" -> -Sign[dGamma] * 0.0001  (* alpha is subtracted, so opposite sign *)
+    "alpha" -> -Sign[dGamma] * 0.0001  (* alpha is subtracted in Γ, so opposite sign *)
   |>
 ];
 

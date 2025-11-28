@@ -94,12 +94,33 @@ Plot3DGraph[gs_?GraphStateQ, opts:OptionsPattern[]] := Module[
   (* Create graph object *)
   g = AdjacencyGraph[adjMat];
   
-  (* Use 3D layout *)
+  (* Use 3D layout with fallback strategies *)
   coords = GraphEmbedding[g, {layout, 3}];
   
   If[coords === $Failed || Length[coords] != n,
-    (* Fall back to random coordinates *)
-    coords = RandomReal[{-1, 1}, {n, 3}]
+    (* Fallback 1: Try simpler spring embedding *)
+    coords = Quiet[GraphEmbedding[g, {"SpringEmbedding", 3}]];
+    If[coords === $Failed || Length[coords] != n,
+      (* Fallback 2: Use spectral embedding based on Laplacian eigenvectors *)
+      coords = Quiet[
+        Module[{laplacian, eigenvecs},
+          laplacian = DiagonalMatrix[Total[adjMat, {2}]] - adjMat;
+          eigenvecs = Take[Eigenvectors[N[laplacian]], Min[4, n]];
+          If[Length[eigenvecs] >= 3 && Length[eigenvecs[[1]]] == n,
+            Transpose[eigenvecs[[2 ;; 4]]],  (* Skip first (constant) eigenvector *)
+            RandomReal[{-1, 1}, {n, 3}]
+          ]
+        ]
+      ];
+      (* Final fallback: random coordinates with structured variance *)
+      If[!MatrixQ[coords] || Dimensions[coords] != {n, 3},
+        coords = Table[{
+          RandomReal[{-1, 1}],
+          RandomReal[{-1, 1}],
+          RandomReal[{-0.5, 0.5}]  (* Flatter in z to aid visualization *)
+        }, {n}]
+      ]
+    ]
   ];
   
   (* Build graphics *)

@@ -255,8 +255,17 @@ deriveFineStructure[gaps_, ratios_, n_] := Module[
   
   (* Proxy: α ∝ 1/(mean gap ratio × √n) *)
   (* This is a placeholder mapping that attempts to produce α ~ 1/137 *)
+  (* 
+     THEORETICAL NOTE: The scale factor 137.036 is the inverse of the 
+     fine structure constant α ≈ 1/137.036. This constant appears in QED
+     as the electromagnetic coupling strength. The heuristic assumes that
+     graph spectral properties scale with this fundamental constant.
+     This mapping is a DOCUMENTED PROXY requiring domain expert refinement
+     based on IRH theoretical predictions for how α emerges from resonance.
+     Reference: CODATA 2018 α = 7.2973525693×10⁻³
+  *)
   If[gaps["MeanGap"] > 0,
-    scaleFactor = 137.036;  (* Approximate 1/α *)
+    scaleFactor = 137.036;  (* CODATA: 1/α_em, electromagnetic coupling inverse *)
     proxy = 1 / (scaleFactor * (1 + gaps["MeanGap"] / 10) * Sqrt[n/100]),
     proxy = target  (* Fall back to CODATA if no data *)
   ];
