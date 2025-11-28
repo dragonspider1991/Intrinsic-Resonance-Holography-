@@ -1,0 +1,45 @@
+# IRH_Suite v3.0 .gitignore
+
+# Output directory (generated at runtime)
+io/output/*.irh
+io/output/*.csv
+io/output/*.pdf
+io/output/*.json
+io/output/*.png
+io/output/checkpoint_*.irh
+
+# Keep directory structure
+!io/output/.gitkeep
+!io/input/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Mathematica-specific
+*.mx
+*.m~
+*.wl~
+.Mathematica/
+FrontEnd/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Log files (keep example, ignore generated)
+*.log
+
+# Cache files
+*.cache
+__pycache__/

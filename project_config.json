@@ -1,0 +1,33 @@
+{
+  "version": "3.0",
+  "seed": 42,
+  "precision": 50,
+  "maxIterations": 1000,
+  "outputDir": "io/output",
+  "logLevel": "INFO",
+  "checkpointInterval": 100,
+  "graphSize": 100,
+  "temperature": {
+    "initial": 1.0,
+    "final": 0.01,
+    "schedule": "exponential"
+  },
+  "optimizer": {
+    "mutationProbability": 0.3,
+    "edgeRewiringWeight": 0.4,
+    "weightPerturbationWeight": 0.3,
+    "phaseRotationWeight": 0.3
+  },
+  "controller": {
+    "strategy": "adaptive",
+    "betaH": 1.0,
+    "mu": 0.1,
+    "alpha": 0.01,
+    "learningRate": 0.001
+  },
+  "analysis": {
+    "spectralDimensionFitRange": [0.1, 10.0],
+    "eigenvalueTolerance": 1e-10,
+    "automorphismMaxIterations": 1000
+  }
+}
