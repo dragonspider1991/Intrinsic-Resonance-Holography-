@@ -1,0 +1,5 @@
+\title{\textbf{\huge Intrinsic Resonance Holography}\\[0.5em]
+\Large \textit {The Resonant Substrate and the Emergence of Geometry, Matter, and Forces}
+
+\author{\textbf{Brandon D. McCrary}\\
+\textit{Independent Theoretical Physics Researcher}}

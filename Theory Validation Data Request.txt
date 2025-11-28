@@ -1,0 +1,305 @@
+﻿Empirical Frameworks for Intrinsic Resonance Holography: A Comprehensive Survey of Observational Datasets and Likelihood Architectures
+
+
+
+
+1. Introduction: The Empirical Validation of Holographic Resonance
+
+
+The theoretical landscape of gravitational physics stands at a precipice. While General Relativity (GR) has withstood a century of experimental scrutiny, the persistent theoretical dissatisfaction regarding the quantization of gravity and the information paradox at black hole horizons has given rise to a plethora of alternative frameworks. Among these, Intrinsic Resonance Holography (IRH) represents a class of theories positing that the continuum description of spacetime is an emergent phenomenon, subject to corrections that manifest as "resonances" at characteristic scales—specifically at the event horizon and over cosmological distances. Validating such a framework requires a departure from standard phenomenological testing. It demands a rigorous, multi-messenger approach that interrogates the data not just for deviations in bulk parameters, but for subtle spectral anomalies, forbidden modes, and phase shifts that would signal the underlying holographic grain of spacetime.
+This report serves as an exhaustive technical manual for the empirical testing of IRH. It supplies the specific observational datasets, file specifications, and statistical architectures required to subject the theory to the rigors of high-precision data. The analysis is structured around the three primary regimes where IRH signatures are expected to decouple from standard GR: the strong-field ringdown of binary mergers (probing horizon structure), the propagation of gravitational waves (probing the graviton dispersion relation), and the cosmological expansion history (probing holographic dark energy and structure formation). We integrate data from the LIGO-Virgo-KAGRA (LVK) collaboration, the Simulating eXtreme Spacetimes (SXS) numerical relativity catalog, the Pantheon+ supernova compilation, the Dark Energy Spectroscopic Instrument (DESI), the Planck cosmic microwave background mission, and the KATRIN neutrino experiment.
+Crucially, the verification of IRH cannot rely on summary statistics or mean parameter values found in abstract papers. It requires the ingestion of full posterior probability chains, covariance matrices, and residual data streams. This document identifies the specific archival locations and formats of these files, enabling the construction of a unified likelihood framework—likely within architectures such as Cobaya or MontePython—to constrain the free parameters of the theory.
+________________
+
+
+2. Gravitational Wave Interferometry: Probing the Horizon and Propagation
+
+
+The most immediate and potentially damning test for any holographic theory of gravity lies in the gravitational wave sector. If the event horizon is a holographic projection rather than a mere coordinate singularity, or if the graviton possesses an intrinsic mass or resonance, the signals detected by the LIGO, Virgo, and KAGRA interferometers will bear the imprint of these modifications. The primary dataset for this analysis is the Gravitational Wave Transient Catalog 3 (GWTC-3), specifically the data release for Tests of General Relativity (TGR).
+
+
+2.1. The GWTC-3 Testing General Relativity Data Release
+
+
+The LVK collaboration has released a comprehensive suite of data products derived from the confident events observed during the O3b run. This archive, accessible via the LIGO Document Control Center (DCC), provides the raw posterior samples for nine distinct tests of GR. For IRH, four specific subsets of this data are of paramount importance: the residuals test, the inspiral-merger-ringdown (IMR) consistency test, the modified dispersion relation (MDR) test, and the search for post-merger echoes.
+Table 1: Primary Data Archives for GWTC-3 Tests of General Relativity 1
+Archive Filename
+	Approximate Size
+	Content Description
+	Relevance to Intrinsic Resonance Holography
+	IGWN-GWTC3-TGR-v1-liv.tar.gz
+	7.4 GB
+	Propagation Tests (Lorentz Invariance)
+	Constrains graviton mass ($m_g$) and dispersion relations ($A, \alpha$). Critical for testing "Resonance" propagation.
+	IGWN-GWTC3-TGR-v1-imr.tar.gz
+	4.1 GB
+	IMR Consistency
+	Checks consistency between low-frequency (inspiral) and high-frequency (merger-ringdown) mass/spin estimates.
+	IGWN-GWTC3-TGR-v2-rin.tar.gz
+	2.2 GB
+	Ringdown (QNM) Tests
+	Posterior samples for black hole spectroscopy, constraining deviations in quasinormal mode frequencies and damping times.
+	IGWN-GWTC3-TGR-v1-ech.tar.gz
+	191.4 kB
+	Echo Searches
+	Bayes factors and posteriors for post-merger repeating signals, probing horizon reflectivity.
+	IGWN-GWTC3-TGR-v1-res.tar.gz
+	295.4 kB
+	Residuals Analysis
+	Analysis of residual power after subtracting the best-fit GR waveform, searching for unmodeled scalar/vector modes.
+	
+
+2.1.1. Testing the Graviton Dispersion Relation
+
+
+Intrinsic Resonance Holography typically implies that the propagation of gravitational information is not strictly light-like, potentially due to interactions with a background holographic screen or a massive graviton sector. This results in a modified dispersion relation of the form $E^2 = p^2 c^2 + A p^\alpha c^\alpha$. The IGWN-GWTC3-TGR-v1-liv.tar.gz archive 1 contains the data necessary to constrain these parameters.
+The archive provides posterior samples for the phenomenology of Lorentz Invariance Violation (LIV) and the mass of the graviton. The current bound on the graviton mass is $m_g \leq 1.27 \times 10^{-23} \text{ eV}/c^2$ at 90% credibility.3 However, IRH may predict a specific, frequency-dependent mass term or a "resonance" that activates only at certain energy scales. By re-weighting the posteriors in this archive against the specific dispersion relation predicted by IRH ($E_{IRH}(p)$), researchers can derive strict exclusion limits on the theory's coupling constants. The large size of this archive (over 7 GB) reflects the high dimensionality of the parameter space sampled, including the mass of the graviton and the coefficients for various powers of momentum deviation ($\alpha$).
+The propagation of gravitational waves over cosmological distances accumulates these dispersive effects, making distant events particularly sensitive probes. The data in liv.tar.gz effectively combines information from multiple events, hierarchically stacked to maximize the signal-to-noise ratio of any dispersive anomaly.3 If IRH predicts a "gapped" spectrum or a discrete resonance ladder for the graviton, this is the dataset where it would manifest as a statistical tension in the propagation parameters.
+
+
+2.1.2. The Residuals Test: Hunting for Forbidden Modes
+
+
+One of the most robust ways to search for "unknown unknowns" is the residuals test, contained in IGWN-GWTC3-TGR-v1-res.tar.gz.1 In this analysis, the best-fit waveform from standard General Relativity (typically a template like IMRPhenomXPHM or SEOBNRv4PHM) is subtracted from the strain data. The remaining time-series data—the residual—is then analyzed for any coherent excess power that is inconsistent with the detector noise floor.3
+For IRH, this test is critical. Holographic theories often involve additional degrees of freedom, such as scalar or vector fields, that are excited during the extreme dynamics of the merger. These fields would emit gravitational radiation (or scalar radiation coupled to the metric) that standard GR templates do not model. If IRH predicts the emission of a "scalar breathing mode" or a "vector resonance" during the merger, this signal would remain in the residual data.
+The LVK analysis reports that the residual power is consistent with detector noise for the 15 confident events analyzed in GWTC-3.3 This result imposes a stringent upper limit on the amplitude of any intrinsic resonances predicted by the theory. To use this dataset, one would generate the specific waveform predicted for the IRH extra modes and compute its overlap with the noise residuals provided in the archive. A high overlap would indicate a potential detection, while the current null result serves to bound the coupling strength of the holographic fields to the standard model matter.
+
+
+2.1.3. Horizon Structure and Echoes
+
+
+If the event horizon is a structured membrane (as in fuzzball or firewall proposals, often linked to holographic theories), the ringdown phase will not be a simple decay. Instead, the gravitational waves trapped between the angular momentum barrier and the "hard" surface of the holographic horizon will reflect back and forth, producing a series of repeating pulses known as "echoes."
+The IGWN-GWTC3-TGR-v1-ech.tar.gz archive 1 contains the results of searches for these echoes using templates based on a Lorentzian spectral comb. While the LVK analysis found no evidence for echoes (with Bayes factors generally favoring noise over the echo hypothesis) 3, the dataset allows for the testing of more specific echo morphologies. IRH might predict a specific time-delay spectrum or a phase shift in the reflected pulses that differs from the generic templates used by LVK. Accessing the posterior samples for the echo amplitude and time delay parameters allows theorists to check if their specific "holographic reflectivity" model is excluded by the data.
+
+
+2.2. Black Hole Spectroscopy and the Ringdown
+
+
+The "ringdown" phase, where the remnant black hole sheds its perturbations and settles into a stationary Kerr state, is the primary laboratory for testing the "Intrinsic" nature of the spacetime geometry. The IGWN-GWTC3-TGR-v2-rin.tar.gz archive 1 contains the data for Quasinormal Mode (QNM) spectroscopy.
+In standard GR, the frequency ($f$) and damping time ($\tau$) of the ringdown modes are uniquely determined by the final mass ($M_f$) and spin ($\chi_f$) of the black hole. This is a consequence of the No-Hair Theorem. IRH, however, may predict deviations from this uniqueness, either due to a modified area law entropy or intrinsic resonances of the vacuum state. The data in the rin archive provides the posterior distributions for the deviations $\delta f_{lmn}$ and $\delta \tau_{lmn}$ from the GR predictions.3
+By analyzing these posteriors, one can test if the observed modes are consistent with the Kerr metric or if they require a "holographic hair" parameter. The precision of these tests is currently limited by the signal-to-noise ratio, but the data allows for the combination of results from multiple events to tighten the bounds on any universal deviation predicted by IRH.
+________________
+
+
+3. Numerical Relativity: The Ground Truth and the Nonlinearity Debate
+
+
+While observational data provides the test, Numerical Relativity (NR) provides the "ground truth" prediction for General Relativity in the strong field. To claim a deviation in favor of IRH, one must first be certain that the effect is not merely a misunderstood feature of standard nonlinear GR. This is particularly relevant for the "ringdown" analysis, where a fierce debate regarding the role of overtones versus nonlinearities is currently unfolding.
+
+
+3.1. The SXS CCE Waveform Catalog
+
+
+The Simulating eXtreme Spacetimes (SXS) collaboration provides the most accurate catalog of binary black hole simulations available. Crucially, recent updates have incorporated Cauchy-Characteristic Evolution (CCE), a technique that extracts the gravitational waveform at future null infinity ($\mathcal{I}^+$) rather than extrapolating from a finite radius.7
+Table 2: Key SXS CCE Catalog Specifications 8
+Data Product
+	File Format
+	URL/Location
+	Significance for IRH
+	Ext-CCE Waveform Database
+	HDF5 (.h5)
+	data.black-holes.org/waveforms/extcce_catalog.html
+	Provides asymptotic waveforms free of gauge ambiguities and near-field errors.
+	rhOverM_Asymptotic_GeometricUnits_CoM.h5
+	HDF5
+	Within individual simulation directories
+	The strain $h$ extrapolated to $\mathcal{I}^+$. Essential for training "standard" GR models to distinguish from IRH.
+	rMPsi4_Asymptotic_GeometricUnits_CoM.h5
+	HDF5
+	Within individual simulation directories
+	The Weyl scalar $\Psi_4$, often used for analyzing the curvature radiation directly.
+	metadata.txt
+	ASCII
+	Within individual simulation directories
+	Contains initial parameters (masses, spins) necessary for mapping the waveform to the parameter space.
+	The use of CCE waveforms is non-negotiable for testing subtle effects like IRH. Standard extrapolation methods introduce systematic errors that can mimic or mask small resonant deviations. The CCE method solves the Einstein equations all the way to infinity, providing the precise "standard candle" waveform against which the LVK data must be compared.
+
+
+3.2. The Nonlinearity vs. Overtone Controversy
+
+
+A critical insight for testing IRH comes from the recent literature utilizing the SXS CCE catalog. There is an active debate concerning the mode content of the ringdown.
+* The Linear Overtone Hypothesis: Some analyses suggest that the ringdown can be modeled starting from the peak amplitude using a sum of linear Quasinormal Modes (QNMs), provided one includes a large number of overtones ($n=1, 2, 3, \dots$).10 If correct, this implies the ringdown is linear even at the merger peak.
+* The Nonlinear Mode Hypothesis: Conversely, rigorous analysis of the CCE waveforms by groups including Baibhav, Cheung, and others 11 indicates that these high-order overtones may be physically spurious. They argue that including so many damped modes simply "fits away" the nonlinearities. Instead, they find strong evidence for nonlinear QNMs (e.g., quadratic modes where frequencies are sums of linear modes, $\omega_{quad} \approx \omega_{220} + \omega_{220}$).11
+Relevance to IRH: This distinction is vital. If IRH predicts intrinsic resonances, they might be confused with these nonlinear GR modes. For instance, a "quadratic" GR mode might look like a new "intrinsic" mode of the holographic theory. The SXS CCE catalog allows researchers to build a "background" model of all expected GR nonlinearities. Any spectral feature observed in LVK data that cannot be explained by these nonlinear couplings (quantified via the CCE catalog) would be a smoking gun for Intrinsic Resonance Holography. The "Agnostic Black Hole Spectroscopy" approach advocated by Baibhav et al. 12 is the correct methodological framework: one must fit for all possible modes and see which ones are statistically required by the data, rather than assuming a fixed GR spectrum.
+________________
+
+
+4. Cosmological Expansion: Holographic Dark Energy and Distance Ladders
+
+
+Moving from the horizon scale to the cosmic scale, IRH likely imposes constraints on the vacuum energy, potentially manifesting as a "holographic dark energy" component. Validating this requires precise measurements of the expansion history ($H(z)$) and the luminosity distance relation.
+
+
+4.1. The Pantheon+ Type Ia Supernova Compilation
+
+
+The Pantheon+ dataset is the definitive sample for studying the late-time expansion history. It comprises 1701 light curves of Type Ia supernovae (SNe Ia), covering a redshift range from $z < 0.01$ to $z > 2$.13
+Table 3: Pantheon+ Data Files and Locations 14
+File Name
+	Location (GitHub)
+	Content
+	Usage in IRH Testing
+	Pantheon+SH0ES.dat
+	Pantheon+_Data/4_DISTANCES_AND_COVAR/
+	Redshifts ($z$), Distance Moduli ($\mu$)
+	The primary Hubble diagram data vector.
+	sys_full_long.txt
+	Pantheon+_Data/4_DISTANCES_AND_COVAR/
+	Systematic Covariance Matrix ($C_{sys}$)
+	Encodes correlations due to calibration, dust, and selection effects. Essential for $\chi^2$ calculation.
+	lcparam_full_long.txt
+	Pantheon+_Data/
+	Light curve parameters ($m_B$, $x_1$, $c$)
+	Allows for re-standardization of SNe if IRH affects supernova luminosity physics.
+	The most critical component for a rigorous test is the covariance matrix sys_full_long.txt. This large matrix quantifies how systematic uncertainties are correlated across different redshifts. A simple $\chi^2$ fit using only diagonal errors will yield incorrect constraints. The likelihood for IRH is constructed as:
+$$ \chi^2_{IRH} = (\vec{\mu}{obs} - \vec{\mu}{model}(\theta_{IRH}))^T \mathbf{C}^{-1} (\vec{\mu}{obs} - \vec{\mu}{model}(\theta_{IRH})) $$
+where $\mathbf{C}$ is the sum of the statistical and systematic covariance matrices. If IRH predicts a deviation in the equation of state of dark energy ($w \neq -1$) or a running of the Planck mass that affects the supernova luminosity, it will manifest as a tension in this likelihood fit.
+
+
+4.2. SH0ES and the Hubble Constant Tension
+
+
+The Pantheon+ release is integrated with the SH0ES project, which uses Cepheid variables to calibrate the absolute magnitude of the supernovae.13 This calibration provides a local measurement of the Hubble constant, $H_0 \approx 73$ km/s/Mpc. This value is in tension with the early-universe value inferred by Planck ($\approx 67$ km/s/Mpc) assuming $\Lambda$CDM.
+IRH serves as a potential solution to this tension. If the theory posits a phase transition or a holographic scaling of the energy density at late times, it could reconcile these measurements. The SH0ES_Data folder 14 contains the Cepheid data necessary to include the local calibration directly in the likelihood chain, allowing one to test if IRH parameters can naturally bridge the gap between the anchor ($z=0$) and the Hubble flow.
+________________
+
+
+5. Large Scale Structure: Baryon Acoustic Oscillations and Growth
+
+
+To distinguish IRH from simple "Dark Energy" models, one must look at the growth of structure. Holographic theories often predict a modification to the gravitational force law at large scales, which would suppress or enhance the clustering of matter ($f\sigma_8$).
+
+
+5.1. DESI Data Release 1 (DR1)
+
+
+The Dark Energy Spectroscopic Instrument (DESI) has recently provided the most precise measurements of Baryon Acoustic Oscillations (BAO) and Redshift Space Distortions (RSD). The Data Release 1 (DR1) includes spectra from over 18 million galaxies and quasars.17
+Table 4: DESI DR1 Cosmological Data Products 17
+Dataset Name
+	URL
+	File Format
+	Key Content
+	BAO Cosmology VAC
+	data.desi.lbl.gov/doc/releases/dr1/vac/bao-cosmo-params/
+	ASCII (.txt), YAML
+	Chains for the geometric expansion history ($D_A(z)$, $H(z)$).
+	Full Shape Cosmology VAC
+	data.desi.lbl.gov/doc/releases/dr1/vac/full-shape-cosmo-params/
+	ASCII (.txt), YAML
+	Chains constraining the growth rate ($f\sigma_8$) and expansion simultaneously.
+	Chain Files
+	chain.[number].txt
+	ASCII
+	Posterior samples for parameters like $\Omega_m$, $H_0$, $\sigma_8$.
+	Covariance Matrices
+	chain.covmat
+	ASCII
+	Covariance of the derived parameters, essential for importance sampling.
+	
+
+5.2. Geometric vs. Dynamic Probes
+
+
+For testing IRH, the Full Shape methodology 17 is far more valuable than the simple BAO extraction.
+* BAO (Geometric): Measures the expansion history using the sound horizon as a standard ruler. This constrains the "background" behavior of the holographic theory.
+* Full Shape (Dynamic): Analyzes the amplitude and shape of the power spectrum $P(k)$. This is sensitive to the growth rate of structure ($f$). If IRH implies that gravity is "leaking" into a bulk dimension or is screened by a holographic mechanism, the growth of structure will be suppressed relative to GR, even if the expansion history is identical.
+The files in the full-shape-cosmo-params directory provide the likelihood chains for these measurements. By analyzing the chain.covmat and the posterior samples, one can determine if the data prefers a growth rate consistent with GR or one modified by the IRH interaction terms. The YAML input files (chain.input.yaml) document the exact priors and settings used, ensuring reproducibility.17
+________________
+
+
+6. The Cosmic Microwave Background: The Early Universe Anchor
+
+
+Any theory of gravity must be consistent with the precise measurements of the Cosmic Microwave Background (CMB) anisotropies. The Planck 2018 release remains the standard for these constraints.
+
+
+6.1. Planck Likelihoods and the Lensing Anomaly
+
+
+The relevant data is not just the maps, but the likelihood code itself, which computes the probability of the data given a theoretical power spectrum $C_\ell$.
+* Access: The Planck Legacy Archive (PLA) (pla.esac.esa.int) hosts the likelihood file COM_Likelihood_Data-baseline_R3.00.tar.gz.18
+* Key Likelihoods:
+   * plik_TTTEEE: The high-multipole likelihood using temperature and polarization.
+   * lowl: Constraints from large angular scales, sensitive to reionization ($\tau$).
+   * lensing: The gravitational lensing potential reconstructed from the 4-point correlation function.18
+The $A_L$ Anomaly: A specific feature of the Planck data is the "lensing amplitude" parameter $A_L$, which phenomenologically scales the amount of lensing smoothing the acoustic peaks. Planck prefers $A_L > 1$ at roughly $2\sigma$ significance.20 In standard $\Lambda$CDM, $A_L$ must be exactly 1. This anomaly is a prime target for IRH. If the theory predicts an "intrinsic resonance" that mimics the effect of extra lensing (e.g., by modifying the angular diameter distance to the last scattering surface or introducing a new scattering term), it could naturally explain this deviation. Testing this requires running the plik likelihood with the IRH-modified Boltzmann code.
+________________
+
+
+7. Micro-Scale Gravity: The Neutrino Mass Connection
+
+
+Intrinsic Resonance Holography often links the vacuum energy scale (Dark Energy) to the neutrino mass scale via a "seesaw" or holographic mechanism. Therefore, the absolute mass of the neutrino is a fundamental parameter of the theory.
+
+
+7.1. KATRIN Data and Analysis
+
+
+The KATRIN experiment provides the most stringent direct limits on the electron anti-neutrino mass.
+* Data Source: The data is available on Zenodo. For example, the release "Direct neutrino-mass measurement based on 259 days of KATRIN data" (DOI: 10.5281/zenodo.13644900).21
+* File Format: The data is typically provided in HDF5 format, designed to be read by the Fitrium analysis tool.22
+* Analysis: The measurement relies on the shape of the integrated $\beta$-spectrum of tritium near the endpoint ($E_0 \approx 18.6$ keV).
+* IRH Test: If IRH predicts a modification to the phase space of the decay or a "mass floor" generated by vacuum resonance, it would alter the spectral shape. The standard analysis fits for $m_\nu^2$. To test IRH, one must use the Fitrium framework (or custom code reading the HDF5 files) to fit the spectrum with the IRH-predicted shape function. The systematic uncertainties (energy loss function, source column density) are included in the covariance matrix provided in the release.22
+________________
+
+
+8. Integrated Statistical Frameworks: Cobaya and MontePython
+
+
+Conducting a unified test of IRH requires combining these disparate datasets—GW transients, SN distance ladders, Galaxy clustering, CMB spectra, and Neutrino decay kinematics—into a single Bayesian inference engine.
+
+
+8.1. Cobaya Architecture
+
+
+Cobaya (Code for Bayesian Analysis) is the industry-standard Python framework for this task.24
+* Theory Module: The user must write a custom Python class (inheriting from cobaya.theory.Theory) that implements the IRH equations. This module computes the modified observables (e.g., $D_L(z)$, $P(k)$, $h_{GW}(f)$) based on the input parameters.
+* Likelihood Integration:
+   * Planck: Cobaya has a native interface to the clik likelihood code.18
+   * DESI & Pantheon+: These likelihoods are often available as "external" modules or can be easily wrapped since they primarily involve reading a chain or covariance file.17
+   * LIGO: The posterior samples from the TGR release (liv.tar.gz) can be used as a prior or an external likelihood via kernel density estimation (KDE) or importance sampling.
+
+
+8.2. Methodology for Validation
+
+
+1. Define the Model: Implement the background expansion and perturbation equations of IRH in a Boltzmann solver (like CLASS or CAMB).
+2. Calibrate: Use the Planck plik likelihood to constrain the early universe parameters.
+3. Stress Test: Use the DESI Full Shape and Pantheon+ sys_full_long data to test the late-time expansion and growth. Look for tensions with the Planck baseline.
+4. Local Test: Use the LIGO liv and ech data to constrain the strong-field behavior.
+5. Global Fit: Run a joint MCMC using Cobaya to find the global posterior of the IRH parameters. If the marginal likelihood (Bayesian Evidence) is higher than that of $\Lambda$CDM + GR, the theory is empirically favored.
+________________
+
+
+9. Conclusion
+
+
+The empirical validation of Intrinsic Resonance Holography is a tractable, albeit demanding, computational challenge. The observational data required—ranging from the sub-atomic kinematics of tritium decay to the horizon-scale ringing of black holes and the cosmic expansion history—is now publicly available in high-fidelity archives.
+The LIGO-Virgo-KAGRA TGR data release (specifically the liv and ech archives) serves as the gatekeeper for the theory's gravitational sector. The SXS CCE waveform catalog provides the necessary nonlinear baseline to ensure that any "resonance" detected is not merely a misunderstood feature of standard gravity. On cosmological scales, the Pantheon+ covariance matrix and DESI Full Shape chains provide the leverage to detect holographic modifications to the vacuum energy. Finally, Planck and KATRIN anchor the theory at the recombination and neutrino mass scales, respectively.
+By synthesizing these datasets within a unified framework like Cobaya, researchers can move Intrinsic Resonance Holography from the realm of theoretical conjecture to the crucible of empirical falsification. The files are identified, the formats are known, and the likelihood architectures are ready. The test can now begin.
+Works cited
+1. LIGO-P2100456-v2: Data release for Tests of General Relativity with ..., accessed November 25, 2025, https://dcc.ligo.org/LIGO-P2100456/public
+2. Data release for Tests of General Relativity with GWTC-3 - Zenodo, accessed November 25, 2025, https://zenodo.org/records/17461225
+3. (PDF) Tests of General Relativity with GWTC-3 - ResearchGate, accessed November 25, 2025, https://www.researchgate.net/publication/360355090_Tests_of_General_Relativity_with_GWTC-3
+4. Tests of General Relativity with GWTC-3 - University of Idaho, accessed November 25, 2025, https://verso.uidaho.edu/esploro/outputs/preprint/Tests-of-General-Relativity-with-GWTC-3/996657843001851
+5. Tests of General Relativity with GWTC-3 - DCC - LIGO Document Control Center Portal, accessed November 25, 2025, https://dcc.ligo.org/public/0177/P2100275/013/o3b_tgr_resubmitted.pdf
+6. [PDF] Analysis of Ringdown Overtones in GW150914. - Semantic Scholar, accessed November 25, 2025, https://www.semanticscholar.org/paper/94c3a4fd9487ba34fa3611b988b0c1b6b44a2802
+7. [2510.13954] The quasinormal mode content of binary black hole ringdown - arXiv, accessed November 25, 2025, https://arxiv.org/abs/2510.13954
+8. The Ext-CCE Waveform Database - SXS Catalog, accessed November 25, 2025, https://data.black-holes.org/waveforms/extcce_catalog.html
+9. The SXS collaboration catalog of binary black hole simulations - SciSpace, accessed November 25, 2025, https://scispace.com/pdf/the-sxs-collaboration-catalog-of-binary-black-hole-17qqaaf24v.pdf
+10. [2302.06634] Role of black hole quasinormal mode overtones for ringdown analysis - arXiv, accessed November 25, 2025, https://arxiv.org/abs/2302.06634
+11. The quasinormal mode content of binary black hole ringdown - ResearchGate, accessed November 25, 2025, https://www.researchgate.net/publication/396541375_The_quasinormal_mode_content_of_binary_black_hole_ringdown
+12. [2302.03050] Agnostic black hole spectroscopy: Quasinormal mode content of numerical relativity waveforms and limits of validity of linear perturbation theory - arXiv, accessed November 25, 2025, https://arxiv.org/abs/2302.03050
+13. The Pantheon+ Type Ia Supernova Sample: The Full Dataset and Light-Curve Release, accessed November 25, 2025, https://dukespace.lib.duke.edu/items/d618990e-f4fe-4467-b4e9-78273c8532d7
+14. PantheonPlusSH0ES/DataRelease - GitHub, accessed November 25, 2025, https://github.com/PantheonPlusSH0ES/DataRelease
+15. dscolnic/Pantheon: This is all the code and data from the Pantheon analysis https://arxiv.org/abs/1710.00845 - GitHub, accessed November 25, 2025, https://github.com/dscolnic/Pantheon
+16. PantheonPlusSH0ES/PantheonPlusSH0ES.github.io, accessed November 25, 2025, https://github.com/PantheonPlusSH0ES/PantheonPlusSH0ES.github.io
+17. DR1 (latest) - DESI Data, accessed November 25, 2025, https://data.desi.lbl.gov/doc/releases/dr1/
+18. CMB from Planck — cobaya 3.6 documentation - Read the Docs, accessed November 25, 2025, https://cobaya.readthedocs.io/en/latest/likelihood_planck.html
+19. Tutorial: CLASS and MontePython Installation - Indico, accessed November 25, 2025, https://indico3.conference4me.psnc.pl/event/44/contributions/5698/attachments/452/617/class_and_montepython.pdf
+20. [1807.06209] Planck 2018 results. VI. Cosmological parameters - arXiv, accessed November 25, 2025, https://arxiv.org/abs/1807.06209
+21. Direct neutrino-mass measurement based on 259 days of KATRIN data - Zenodo, accessed November 25, 2025, https://zenodo.org/records/13644900
+22. Analysis of First Tritium Data of the KATRIN Experiment, accessed November 25, 2025, https://www.katrin.kit.edu/publikationen/mth-karl.pdf
+23. Data Quality and Neutrino Mass Sensitivity of the 6th to 9th KATRIN campaigns - TUM, accessed November 25, 2025, https://www.ph.nat.tum.de/fileadmin/w00bya/neutrinos/Thesis/Master/KATRIN_Jan_Ploessner_24.pdf
+24. Cobaya, a code for Bayesian analysis in Cosmology — cobaya 3.6 documentation, accessed November 25, 2025, https://cobaya.readthedocs.io/
