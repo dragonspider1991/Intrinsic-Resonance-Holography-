@@ -222,13 +222,12 @@ def get_k_hop_neighbors(
     for _ in range(k):
         next_frontier: set[tuple[int, ...]] = set()
         for frontier_edge in current_frontier:
-            frontier_nodes = edge_nodes.get(frontier_edge, set(frontier_edge))
+            frontier_nodes = edge_nodes[frontier_edge]
             for e in graph.E:
                 if e in visited:
                     continue
-                e_nodes = edge_nodes.get(e, set(e))
                 # Check if edges share a node (1-hop)
-                if frontier_nodes & e_nodes:
+                if frontier_nodes & edge_nodes[e]:
                     next_frontier.add(e)
                     visited.add(e)
         current_frontier = next_frontier
