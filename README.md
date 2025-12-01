@@ -37,7 +37,9 @@ IRH_Suite v9.2 is a complete implementation of the Harmony Functional and HAGO (
 ### Python Usage
 
 ```bash
-
+# Python tests
+cd python
+PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest tests/ -v
 ```
 
 ### Wolfram Language Usage
