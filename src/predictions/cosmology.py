@@ -13,6 +13,7 @@ Key predictions:
 """
 
 import numpy as np
+from scipy.integrate import quad
 
 
 def dark_energy_eos(a):
@@ -79,8 +80,6 @@ def dark_energy_density_ratio(a, omega_de_0=0.685):
     Returns:
         float: Dark energy density ratio at scale factor a.
     """
-    from scipy.integrate import quad
-    
     def integrand(a_prime):
         return (1.0 + dark_energy_eos(a_prime)) / a_prime
     
