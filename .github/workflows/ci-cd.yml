@@ -8,10 +8,16 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Set minimal permissions for all jobs
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint & Format
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -36,6 +42,8 @@ jobs:
   test-python:
     name: Python Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
@@ -70,6 +78,8 @@ jobs:
   test-wolfram:
     name: Wolfram Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     continue-on-error: true
 
     steps:
@@ -90,6 +100,8 @@ jobs:
   benchmark:
     name: Benchmark Suite
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: test-python
 
     steps:
@@ -147,6 +159,8 @@ jobs:
   docs:
     name: Build Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: test-python
 
     steps:
@@ -171,6 +185,8 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [test-python, benchmark]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 

@@ -20,11 +20,13 @@ if TYPE_CHECKING:
 
 
 # Standard Model beta function coefficients (1-loop)
-# QCD: b0 = (11/3)N_c - (2/3)N_f = 11 - 2 = 7 for SU(3), N_f=6 -> b0 = -7
+# For SU(N) with N_f fermions: b0 = (11/3)N - (2/3)N_f
+# QCD (SU(3)): b0 = (11/3)*3 - (2/3)*6 = 11 - 4 = 7
+# Note: With convention β = -b0 * g³/(16π²), we use b0 = -7 for the running sign
 SM_BETA_COEFFICIENTS = {
     "U(1)": 41 / 10,  # Hypercharge
     "SU(2)": -19 / 6,  # Weak isospin
-    "SU(3)": -7,  # QCD
+    "SU(3)": -7,  # QCD (negative for asymptotic freedom)
 }
 
 # Target coupling values at M_Z

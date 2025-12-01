@@ -420,10 +420,16 @@ def hgo_optimize(
 
         iterations = i + 1
 
-    # Update final weights
+    # Update final weights using optimized values
     optimal_weights = {}
+    # Get the final optimized weights based on method
+    if method == "scipy":
+        final_x = result.x
+    else:
+        final_x = x  # Use the optimized x from Adam loop
+    
     for i, edge in enumerate(edges):
-        mag = np.clip(x0[i] if method != "scipy" else result.x[i], 0.01, 1.0)
+        mag = np.clip(final_x[i], 0.01, 1.0)
         phase = np.angle(graph.W[edge])
         optimal_weights[edge] = mag * np.exp(1j * phase)
 

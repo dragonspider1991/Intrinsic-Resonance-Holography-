@@ -187,9 +187,10 @@ class TestGTEC:
         """Test Shannon entropy function."""
         from irh.gtec import shannon_entropy
 
+        # Uniform distribution over 4 outcomes: H = log2(4) = 2 bits
         P = np.array([0.25, 0.25, 0.25, 0.25])
         H = shannon_entropy(P)
-        assert np.isclose(H, 2.0, atol=0.01)  # log2(4) = 2
+        assert np.isclose(H, 2.0, atol=0.01)  # Expected: 2 bits
 
 
 # NCGG Tests
