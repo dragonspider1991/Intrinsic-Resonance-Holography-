@@ -1,12 +1,15 @@
 {
-  "version": "3.0",
+  "version": "9.2",
   "seed": 42,
   "precision": 50,
+  "precision_target": 1e-10,
+  "N_max": 4096,
   "maxIterations": 1000,
   "outputDir": "io/output",
   "logLevel": "INFO",
   "checkpointInterval": 100,
   "graphSize": 100,
+  "holographic_lambda": 1.0,
   "temperature": {
     "initial": 1.0,
     "final": 0.01,
@@ -28,6 +31,19 @@
   "analysis": {
     "spectralDimensionFitRange": [0.1, 10.0],
     "eigenvalueTolerance": 1e-10,
-    "automorphismMaxIterations": 1000
+    "automorphismMaxIterations": 1000,
+    "targetSpectralDimension": 4.0,
+    "targetBetti1": 12
+  },
+  "validation": {
+    "ontologicalClarity": true,
+    "mathematicalCompleteness": true,
+    "empiricalGrounding": true,
+    "logicalCoherence": true
+  },
+  "python": {
+    "srcPath": "python/src",
+    "testsPath": "python/tests",
+    "notebooksPath": "notebooks"
   }
 }
