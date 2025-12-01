@@ -198,6 +198,8 @@ def get_k_hop_neighbors(
     """
     Get all edges within k hops of the given edge.
 
+    Uses iterative BFS to avoid exponential recursion blowup.
+
     Args:
         graph: HyperGraph instance
         edge: Target edge
@@ -209,26 +211,33 @@ def get_k_hop_neighbors(
     if k <= 0:
         return [edge]
 
-    edge_set = set(edge)
-    neighbors = []
+    # Build an adjacency mapping from edges to their 1-hop neighbors
+    # Two edges are neighbors if they share at least one node
+    edge_nodes = {e: set(e) for e in graph.E}
 
-    for e in graph.E:
-        if e == edge:
-            continue
-        e_set = set(e)
-        # Check if edges share a node (1-hop)
-        if edge_set & e_set:
-            neighbors.append(e)
+    # Use BFS to find all edges within k hops
+    visited: set[tuple[int, ...]] = {edge}
+    current_frontier: set[tuple[int, ...]] = {edge}
 
-    # For k > 1, recursively expand
-    if k > 1:
-        expanded = set()
-        for n_edge in neighbors:
-            sub_neighbors = get_k_hop_neighbors(graph, n_edge, k - 1)
-            expanded.update(sub_neighbors)
-        neighbors = list(expanded)
+    for _ in range(k):
+        next_frontier: set[tuple[int, ...]] = set()
+        for frontier_edge in current_frontier:
+            frontier_nodes = edge_nodes.get(frontier_edge, set(frontier_edge))
+            for e in graph.E:
+                if e in visited:
+                    continue
+                e_nodes = edge_nodes.get(e, set(e))
+                # Check if edges share a node (1-hop)
+                if frontier_nodes & e_nodes:
+                    next_frontier.add(e)
+                    visited.add(e)
+        current_frontier = next_frontier
+        if not current_frontier:
+            break
 
-    return neighbors
+    # Return all visited edges except the starting edge
+    visited.discard(edge)
+    return list(visited)
 
 
 def optimize_k(graph: HyperGraph, max_k: int = 5) -> int:
