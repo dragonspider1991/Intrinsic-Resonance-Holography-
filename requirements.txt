@@ -1,0 +1,5 @@
+# IRH Suite Formalism v9.4 Requirements
+# Core numerical libraries
+numpy>=1.24.0
+scipy>=1.11.0
+networkx>=3.1
