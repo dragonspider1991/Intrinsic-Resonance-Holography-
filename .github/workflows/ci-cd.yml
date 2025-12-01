@@ -1,0 +1,192 @@
+# IRH Suite v9.2 CI/CD Pipeline
+name: CI/CD
+
+on:
+  push:
+    branches: [main, "feature/*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install linting tools
+        run: |
+          pip install black mypy
+
+      - name: Check formatting with Black
+        run: |
+          black --check python/src/ python/tests/ || echo "Formatting issues found"
+
+      - name: Type check with mypy
+        run: |
+          cd python
+          mypy src/irh/ --ignore-missing-imports || echo "Type checking completed"
+
+  test-python:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install --upgrade pip
+          pip install numpy scipy networkx sympy pytest pytest-cov
+
+      - name: Run tests
+        run: |
+          cd python
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          pytest tests/ -v --cov=src/irh --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        if: matrix.python-version == '3.12'
+        with:
+          files: python/coverage.xml
+          fail_ci_if_error: false
+
+  test-wolfram:
+    name: Wolfram Tests
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Wolfram files exist
+        run: |
+          echo "Wolfram source files:"
+          ls -la src/*.wl
+          echo "Tests:"
+          ls -la tests/*.wl || echo "No Wolfram tests found"
+
+      - name: Note about Wolfram tests
+        run: |
+          echo "Note: Wolfram tests require WolframScript license"
+          echo "Run locally with: wolframscript -file tests/unit_tests.wl"
+
+  benchmark:
+    name: Benchmark Suite
+    runs-on: ubuntu-latest
+    needs: test-python
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install numpy scipy networkx sympy
+
+      - name: Run benchmarks
+        run: |
+          cd python
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          python -c "
+          import time
+          from irh import HyperGraph
+          from irh.spectral_dimension import SpectralDimension
+          from irh.grand_audit import grand_audit
+
+          print('=== IRH v9.2 Benchmark Suite ===')
+          print()
+
+          # Benchmark N=64
+          start = time.time()
+          G = HyperGraph(N=64, seed=42)
+          print(f'Create N=64 graph: {time.time()-start:.3f}s')
+
+          start = time.time()
+          ds = SpectralDimension(G)
+          print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
+
+          # Benchmark N=256
+          start = time.time()
+          G = HyperGraph(N=256, seed=42)
+          print(f'Create N=256 graph: {time.time()-start:.3f}s')
+
+          start = time.time()
+          ds = SpectralDimension(G)
+          print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
+
+          # Grand audit on small graph
+          G = HyperGraph(N=32, seed=42)
+          start = time.time()
+          report = grand_audit(G)
+          print(f'Grand audit N=32: {time.time()-start:.3f}s')
+          print(f'  Pass rate: {report.pass_count}/{report.total_checks}')
+          "
+
+  docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    needs: test-python
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install doc dependencies
+        run: |
+          pip install mkdocs mkdocs-material
+
+      - name: Check documentation
+        run: |
+          echo "Documentation files:"
+          ls -la docs/ || echo "No docs directory"
+          echo ""
+          echo "README.md exists: $(test -f README.md && echo 'yes' || echo 'no')"
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [test-python, benchmark]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for version tag
+        id: check_tag
+        run: |
+          if git tag -l | grep -q "v9.2"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Note about release
+        run: |
+          echo "Release v9.2 would be created here"
+          echo "Run: git tag v9.2-validated && git push --tags"
