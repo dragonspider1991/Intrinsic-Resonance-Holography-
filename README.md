@@ -37,31 +37,7 @@ IRH_Suite v9.2 is a complete implementation of the Harmony Functional and HAGO (
 ### Python Usage
 
 ```bash
-# Install dependencies
-cd python
-pip install -r requirements.txt
 
-# Run tests
-PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest tests/ -v
-
-# Interactive usage
-python -c "
-from irh import HyperGraph
-from irh.spectral_dimension import SpectralDimension
-from irh.grand_audit import grand_audit
-
-# Create graph
-G = HyperGraph(N=64, seed=42)
-print(f'Graph: {G.N} nodes, {G.edge_count} edges')
-
-# Compute spectral dimension
-ds = SpectralDimension(G)
-print(f'Spectral dimension: {ds.value:.2f} ± {ds.error:.2f}')
-
-# Run grand audit
-report = grand_audit(G)
-print(f'Audit: {report.pass_count}/{report.total_checks} checks passed')
-"
 ```
 
 ### Wolfram Language Usage
@@ -101,13 +77,38 @@ Edit `project_config.json` to customize:
 ### Running Tests
 
 ```bash
-# Python tests
-cd python
-PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest tests/ -v
+# Change to the project's python directory
+%cd /content/Intrinsic-Resonance-Holography-/python/
 
-# Wolfram tests
-cd tests
-wolframscript -file unit_tests.wl
+# Install dependencies
+!pip install -r requirements.txt
+
+# Install the 'irh' package itself from the current directory (editable mode)
+!pip install -e .
+
+# Add src to Python path for interactive use
+import sys
+sys.path.insert(0, './src')
+
+# Run tests (assuming tests are located within the python/ directory)
+!PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest tests/ -v
+
+# Interactive usage
+from irh import HyperGraph
+from irh.spectral_dimension import SpectralDimension
+from irh.grand_audit import grand_audit
+
+# Create graph
+G = HyperGraph(N=64, seed=42)
+print(f'Graph: {G.N} nodes, {G.edge_count} edges')
+
+# Compute spectral dimension
+ds = SpectralDimension(G)
+print(f'Spectral dimension: {ds.value:.2f} ± {ds.error:.2f}')
+
+# Run grand audit
+report = grand_audit(G)
+print(f'Audit: {report.pass_count}/{report.total_checks} checks passed')
 ```
 
 ## Directory Structure
