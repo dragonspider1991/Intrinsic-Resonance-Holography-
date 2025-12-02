@@ -17,8 +17,10 @@ References:
 
 import numpy as np
 from scipy.spatial import distance_matrix
-from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigsh
+
+# Numerical thresholds for eigenvalue filtering and log stability
+EIGENVALUE_THRESHOLD = 1e-10
+LOG_EPSILON = 1e-15
 
 
 def generate_random_geometric_graph(N: int, dim: int = 2, k: float = 6.0) -> np.ndarray:
@@ -49,10 +51,8 @@ def generate_random_geometric_graph(N: int, dim: int = 2, k: float = 6.0) -> np.
     # Connectivity radius for expected degree ~ k * ln(N)
     # For d=2: expected neighbors ~ pi * r^2 * N
     # So r = sqrt(k * ln(N) / (pi * N))
-    if N > 1:
-        r = np.sqrt(k * np.log(N) / (np.pi * N))
-    else:
-        r = 1.0
+    # Note: N >= 2 is guaranteed by validation above
+    r = np.sqrt(k * np.log(N) / (np.pi * N))
 
     # Create adjacency matrix (connect if distance < r)
     adj_matrix = (dist < r).astype(np.float64)
@@ -104,8 +104,7 @@ def compute_holographic_action(adj_matrix: np.ndarray) -> dict:
 
     # Filter non-zero eigenvalues for log-determinant
     # Use threshold to handle numerical zeros
-    threshold = 1e-10
-    non_zero_eigs = eigenvalues[eigenvalues > threshold]
+    non_zero_eigs = eigenvalues[eigenvalues > EIGENVALUE_THRESHOLD]
 
     if len(non_zero_eigs) == 0:
         # Disconnected or trivial graph
@@ -122,10 +121,8 @@ def compute_holographic_action(adj_matrix: np.ndarray) -> dict:
     log_det = np.sum(np.log(non_zero_eigs))
 
     # Exponent: log_det / (N * ln(N))
-    if N > 1:
-        exponent = log_det / (N * np.log(N))
-    else:
-        exponent = 0.0
+    # Note: N >= 2 is guaranteed for valid adjacency matrices
+    exponent = log_det / (N * np.log(N))
 
     # Holographic action
     if np.isfinite(exponent):
@@ -136,7 +133,7 @@ def compute_holographic_action(adj_matrix: np.ndarray) -> dict:
     # Von Neumann entropy from normalized eigenvalue distribution
     # p_i = lambda_i / sum(lambda_j) for lambda_i > 0
     p = non_zero_eigs / np.sum(non_zero_eigs)
-    von_neumann_entropy = -np.sum(p * np.log(p + 1e-15))
+    von_neumann_entropy = -np.sum(p * np.log(p + LOG_EPSILON))
 
     return {
         "s_holo": s_holo,
