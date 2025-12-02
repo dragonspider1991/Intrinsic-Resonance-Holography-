@@ -21,7 +21,7 @@ References:
 """
 
 import numpy as np
-from scipy.linalg import eigh, logm
+from scipy.linalg import eigh
 from scipy import sparse
 
 
@@ -247,7 +247,7 @@ def gtec_entanglement_energy(eigenvalues, coupling_mu, L_G, hbar_G):
     """
     Explicitly calculates the negative energy contribution from vacuum entanglement.
 
-    Formalism v9.4: E_GTEC = - mu * S_ent
+    Formalism v9.5: E_GTEC = - mu * S_ent
 
     Args:
         eigenvalues (np.array): Normalized spectrum of the entanglement Hamiltonian.

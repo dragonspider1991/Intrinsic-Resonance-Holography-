@@ -19,7 +19,6 @@ References:
 
 import numpy as np
 from scipy import sparse
-from scipy.sparse.linalg import eigsh
 from scipy.linalg import eigh
 
 # Alignment threshold for directional filtering (cos(60°) ≈ 0.5)
@@ -235,7 +234,7 @@ def ncgg_covariant_derivative(f, W, adj_list, embedding, k, v):
     Constructs the discrete gauge-covariant derivative D_k f(v).
     Uses spectral embedding to identify directional neighbors via projection.
 
-    Formalism v9.4 Section IV.A
+    Formalism v9.5 Section IV.A
 
     Args:
         f (array): Scalar field on nodes.
