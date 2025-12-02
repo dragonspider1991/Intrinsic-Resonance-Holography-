@@ -22,7 +22,7 @@ Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical real
 
 ## Conceptual Lexicon
 
-The following definitions establish the vocabulary for Formalism v9.4:
+The following definitions establish the vocabulary for Formalism v9.5:
 
 ### Relational Matrix
 The fundamental data structure encoding all relationships in the hypergraph. A complex-valued matrix $M_{ij}$ where $|M_{ij}|$ represents connection strength and $\arg(M_{ij})$ encodes phase (gauge) information. The Laplacian $L = D - M$ governs spectral dynamics.
