@@ -287,6 +287,14 @@ The optimization seeks configurations where:
 - Exactly 1 negative eigenvalue (Lorentzian signature)
 - Physical constants match CODATA/PDG values
 
+## Ontological Foundations
+
+The SOTE Principle provides the rigorous mathematical foundations for the RIRH formalism. The full derivations are documented in:
+
+- [SOTE Derivation](docs/derivations/SOTE_Derivation.md): Complete derivations of the holographic entropy functional $S_{\text{Holo}}$ and the RG flow parameter $\xi(N) \sim 1/\ln N$
+
+A verification script is available at `src/simulations/sote_scaling_verification.py` to numerically verify the scaling arguments.
+
 ## Validation Framework
 
 IRH v9.4 implements the Meta-Theoretical Validation Protocol with four pillars:
