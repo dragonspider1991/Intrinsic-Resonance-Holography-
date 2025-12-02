@@ -195,8 +195,8 @@ class TestTopological_Defect_Classifier:
 
     @pytest.fixture
     def tree_adj_matrix(self):
-        """Create a tree graph (no cycles)."""
-        # Simple star graph: node 0 connected to nodes 1-5
+        """Create a star tree graph (no cycles)."""
+        # Star graph: node 0 connected to nodes 1-5
         N = 6
         adj = np.zeros((N, N))
         for i in range(1, N):

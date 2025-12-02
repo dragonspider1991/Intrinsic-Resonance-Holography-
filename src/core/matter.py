@@ -33,7 +33,7 @@ class Topological_Defect_Classifier:
 
     The K-Theory index argument predicts exactly 12 independent generators
     for the Standard Model gauge group SU(3) x SU(2) x U(1), corresponding
-    to the 12 dimension of the algebra.
+    to the 12-dimensional algebra.
 
     Attributes:
         adj_matrix: Adjacency matrix of the hypergraph

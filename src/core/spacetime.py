@@ -20,9 +20,8 @@ References:
 """
 
 import numpy as np
-from scipy.linalg import eigh, expm
-from scipy.sparse import csr_matrix, issparse
-from scipy.optimize import curve_fit
+from scipy.linalg import eigh
+from scipy.sparse import issparse
 from collections import deque
 
 
