@@ -22,6 +22,10 @@ from scipy.sparse import diags, lil_matrix, csr_matrix
 from scipy.sparse.linalg import eigsh
 from typing import Optional
 
+# Numerical constants
+EIGENVALUE_THRESHOLD = 1e-10  # Filter for zero eigenvalues
+LOG_EPSILON = 1e-15  # Stability constant for logarithm calculations
+
 
 def create_grid_graph(dims: tuple[int, ...]) -> csr_matrix:
     """
@@ -115,11 +119,8 @@ def compute_holographic_entropy(eigenvalues: np.ndarray, N: int) -> dict:
             - 'von_neumann': Von Neumann entropy from normalized spectrum
             - 'log_det': Log pseudo-determinant
     """
-    # Numerical threshold
-    threshold = 1e-10
-    
-    # Filter non-zero eigenvalues
-    nonzero_eigs = eigenvalues[eigenvalues > threshold]
+    # Filter non-zero eigenvalues for log-based calculations
+    nonzero_eigs = eigenvalues[eigenvalues > EIGENVALUE_THRESHOLD]
     
     if len(nonzero_eigs) == 0:
         return {
@@ -129,10 +130,10 @@ def compute_holographic_entropy(eigenvalues: np.ndarray, N: int) -> dict:
             'log_det': np.nan
         }
     
-    # Tr(L^2)
+    # Tr(L^2) - uses all eigenvalues including zeros
     trace_L2 = np.sum(eigenvalues ** 2)
     
-    # Log pseudo-determinant
+    # Log pseudo-determinant - uses only non-zero eigenvalues
     log_det = np.sum(np.log(nonzero_eigs))
     
     # Holographic entropy
@@ -143,9 +144,10 @@ def compute_holographic_entropy(eigenvalues: np.ndarray, N: int) -> dict:
         s_holo = np.nan
     
     # Von Neumann entropy: S_vN = -sum(p_i * log(p_i)) where p_i = lambda_i / sum(lambda_j)
+    # Uses only non-zero eigenvalues for the normalized distribution
     total = np.sum(nonzero_eigs)
     p = nonzero_eigs / total
-    von_neumann = -np.sum(p * np.log(p + 1e-15))
+    von_neumann = -np.sum(p * np.log(p + LOG_EPSILON))
     
     return {
         's_holo': s_holo,
@@ -174,7 +176,7 @@ def analyze_dim_sparse(
         n_per_dim: Number of nodes per dimension. Default 4.
         k: Optional parameter for number of eigenvalues to compute.
            If None, computes all eigenvalues for small graphs (N < 500)
-           or N-2 eigenvalues for larger graphs.
+           or min(N-2, 100) eigenvalues for larger graphs using sparse solver.
            
     Returns:
         dict: Contains:
