@@ -1,10 +1,10 @@
-# Intrinsic Resonance Holography (RIRH) - Formalism v9.4
+# Intrinsic Resonance Holography (RIRH) - Formalism v9.5
 
 An axiomatic derivation of physical law from information-theoretic constraints on self-organizing hypergraphs.
 
 ## Abstract
 
-Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical reality emerges from the self-consistent dynamics of a discrete, information-theoretic substrate—a complex-weighted hypergraph. The formalism imposes the "Zero Free Parameters" constraint: all physical constants, including the fine structure constant, neutrino masses, and dark energy equation of state, are derived purely from graph topology and spectral properties. This implementation provides explicit computational kernels for the v9.4 formalism, enabling reproducible validation of theoretical predictions against experimental data.
+Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical reality emerges from the self-consistent dynamics of a discrete, information-theoretic substrate—a complex-weighted hypergraph. The formalism imposes the "Zero Free Parameters" constraint: all physical constants, including the fine structure constant, neutrino masses, and dark energy equation of state, are derived purely from graph topology and spectral properties. This implementation provides explicit computational kernels for the v9.5 formalism, enabling reproducible validation of theoretical predictions against experimental data.
 
 ## Table of Contents
 
@@ -50,7 +50,7 @@ The coarse-graining procedure that decimates high-energy modes while preserving 
 
 ## Key Predictions
 
-Formalism v9.4 makes the following explicit, testable predictions with zero free parameters:
+Formalism v9.5 makes the following explicit, testable predictions with zero free parameters:
 
 | Quantity | Symbol | Predicted Value | Status |
 |----------|--------|-----------------|--------|
@@ -58,6 +58,18 @@ Formalism v9.4 makes the following explicit, testable predictions with zero free
 | Dark Energy EoS | $w(a)$ | $-1 + 0.25(1+a)^{-1.5}$ | Testable by DESI/Euclid |
 | Number of Generations | $N_{\text{gen}}$ | 3 (via K-Theory Index) | Matches observation |
 | Neutrino Mass Sum | $\sum m_\nu$ | 0.0583 eV | Within cosmological bounds |
+
+## Empirical Predictions (Section VII)
+
+The following predictions are derived from the computational kernels in `src/core/spacetime.py` and `src/core/matter.py`:
+
+| Prediction | Derivation Method | Value | Reference Module |
+|------------|------------------|-------|------------------|
+| Spectral Dimension | Heat Kernel Trace ($K(t) \sim t^{-d_s/2}$) | $d_s \to 4$ | `spacetime.Dimensional_Bootstrap` |
+| Growth Dimension | BFS Volume Scaling ($V(r) \sim r^{d_g}$) | $d_g \to 4$ | `spacetime.Dimensional_Bootstrap` |
+| SOTE Penalty Minimum | Dimension Consistency ($\sum (d_i - d_j)^2 = 0$) | $d = 4$ | `spacetime.Dimensional_Bootstrap` |
+| Gauge Group Dimension | K-Theory Index (Fundamental Cycles) | 12 (SU(3)×SU(2)×U(1)) | `matter.Topological_Defect_Classifier` |
+| Holonomy Non-Triviality | Cycle Phase Sum ($\Phi = \sum \arg(W_{ij})$) | $\Phi \neq 0 \mod 2\pi$ | `matter.Topological_Defect_Classifier` |
 
 ## Features
 
@@ -104,12 +116,14 @@ cd python
 PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest tests/ -v
 ```
 
-### Using Core Mathematical Kernels (v9.4)
+### Using Core Mathematical Kernels (v9.5)
 
 ```python
 import numpy as np
 from src.core.gtec import gtec_entanglement_energy
 from src.core.ncgg import ncgg_covariant_derivative
+from src.core.spacetime import Dimensional_Bootstrap
+from src.core.matter import Topological_Defect_Classifier
 from src.predictions.cosmology import dark_energy_eos, calculate_w0, calculate_wa
 from src.predictions.fine_structure import calculate_alpha_error
 
@@ -126,6 +140,19 @@ print(f"w_0 = {w0:.4f}, w_a = {wa:.4f}")
 # Fine Structure Error Budget
 error_budget = calculate_alpha_error(N_min=100, N_max=4096)
 print(f"Δ_total = {error_budget['delta_total']:.6f}")
+
+# Spacetime Emergence: Dimensional Bootstrap
+adj_matrix = np.array([...])  # Your hypergraph adjacency matrix
+bootstrap = Dimensional_Bootstrap()
+dims = bootstrap.compute_intrinsic_dims(adj_matrix)
+print(f"d_spectral = {dims['d_spectral']:.2f}, d_growth = {dims['d_growth']:.2f}")
+
+# Matter Genesis: Topological Defect Classifier
+classifier = Topological_Defect_Classifier()
+cycles = classifier.identify_cycles(adj_matrix)
+print(f"Fundamental cycles: {cycles['n_cycles']}, Generators: {cycles['n_generators']}")
+is_sm = classifier.verify_gauge_group(cycles['n_generators'])
+print(f"Matches SM gauge group (n=12): {is_sm}")
 ```
 
 ### Wolfram Language Usage
@@ -171,11 +198,13 @@ IRH_Suite_v9.4/
 ├── requirements.txt        # Python dependencies
 ├── changelog.md            # Version history
 ├── src/                    # Source code
-│   ├── core/               # v9.4 Mathematical Kernels
+│   ├── core/               # v9.5 Mathematical Kernels
 │   │   ├── __init__.py
 │   │   ├── gtec.py         # GTEC entanglement energy
-│   │   └── ncgg.py         # NCGG covariant derivative
-│   ├── predictions/        # v9.4 Prediction modules
+│   │   ├── ncgg.py         # NCGG covariant derivative
+│   │   ├── spacetime.py    # Dimensional Bootstrap (Spacetime Emergence)
+│   │   └── matter.py       # Topological Defect Classifier (Matter Genesis)
+│   ├── predictions/        # v9.5 Prediction modules
 │   │   ├── __init__.py
 │   │   ├── cosmology.py    # Dark energy w(a)
 │   │   └── fine_structure.py # α⁻¹ error budget
@@ -202,7 +231,9 @@ IRH_Suite_v9.4/
 │   │   └── predictions/        # Constant predictions
 │   └── tests/              # Python test suite
 ├── tests/
-│   └── unit_tests.wl       # Wolfram unit tests
+│   ├── test_quantum_emergence.py  # NCGG and GTEC tests
+│   ├── test_derivations.py        # Spacetime and Matter tests
+│   └── unit_tests.wl              # Wolfram unit tests
 ├── io/
 │   ├── input/              # Input files
 │   └── output/             # Generated artifacts
@@ -332,4 +363,4 @@ If using IRH_Suite for research, please cite the Intrinsic Resonance Holography 
 
 ---
 
-*"RIRH Formalism v9.4: Zero free parameters. Explicit mathematical kernels. Testable predictions."*
+*"RIRH Formalism v9.5: Zero free parameters. Explicit mathematical kernels. Testable predictions."*
