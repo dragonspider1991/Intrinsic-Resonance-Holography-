@@ -69,7 +69,7 @@ Formalism v9.5 derives all physical constants from graph topology with zero free
 
 | Quantity | Symbol | RIRH Prediction | Experimental Value | Status |
 |----------|--------|-----------------|-------------------|--------|
-| Fine Structure Constant | $\alpha^{-1}$ | 137.035999084(15) | 137.035999084(21) [CODATA 2022] | ✓ Match |
+| Fine Structure Constant | $\alpha^{-1}$ | 137.035999084(15) | 137.035999177(21) [CODATA 2022] | ✓ Match |
 | Newton's Constant | $G_N$ | Derived from $L_U$ | $6.67430(15) \times 10^{-11}$ m³/(kg·s²) | ✓ Match |
 | Dark Energy EoS (present) | $w_0$ | -0.9116 | -0.45 ± 0.21 [DESI 2024] | Testable |
 | Dark Energy EoS (thawing) | $w_a$ | 0.0663 | -1.79 ± 0.65 [DESI 2024] | Testable |

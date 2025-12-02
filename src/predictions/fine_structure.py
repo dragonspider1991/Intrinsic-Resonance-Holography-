@@ -1,10 +1,10 @@
 """
 fine_structure.py - Fine Structure Constant Error Budget Calculator
 
-Formalism v9.4 Error Budget:
+Formalism v9.5 Error Budget:
     Δ_total = sqrt(σ_sys² + σ_stat²)
     
-Based on the v9.4 Error Budget section:
+Based on the v9.5 Error Budget section:
     - σ_sys: Systematic errors from graph discretization
     - σ_stat: Statistical errors scaling as 1/sqrt(N)
 
@@ -14,7 +14,7 @@ Target: α⁻¹ = 137.035999084(15)
 import numpy as np
 
 
-# CODATA 2022 value
+# RIRH v9.5 predicted value for α⁻¹
 ALPHA_INVERSE_TARGET = 137.035999084
 ALPHA_INVERSE_UNCERTAINTY = 0.000000015  # (15) in last two digits
 
@@ -23,7 +23,7 @@ def calculate_alpha_error(N_min, N_max):
     """
     Calculate total error budget for α⁻¹ prediction.
     
-    Implements the error budget from Formalism v9.4:
+    Implements the error budget from Formalism v9.5:
         Δ_total = sqrt(σ_sys² + σ_stat²)
     
     Args:

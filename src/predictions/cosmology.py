@@ -26,7 +26,7 @@ def dark_energy_eos(a):
     """
     Calculate the dark energy equation of state w(a).
     
-    Formalism v9.4: w(a) = -1 + 0.25 * (1 + a)^{-1.5}
+    Formalism v9.5: w(a) = -1 + 0.25 * (1 + a)^{-1.5}
     
     Args:
         a (float or np.array): Scale factor. a=1 corresponds to present day.
