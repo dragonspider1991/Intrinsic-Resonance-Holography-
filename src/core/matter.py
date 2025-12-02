@@ -272,3 +272,67 @@ class Topological_Defect_Classifier:
             'holonomy_mean': float(np.mean(np.abs(self.holonomies))) if self.holonomies else 0.0,
             'holonomy_std': float(np.std(self.holonomies)) if self.holonomies else 0.0
         }
+
+
+if __name__ == "__main__":
+    # Verification test for Topological Defect Classifier
+    print("=" * 60)
+    print("Topological Defect Classifier Verification")
+    print("=" * 60)
+    
+    # Test 1: Simple cycle graph
+    print("\nTest 1: Simple cycle graph C_6")
+    N = 6
+    adj = np.zeros((N, N))
+    for i in range(N):
+        adj[i, (i + 1) % N] = 1
+        adj[(i + 1) % N, i] = 1
+    
+    classifier = Topological_Defect_Classifier()
+    result = classifier.identify_cycles(adj)
+    print(f"  Number of cycles: {result['n_cycles']} (expected: 1)")
+    print(f"  Cycle length: {len(result['cycles'][0]) if result['cycles'] else 0}")
+    
+    # Test 2: Tree graph (no cycles)
+    print("\nTest 2: Star tree graph (no cycles)")
+    N = 6
+    adj = np.zeros((N, N))
+    for i in range(1, N):
+        adj[0, i] = 1
+        adj[i, 0] = 1
+    
+    result = classifier.identify_cycles(adj)
+    print(f"  Number of cycles: {result['n_cycles']} (expected: 0)")
+    
+    # Test 3: 4x4 grid (9 fundamental cycles)
+    print("\nTest 3: 4x4 grid (9 fundamental cycles)")
+    N = 16
+    adj = np.zeros((N, N))
+    for i in range(4):
+        for j in range(4):
+            idx = i * 4 + j
+            if j < 3:
+                adj[idx, idx + 1] = 1
+                adj[idx + 1, idx] = 1
+            if i < 3:
+                adj[idx, idx + 4] = 1
+                adj[idx + 4, idx] = 1
+    
+    result = classifier.identify_cycles(adj)
+    print(f"  Number of cycles: {result['n_cycles']} (expected: 9)")
+    print(f"  Number of generators: {result['n_generators']}")
+    
+    stats = classifier.get_cycle_statistics()
+    print(f"  Average cycle length: {stats['avg_cycle_length']:.2f}")
+    print(f"  Holonomy mean: {stats['holonomy_mean']:.4f}")
+    
+    # Test 4: K-Theory index verification
+    print("\nTest 4: K-Theory index verification")
+    print(f"  SM gauge group dimension = 12 (SU(3)×SU(2)×U(1))")
+    print(f"  verify_gauge_group(12) = {classifier.verify_gauge_group(12)}")
+    print(f"  verify_gauge_group(10) = {classifier.verify_gauge_group(10)}")
+    print(f"  verify_gauge_group(24) = {classifier.verify_gauge_group(24)}")
+    
+    print("\n" + "=" * 60)
+    print("Topological Defect Classifier Verification Complete")
+    print("=" * 60)
