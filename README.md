@@ -1,10 +1,10 @@
-# Intrinsic Resonance Holography (RIRH) - Formalism v9.4
+# Intrinsic Resonance Holography (RIRH) - Formalism v9.5
 
 An axiomatic derivation of physical law from information-theoretic constraints on self-organizing hypergraphs.
 
 ## Abstract
 
-Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical reality emerges from the self-consistent dynamics of a discrete, information-theoretic substrate—a complex-weighted hypergraph. The formalism imposes the "Zero Free Parameters" constraint: all physical constants, including the fine structure constant, neutrino masses, and dark energy equation of state, are derived purely from graph topology and spectral properties. This implementation provides explicit computational kernels for the v9.4 formalism, enabling reproducible validation of theoretical predictions against experimental data.
+Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical reality emerges from the self-consistent dynamics of a discrete, information-theoretic substrate—a complex-weighted hypergraph. The formalism imposes the "Zero Free Parameters" constraint: all physical constants, including the fine structure constant, neutrino masses, and dark energy equation of state, are derived purely from graph topology and spectral properties. This implementation provides explicit computational kernels for the v9.5 formalism, enabling reproducible validation of theoretical predictions against experimental data.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Intrinsic Resonance Holography (RIRH) proposes a framework wherein physical real
 
 ## Conceptual Lexicon
 
-The following definitions establish the vocabulary for Formalism v9.4:
+The following definitions establish the vocabulary for Formalism v9.5:
 
 ### Relational Matrix
 The fundamental data structure encoding all relationships in the hypergraph. A complex-valued matrix $M_{ij}$ where $|M_{ij}|$ represents connection strength and $\arg(M_{ij})$ encodes phase (gauge) information. The Laplacian $L = D - M$ governs spectral dynamics.
@@ -50,7 +50,7 @@ The coarse-graining procedure that decimates high-energy modes while preserving 
 
 ## Key Predictions
 
-Formalism v9.4 makes the following explicit, testable predictions with zero free parameters:
+Formalism v9.5 makes the following explicit, testable predictions with zero free parameters:
 
 | Quantity | Symbol | Predicted Value | Status |
 |----------|--------|-----------------|--------|
