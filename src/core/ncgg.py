@@ -279,3 +279,76 @@ def ncgg_covariant_derivative(f, W, adj_list, embedding, k, v):
     # Scale by average connection strength
     avg_weight = total_weight / count
     return (avg_weight / count) * sum_val
+
+
+if __name__ == "__main__":
+    # Verification test for NCGG operators
+    print("=" * 60)
+    print("NCGG Operator Algebra Verification")
+    print("=" * 60)
+    
+    # Test 1: Cycle graph C_10
+    print("\nTest 1: Cycle graph C_10")
+    N = 10
+    adj = np.zeros((N, N))
+    for i in range(N):
+        adj[i, (i + 1) % N] = 1
+        adj[(i + 1) % N, i] = 1
+    
+    algebra = NCGG_Operator_Algebra(adj)
+    print(f"  Graph size N = {algebra.N}")
+    print(f"  X operator shape: {algebra.X.shape}")
+    print(f"  P operator shape: {algebra.P.shape}")
+    
+    # Expected eigenvalues for cycle graph: λ_k = 2(1 - cos(2πk/N))
+    expected = sorted([2 * (1 - np.cos(2 * np.pi * k / N)) for k in range(N)])
+    computed = sorted(algebra.eigenvalues)
+    match = np.allclose(computed, expected, atol=1e-10)
+    print(f"  Eigenvalue spectrum correct: {match}")
+    
+    # Test 2: Commutator
+    print("\nTest 2: Commutator [X, P]")
+    result = algebra.compute_commutator()
+    print(f"  Trace of [X,P] = {result['trace']:.6f}")
+    print(f"  hbar_G (from diagonal) = {result['hbar_G_from_diagonal']:.6f}")
+    print(f"  hbar_G (from trace) = {result['hbar_G_from_trace']:.6f}")
+    
+    # Test 3: Complete graph K_8
+    print("\nTest 3: Complete graph K_8")
+    N = 8
+    adj = np.ones((N, N)) - np.eye(N)
+    algebra = NCGG_Operator_Algebra(adj)
+    print(f"  Graph size N = {algebra.N}")
+    print(f"  Smallest eigenvalue (should be ~0): {algebra.eigenvalues[0]:.10f}")
+    print(f"  Other eigenvalues (should be N=8): {algebra.eigenvalues[1]:.6f}")
+    
+    # Test 4: Spectral embedding
+    print("\nTest 4: Spectral embedding (4x4 lattice)")
+    N = 16
+    adj = np.zeros((N, N))
+    for i in range(4):
+        for j in range(4):
+            idx = i * 4 + j
+            if j < 3:
+                adj[idx, idx + 1] = 1
+                adj[idx + 1, idx] = 1
+            if i < 3:
+                adj[idx, idx + 4] = 1
+                adj[idx + 4, idx] = 1
+    
+    algebra = NCGG_Operator_Algebra(adj)
+    embedding = algebra.get_spectral_embedding(n_dims=4)
+    print(f"  Embedding shape: {embedding.shape}")
+    print(f"  First node embedding: {embedding[0, :]}")
+    
+    # Test 5: Covariant derivative
+    print("\nTest 5: Gauge-covariant derivative")
+    f = np.ones(N, dtype=complex)
+    W = adj.astype(complex)
+    adj_list = [np.where(adj[v] > 0)[0].tolist() for v in range(N)]
+    D_0_f = ncgg_covariant_derivative(f, W, adj_list, embedding, k=0, v=0)
+    print(f"  D_0 f(0) for constant field = {D_0_f}")
+    
+    print("\n" + "=" * 60)
+    print("NCGG Verification Complete")
+    print("=" * 60)

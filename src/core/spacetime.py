@@ -325,3 +325,88 @@ class Dimensional_Bootstrap:
                 penalty += (dimensions[i] - dimensions[j]) ** 2
 
         return float(penalty)
+
+
+if __name__ == "__main__":
+    # Verification test for Dimensional Bootstrap
+    print("=" * 60)
+    print("Dimensional Bootstrap Verification")
+    print("=" * 60)
+    
+    # Test 1: 2D grid (4x4)
+    print("\nTest 1: 2D grid (4x4 = 16 nodes)")
+    N = 16
+    adj = np.zeros((N, N))
+    for i in range(4):
+        for j in range(4):
+            idx = i * 4 + j
+            if j < 3:
+                adj[idx, idx + 1] = 1
+                adj[idx + 1, idx] = 1
+            if i < 3:
+                adj[idx, idx + 4] = 1
+                adj[idx + 4, idx] = 1
+    
+    bootstrap = Dimensional_Bootstrap()
+    result = bootstrap.compute_intrinsic_dims(adj)
+    print(f"  Spectral dimension: {result['d_spectral']:.4f}")
+    print(f"  Growth dimension: {result['d_growth']:.4f}")
+    print(f"  Average dimension: {result['d_average']:.4f}")
+    
+    penalty = bootstrap.compute_sote_penalty(result['d_spectral'], result['d_growth'])
+    print(f"  SOTE penalty: {penalty:.6f}")
+    
+    # Test 2: 1D cycle
+    print("\nTest 2: 1D cycle (20 nodes)")
+    N = 20
+    adj = np.zeros((N, N))
+    for i in range(N):
+        adj[i, (i + 1) % N] = 1
+        adj[(i + 1) % N, i] = 1
+    
+    result = bootstrap.compute_intrinsic_dims(adj)
+    print(f"  Spectral dimension: {result['d_spectral']:.4f} (expected ~1)")
+    print(f"  Growth dimension: {result['d_growth']:.4f}")
+    
+    # Test 3: 4D grid (2x2x2x2 = 16 nodes)
+    print("\nTest 3: 4D grid (2x2x2x2 = 16 nodes)")
+    N = 16
+    adj = np.zeros((N, N))
+    for i in range(2):
+        for j in range(2):
+            for k in range(2):
+                for l in range(2):
+                    idx = i + 2*j + 4*k + 8*l
+                    if i < 1:
+                        neighbor = (i+1) + 2*j + 4*k + 8*l
+                        adj[idx, neighbor] = 1
+                        adj[neighbor, idx] = 1
+                    if j < 1:
+                        neighbor = i + 2*(j+1) + 4*k + 8*l
+                        adj[idx, neighbor] = 1
+                        adj[neighbor, idx] = 1
+                    if k < 1:
+                        neighbor = i + 2*j + 4*(k+1) + 8*l
+                        adj[idx, neighbor] = 1
+                        adj[neighbor, idx] = 1
+                    if l < 1:
+                        neighbor = i + 2*j + 4*k + 8*(l+1)
+                        adj[idx, neighbor] = 1
+                        adj[neighbor, idx] = 1
+    
+    result = bootstrap.compute_intrinsic_dims(adj)
+    print(f"  Spectral dimension: {result['d_spectral']:.4f}")
+    print(f"  Growth dimension: {result['d_growth']:.4f}")
+    print(f"  Average dimension: {result['d_average']:.4f}")
+    
+    # Test 4: SOTE penalty gradient
+    print("\nTest 4: SOTE penalty gradient")
+    penalties = []
+    for d in [2.0, 3.0, 4.0, 5.0]:
+        p = bootstrap.compute_sote_penalty(4.0, d)
+        penalties.append((d, p))
+        print(f"  d_growth={d:.1f}, d_spectral=4.0 -> penalty={p:.4f}")
+    
+    print("\n" + "=" * 60)
+    print("Dimensional Bootstrap Verification Complete")
+    print("=" * 60)

@@ -269,3 +269,60 @@ def gtec_entanglement_energy(eigenvalues, coupling_mu, L_G, hbar_G):
     E_gtec = -(L_G / hbar_G) * coupling_mu * S_ent
 
     return E_gtec
+
+
+if __name__ == "__main__":
+    # Verification test for GTEC functional
+    print("=" * 60)
+    print("GTEC Functional Verification")
+    print("=" * 60)
+    
+    # Test 1: Uniform eigenvalue distribution
+    print("\nTest 1: Uniform distribution (max entropy)")
+    eigenvalues = np.array([0.25, 0.25, 0.25, 0.25])
+    E_gtec = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+    print(f"  Eigenvalues: {eigenvalues}")
+    print(f"  E_GTEC = {E_gtec:.6f}")
+    print(f"  Expected: -0.2 (entropy = 2 bits)")
+    
+    # Test 2: Non-uniform distribution
+    print("\nTest 2: Non-uniform distribution")
+    eigenvalues = np.array([0.5, 0.3, 0.15, 0.05])
+    E_gtec = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+    print(f"  Eigenvalues: {eigenvalues}")
+    print(f"  E_GTEC = {E_gtec:.6f}")
+    
+    # Test 3: GTEC Functional class
+    print("\nTest 3: GTEC Functional class on 4x4 lattice")
+    N = 16
+    adj = np.zeros((N, N))
+    for i in range(4):
+        for j in range(4):
+            idx = i * 4 + j
+            if j < 3:
+                adj[idx, idx + 1] = 1
+                adj[idx + 1, idx] = 1
+            if i < 3:
+                adj[idx, idx + 4] = 1
+                adj[idx + 4, idx] = 1
+    
+    gtec = GTEC_Functional(adj)
+    print(f"  Graph size N = {gtec.N}")
+    print(f"  Coupling mu = {gtec.mu:.6f} (expected: 1/(N*ln(N)) = {1/(16*np.log(16)):.6f})")
+    
+    # Compute entanglement entropy
+    partition = {'A': list(range(8)), 'B': list(range(8, 16))}
+    result = gtec.compute_entanglement_entropy(adj, partition)
+    print(f"  Entanglement entropy S_ent = {result['S_ent']:.6f} bits")
+    
+    # Verify cancellation
+    Lambda_QFT = 10.0
+    cancel_result = gtec.verify_cancellation(Lambda_QFT, result['S_ent'])
+    print(f"  Lambda_QFT = {Lambda_QFT}")
+    print(f"  E_GTEC = {cancel_result['E_GTEC']:.6f}")
+    print(f"  Lambda_obs = {cancel_result['Lambda_obs']:.6f}")
+    print(f"  Cancellation ratio = {cancel_result['cancellation_ratio']:.4f}")
+    
+    print("\n" + "=" * 60)
+    print("GTEC Verification Complete")
+    print("=" * 60)
