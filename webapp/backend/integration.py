@@ -17,10 +17,15 @@ from typing import Dict, Any, Optional, List, Callable
 import sys
 import os
 
-# Add IRH package to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../python/src'))
-
-from irh.graph_state import HyperGraph
+# Import IRH modules
+# NOTE: For production, ensure IRH package is installed via: pip install -e .
+# This sys.path modification is a fallback for development.
+try:
+    from irh.graph_state import HyperGraph
+except ImportError:
+    # Fallback: add IRH package to path if not installed
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../python/src'))
+    from irh.graph_state import HyperGraph
 from irh.spectral_dimension import SpectralDimension, HeatKernelTrace
 from irh.scaling_flows import MetricEmergence, LorentzSignature, GSRGDecimate
 from irh.predictions.constants import (

@@ -16,8 +16,6 @@ orjson>=3.9.0
 # WebSocket support for real-time updates
 websockets>=12.0
 
-# IRH core dependencies (inherit from parent)
-numpy>=1.24.0
-scipy>=1.11.0
-networkx>=3.1
-matplotlib>=3.7.0
+# Note: IRH core dependencies (numpy, scipy, networkx, matplotlib) 
+# are provided by the parent IRH package.
+# Install the IRH package first: pip install -e . (from repo root)

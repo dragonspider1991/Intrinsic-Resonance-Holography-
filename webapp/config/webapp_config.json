@@ -7,6 +7,7 @@
       "host": "0.0.0.0",
       "port": 8000,
       "cors_origins": ["*"],
+      "_comment": "WARNING: For production, replace cors_origins wildcard with specific domains: ['https://yourdomain.com']",
       "api_prefix": "/api",
       "enable_websockets": true,
       "max_workers": 4

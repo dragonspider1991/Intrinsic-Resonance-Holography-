@@ -49,15 +49,23 @@ app = FastAPI(
 )
 
 # Configure CORS for frontend access
+# WARNING: Wildcard origins are for development only!
+# For production, restrict to specific domains:
+# allow_origins=["https://yourdomain.com", "https://app.yourdomain.com"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=["*"],  # TODO: Configure for production deployment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Global job storage (in production, use Redis or database)
+# Global job storage
+# NOTE: This in-memory storage is for development only.
+# For production, use:
+# - Redis with Celery for distributed task queue
+# - PostgreSQL/MongoDB for persistent job storage
+# - Horizontal scaling requires shared storage backend
 jobs_db: Dict[str, Dict[str, Any]] = {}
 websocket_connections: Dict[str, WebSocket] = {}
 
