@@ -23,6 +23,9 @@ import sys
 import os
 
 # Add parent directories to path to import IRH modules
+# WARNING: This sys.path modification is for development convenience only.
+# For production deployment, install IRH package properly: pip install -e .
+# Or set PYTHONPATH environment variable to avoid this modification.
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../python/src'))
 
 from irh.graph_state import HyperGraph
@@ -52,6 +55,18 @@ app = FastAPI(
 # WARNING: Wildcard origins are for development only!
 # For production, restrict to specific domains:
 # allow_origins=["https://yourdomain.com", "https://app.yourdomain.com"]
+# 
+# Environment check for production deployment
+if os.getenv("ENV") == "production" and "*" in ["*"]:  # Check if wildcard is configured
+    import warnings
+    warnings.warn(
+        "SECURITY WARNING: CORS is configured with wildcard origins ('*'). "
+        "This should NEVER be used in production. Set ENV variable and configure "
+        "specific allowed origins in webapp_config.json or via environment variables.",
+        RuntimeWarning,
+        stacklevel=2
+    )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # TODO: Configure for production deployment
@@ -66,6 +81,18 @@ app.add_middleware(
 # - Redis with Celery for distributed task queue
 # - PostgreSQL/MongoDB for persistent job storage
 # - Horizontal scaling requires shared storage backend
+#
+# Runtime check to warn if used in production
+import warnings
+if os.getenv("ENV") == "production":
+    warnings.warn(
+        "PRODUCTION WARNING: Using in-memory job storage. "
+        "This will not persist across server restarts and does not support "
+        "horizontal scaling. Use Redis/Celery for production deployments.",
+        RuntimeWarning,
+        stacklevel=2
+    )
+
 jobs_db: Dict[str, Dict[str, Any]] = {}
 websocket_connections: Dict[str, WebSocket] = {}
 

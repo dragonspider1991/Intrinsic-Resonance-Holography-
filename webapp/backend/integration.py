@@ -14,28 +14,40 @@ Handles:
 
 import numpy as np
 from typing import Dict, Any, Optional, List, Callable
-import sys
-import os
 
-# Import IRH modules
+# Import IRH modules with proper error handling
 # NOTE: For production, ensure IRH package is installed via: pip install -e .
 # This sys.path modification is a fallback for development.
 try:
+    # Try importing with proper package installation
     from irh.graph_state import HyperGraph
+    from irh.spectral_dimension import SpectralDimension, HeatKernelTrace
+    from irh.scaling_flows import MetricEmergence, LorentzSignature, GSRGDecimate
+    from irh.predictions.constants import (
+        predict_alpha_inverse,
+        predict_neutrino_masses,
+        predict_ckm_matrix,
+    )
+    from irh.grand_audit import grand_audit
+    from irh.gtec import gtec
+    from irh.ncgg import NCGG, frustration
 except ImportError:
     # Fallback: add IRH package to path if not installed
+    import sys
+    import os
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../python/src'))
+    
     from irh.graph_state import HyperGraph
-from irh.spectral_dimension import SpectralDimension, HeatKernelTrace
-from irh.scaling_flows import MetricEmergence, LorentzSignature, GSRGDecimate
-from irh.predictions.constants import (
-    predict_alpha_inverse,
-    predict_neutrino_masses,
-    predict_ckm_matrix,
-)
-from irh.grand_audit import grand_audit
-from irh.gtec import gtec
-from irh.ncgg import NCGG, frustration
+    from irh.spectral_dimension import SpectralDimension, HeatKernelTrace
+    from irh.scaling_flows import MetricEmergence, LorentzSignature, GSRGDecimate
+    from irh.predictions.constants import (
+        predict_alpha_inverse,
+        predict_neutrino_masses,
+        predict_ckm_matrix,
+    )
+    from irh.grand_audit import grand_audit
+    from irh.gtec import gtec
+    from irh.ncgg import NCGG, frustration
 
 from webapp.backend.visualization import (
     serialize_network_3d,
