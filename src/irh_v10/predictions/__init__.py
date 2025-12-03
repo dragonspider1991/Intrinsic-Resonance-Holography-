@@ -11,8 +11,18 @@ Zero free parameters - all values emergent from network geometry.
 """
 
 from .fine_structure_alpha import derive_alpha, quick_alpha_demo
+from .planck_constant import derive_planck_constant, planck_length, planck_mass
+from .newton_G import derive_newton_G, gravitational_coupling_strength
+from .proton_electron_mass_ratio import derive_mass_ratio, mass_from_winding
 
 __all__ = [
     "derive_alpha",
     "quick_alpha_demo",
+    "derive_planck_constant",
+    "planck_length",
+    "planck_mass",
+    "derive_newton_G",
+    "gravitational_coupling_strength",
+    "derive_mass_ratio",
+    "mass_from_winding",
 ]
