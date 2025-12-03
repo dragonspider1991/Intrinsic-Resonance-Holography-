@@ -1,0 +1,21 @@
+# Web Application Backend Requirements
+# FastAPI-based API for IRH Web Interface
+
+# Web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.4.0
+python-multipart>=0.0.6
+
+# CORS support (built-in to FastAPI, no additional package needed)
+# fastapi-cors>=0.0.6  # REMOVED: Use FastAPI's built-in CORSMiddleware instead
+
+# Data serialization
+orjson>=3.9.0
+
+# WebSocket support for real-time updates
+websockets>=12.0
+
+# Note: IRH core dependencies (numpy, scipy, networkx, matplotlib) 
+# are provided by the parent IRH package.
+# Install the IRH package first: pip install -e . (from repo root)
