@@ -124,9 +124,9 @@ class ErrorAnalyzer:
     
     def capture_system_state(self) -> Dict[str, Any]:
         """Capture current system state."""
-        import psutil
-        
+        # Try to import psutil, fall back to basic info if not available
         try:
+            import psutil
             memory = psutil.virtual_memory()
             system_state = {
                 "python_version": sys.version,
