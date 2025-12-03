@@ -1,0 +1,50 @@
+{
+  "webapp": {
+    "name": "IRH Web Interface",
+    "version": "1.0.0",
+    "description": "Interactive web application for Intrinsic Resonance Holography test suite",
+    "backend": {
+      "host": "0.0.0.0",
+      "port": 8000,
+      "cors_origins": ["*"],
+      "api_prefix": "/api",
+      "enable_websockets": true,
+      "max_workers": 4
+    },
+    "frontend": {
+      "title": "IRH - Intrinsic Resonance Holography",
+      "theme": "dark",
+      "default_visualization_mode": "3d"
+    },
+    "simulation": {
+      "default_network_size": 64,
+      "max_network_size": 4096,
+      "default_topology": "Random",
+      "available_topologies": ["Random", "Complete", "Cycle", "Lattice"],
+      "default_optimization_iterations": 500,
+      "max_optimization_iterations": 10000
+    },
+    "visualization": {
+      "3d": {
+        "engine": "three.js",
+        "node_size_range": [0.5, 2.0],
+        "edge_opacity_range": [0.1, 1.0],
+        "camera_distance": 10,
+        "enable_orbit_controls": true,
+        "enable_auto_rotate": false
+      },
+      "2d": {
+        "library": "chart.js",
+        "default_chart_type": "line",
+        "color_scheme": "viridis",
+        "animation_duration": 750
+      }
+    },
+    "features": {
+      "enable_real_time_updates": true,
+      "enable_parameter_presets": true,
+      "enable_export": true,
+      "export_formats": ["json", "csv", "png", "svg"]
+    }
+  }
+}

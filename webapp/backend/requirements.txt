@@ -1,0 +1,23 @@
+# Web Application Backend Requirements
+# FastAPI-based API for IRH Web Interface
+
+# Web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.4.0
+python-multipart>=0.0.6
+
+# CORS support
+fastapi-cors>=0.0.6
+
+# Data serialization
+orjson>=3.9.0
+
+# WebSocket support for real-time updates
+websockets>=12.0
+
+# IRH core dependencies (inherit from parent)
+numpy>=1.24.0
+scipy>=1.11.0
+networkx>=3.1
+matplotlib>=3.7.0
