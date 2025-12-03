@@ -8,7 +8,7 @@ version = "10.0.0"
 description = "Intrinsic Resonance Holography v10.0: Cymatic Resonance - A parameter-free Theory of Everything"
 readme = "README.md"
 authors = [
-    {name = "Brandon D. McCrary", email = ""},
+    {name = "Brandon D. McCrary", email = "brandonmccrary.research@gmail.com"},
 ]
 license = {text = "CC0-1.0"}
 classifiers = [
