@@ -1,0 +1,11 @@
+{
+  "grid_size_N": 1000,
+  "run_gtec": true,
+  "run_ncgg": true,
+  "run_cosmology": false,
+  "output_verbosity": "brief",
+  "max_iterations": 1000,
+  "precision": "high",
+  "use_gpu": false,
+  "output_dir": "./outputs"
+}

@@ -82,3 +82,8 @@ archives/*.zip
 
 # Pre-registration (keep YAML, ignore generated)
 pre_reg/*.hash
+
+# Orchestrator outputs and runtime files
+crash_report_for_llm.txt
+outputs/
+config.json

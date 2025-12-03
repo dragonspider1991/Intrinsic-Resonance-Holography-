@@ -1,0 +1,54 @@
+
+================================================================================
+PROMPT FOR LLM-ENABLED WOLFRAM NOTEBOOK
+================================================================================
+
+I am working with the Intrinsic Resonance Holography (IRH) theoretical physics
+framework. Please generate Mathematica code to implement the GTEC (Graph 
+Topological Emergent Complexity) kernel with the following specifications:
+
+TASK:
+Generate a complete Mathematica notebook that:
+
+1. Creates a random symmetric graph adjacency matrix of size N×N (N=1000)
+   - Use sparse matrix representation for efficiency
+   - Connection probability ~10%
+
+2. Computes the graph Laplacian: L = D - A
+   where D is the degree matrix and A is the adjacency matrix
+
+3. Performs eigenvalue decomposition of the Laplacian
+   - Compute all eigenvalues and eigenvectors
+   - Sort by eigenvalue magnitude
+
+4. Computes entanglement entropy for a bipartite partition
+   - Use the ground state (eigenvector with smallest eigenvalue)
+   - Compute von Neumann entropy: S = -Tr(ρ log₂ ρ)
+   - For a partition A|B where |A| = N/2
+
+5. Calculates GTEC energy contribution
+   - GTEC coupling: μ = 1/(N ln N)
+   - GTEC energy: E_GTEC = -μ * S
+
+6. Visualizes results:
+   - Histogram of eigenvalue distribution
+   - Plot of entropy vs partition size
+   - 3D visualization of Laplacian spectrum
+
+7. Exports results to JSON format
+
+REQUIREMENTS:
+- Use efficient numerical methods (SparseArray, Eigenvalues optimization)
+- Include progress indicators for long computations
+- Add clear section headers and documentation
+- Make it reproducible with SeedRandom[42]
+- Include error handling for numerical instabilities
+
+PHYSICS CONTEXT:
+The GTEC mechanism provides negative vacuum energy that cancels the large
+positive QFT vacuum energy, explaining the small observed cosmological constant.
+This is a key prediction of IRH theory.
+
+Please generate the complete, executable Mathematica code now.
+
+================================================================================
