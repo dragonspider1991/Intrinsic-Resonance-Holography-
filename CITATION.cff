@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Intrinsic Resonance Holography v10.0: Cymatic Resonance"
+version: 10.0.0
+date-released: 2025-12-16
+authors:
+  - family-names: McCrary
+    given-names: Brandon D.
+license: CC0-1.0
+repository-code: "https://github.com/dragonspider1991/Intrinsic-Resonance-Holography-"
+abstract: >
+  A complete, parameter-free, computationally verifiable Theory of Everything
+  derived from a classical network of real harmonic oscillators via Adaptive
+  Resonance Optimization. Derives all fundamental constants including the
+  fine structure constant α⁻¹ = 137.035999084 from first principles.
+keywords:
+  - "theory of everything"
+  - "quantum gravity"
+  - "emergent spacetime"
+  - "holography"
+  - "fine structure constant"
+  - "cymatic resonance"
+  - "adaptive resonance optimization"
+references:
+  - type: article
+    title: "Intrinsic Resonance Holography v10.0: A Theory of Everything from Cymatic Resonance"
+    authors:
+      - family-names: McCrary
+        given-names: Brandon D.
+    year: 2025
+    journal: "arXiv preprint"
+    notes: "arXiv:2025.XXXXX (to be posted)"
