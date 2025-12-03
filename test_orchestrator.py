@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import tempfile
+import shutil
 from pathlib import Path
 
 # Add repository to path

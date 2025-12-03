@@ -217,10 +217,12 @@ class ErrorAnalyzer:
         system_state = self.capture_system_state()
         suggested_fix = self.generate_suggested_fix(error_type, error_message)
         
+        separator = "=" * 80
+        
         report = f"""
-{'='*80}
+{separator}
 IRH PHYSICS SUITE - CRASH REPORT FOR LLM ANALYSIS
-{'='*80}
+{separator}
 
 I am running the Intrinsic Resonance Holography (IRH) Physics Suite and encountered
 an error. Please analyze the root cause and provide a code patch or solution.
@@ -254,13 +256,13 @@ SUGGESTED FIXES:
 INSTALLED PACKAGES (if available):
 {json.dumps(system_state.get('installed_packages', {}), indent=2) if isinstance(system_state.get('installed_packages'), dict) else 'Not available'}
 
-{'='*80}
+{separator}
 QUESTIONS FOR LLM:
 1. What is the root cause of this error?
 2. Is this a configuration issue, environment issue, or code bug?
 3. What specific steps should I take to fix this?
 4. If this is a code issue, please provide a patch.
-{'='*80}
+{separator}
 """
         return report
     
