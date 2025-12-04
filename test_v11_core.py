@@ -3,7 +3,7 @@ Quick validation test for IRH v11.0 core modules.
 
 Tests:
 1. Substrate initialization
-2. SOTE action computation
+2. ARO action computation
 3. Quantum emergence verification
 """
 
@@ -36,15 +36,15 @@ def test_substrate():
     return substrate
 
 def test_sote(substrate):
-    """Test SOTE action computation."""
+    """Test ARO action computation."""
     print("\n" + "=" * 70)
-    print("TEST 2: SOTE Functional")
+    print("TEST 2: ARO Functional")
     print("=" * 70)
     
     sote = SOTEFunctional(substrate)
     S = sote.compute_action()
     
-    print(f"✓ SOTE action computed: S = {S:.4e}")
+    print(f"✓ ARO action computed: S = {S:.4e}")
     
     # Test holographic compliance
     compliance = sote.verify_holographic_compliance()
@@ -93,7 +93,7 @@ def main():
         # Test 1: Substrate
         substrate = test_substrate()
         
-        # Test 2: SOTE
+        # Test 2: ARO
         sote = test_sote(substrate)
         
         # Test 3: Quantum

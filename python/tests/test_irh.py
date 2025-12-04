@@ -169,7 +169,7 @@ class TestScalingFlows:
         assert result.positive_count >= 0
 
 
-# GTEC Tests
+# ARO Tests
 
 
 class TestARO:

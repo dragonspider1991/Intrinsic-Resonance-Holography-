@@ -69,7 +69,7 @@ def analyze_dimension(d, sample_idx):
     substrate.initialize_correlations('random_geometric')
     substrate.compute_laplacian()
     
-    # Compute SOTE action
+    # Compute ARO action
     sote = SOTEFunctional(substrate)
     S_action = sote.compute_action()
     
@@ -163,7 +163,7 @@ def analyze_and_plot(results):
         
         print(f"\nd = {d}:")
         print(f"  Spectral dimension: {stats[d]['mean_d_spec']:.3f} ± {stats[d]['std_d_spec']:.3f}")
-        print(f"  SOTE action: {stats[d]['mean_action']:.4e} ± {stats[d]['std_action']:.4e}")
+        print(f"  ARO action: {stats[d]['mean_action']:.4e} ± {stats[d]['std_action']:.4e}")
         print(f"  Consistency: {stats[d]['mean_consistency']:.4f} ± {stats[d]['std_consistency']:.4f}")
     
     # Find maximum consistency
@@ -194,7 +194,7 @@ def analyze_and_plot(results):
     axes[0, 0].legend(fontsize=11)
     axes[0, 0].grid(True, alpha=0.3)
     
-    # Plot 2: SOTE Action
+    # Plot 2: ARO Action
     means_action = [stats[d]['mean_action'] for d in dims]
     stds_action = [stats[d]['std_action'] for d in dims]
     
@@ -202,8 +202,8 @@ def analyze_and_plot(results):
                         linewidth=2, markersize=8, color='green')
     axes[0, 1].axvline(x=4, color='red', linestyle='--', linewidth=2)
     axes[0, 1].set_xlabel('Dimension d', fontsize=13)
-    axes[0, 1].set_ylabel('$S_{SOTE}$ Action', fontsize=13)
-    axes[0, 1].set_title('SOTE Action vs Dimension', fontsize=14, fontweight='bold')
+    axes[0, 1].set_ylabel('$S_{ARO}$ Action', fontsize=13)
+    axes[0, 1].set_title('ARO Action vs Dimension', fontsize=14, fontweight='bold')
     axes[0, 1].set_yscale('log')
     axes[0, 1].grid(True, alpha=0.3)
     
@@ -233,7 +233,7 @@ def analyze_and_plot(results):
         axes[1, 1].scatter(actions, consistencies, s=size, alpha=alpha,
                           color=color, label=f'd={d}' if d == 4 else '')
     
-    axes[1, 1].set_xlabel('$S_{SOTE}$ Action', fontsize=13)
+    axes[1, 1].set_xlabel('$S_{ARO}$ Action', fontsize=13)
     axes[1, 1].set_ylabel('Consistency', fontsize=13)
     axes[1, 1].set_title('Action-Consistency Phase Space', fontsize=14, fontweight='bold')
     axes[1, 1].set_xscale('log')

@@ -58,7 +58,7 @@ def gtec(
     max_k: int = 5,
 ) -> AROResult:
     """
-    Compute GTEC (Graph Topological Emergent Complexity) functional.
+    Compute ARO (Adaptive Resonance Optimization) functional.
 
     GTEC measures the balance between global disorder (entropy) and
     local structure (conditional entropy), capturing emergent complexity.
@@ -97,7 +97,7 @@ def gtec(
     else:
         edge_entropy = 0.0
 
-    # GTEC complexity
+    # ARO complexity
     complexity = shannon_global - local_entropy
 
     return AROResult(
@@ -293,7 +293,7 @@ def ensemble_gtec(
     perturbation_scale: float = 0.1,
 ) -> EnsembleResult:
     """
-    Compute GTEC over an ensemble of perturbed graphs.
+    Compute ARO over an ensemble of perturbed graphs.
 
     Ensemble sampling: μ_δW ~ exp(-Tr(L²)/2)
 
@@ -325,7 +325,7 @@ def ensemble_gtec(
             phase = np.angle(w)
             perturbed_W[edge] = new_mag * np.exp(1j * phase)
 
-        # Compute GTEC for perturbed graph
+        # Compute ARO for perturbed graph
         # (simplified: use perturbed weights directly)
         W_array = np.array([abs(w) for w in perturbed_W.values()])
         if len(W_array) > 0:
@@ -348,7 +348,7 @@ def ensemble_gtec(
 
 def gtec_monotonicity_test(graph: CymaticResonanceNetwork, complexity_threshold: float = 0.0) -> dict:
     """
-    Test GTEC monotonicity: complexity should increase with structure.
+    Test ARO monotonicity: complexity should increase with structure.
 
     Args:
         graph: CymaticResonanceNetwork instance
