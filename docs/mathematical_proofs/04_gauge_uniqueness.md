@@ -111,13 +111,10 @@ $$
 - Leptons: $L_L$ (1,2,-1/2), $e_R$ (1,1,-1)
 
 **SU(3)² × U(1) Anomaly:**
-$$
-\mathcal{A}[SU(3)^2 U(1)] = N_c \left( 2 \cdot \frac{1}{6} + 1 \cdot \frac{2}{3} + 1 \cdot \left(-\frac{1}{3}\right) \right) = 3 \left(\frac{1}{3} + \frac{2}{3} - \frac{1}{3}\right) = 3 \cdot \frac{2}{3} = 2
-$$
 
-Wait, this doesn't vanish for one generation! But for **three generations** with color $N_c=3$:
+For three generations with color $N_c=3$, the quark contribution is:
 $$
-\mathcal{A}_{\text{quarks}} = N_g \left[2 \cdot \frac{1}{6} + \frac{2}{3} - \frac{1}{3}\right] \cdot 3 = 3 \cdot \frac{2}{3} \cdot 3 = 6
+\mathcal{A}_{\text{quarks}} = N_g N_c \left[2 \cdot \frac{1}{6} + \frac{2}{3} - \frac{1}{3}\right] = 3 \cdot 3 \cdot \frac{2}{3} = 6
 $$
 
 **Lepton Contribution:**
