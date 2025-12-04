@@ -15,7 +15,7 @@ Intrinsic Resonance Holography (IRH) v11.0 presents the first **mathematically c
 
 ✨ **Zero Free Parameters** - All fundamental constants (α, G_N, Λ, ℏ) derived from self-consistency  
 🎯 **Non-Circular Derivations** - Time emerges from updates; QM from information preservation  
-🔬 **Proven Uniqueness** - d=4, SOTE functional, and SU(3)×SU(2)×U(1) are uniquely determined  
+🔬 **Proven Uniqueness** - d=4, ARO functional, and SU(3)×SU(2)×U(1) are uniquely determined  
 📊 **Falsifiable Predictions** - w₀ = -0.912 ± 0.008 (testable by Euclid 2025-2027)  
 ⚡ **Computationally Verified** - Complete Python implementation with test suite  
 
@@ -27,7 +27,7 @@ Intrinsic Resonance Holography (IRH) v11.0 presents the first **mathematically c
 
 ```python
 from src.core.substrate_v11 import InformationSubstrate
-from src.core.sote_v11 import SOTEFunctional  
+from src.core.sote_v11 import AROFunctional  
 from src.core.quantum_v11 import QuantumEmergence
 
 # Initialize discrete substrate (pure information, no assumptions)
@@ -35,8 +35,8 @@ substrate = InformationSubstrate(N=5000, dimension=4)
 substrate.initialize_correlations('random_geometric')
 substrate.compute_laplacian()
 
-# Optimize to SOTE ground state
-sote = SOTEFunctional(substrate)
+# Optimize to ARO ground state
+sote = AROFunctional(substrate)
 S_action = sote.compute_action()
 
 # Extract fundamental constants
@@ -89,7 +89,7 @@ Total mutual information cannot exceed the Bekenstein-Hawking holographic bound.
 | **ℏ** | Empirical constant | Calculated from frustration density |
 | **Complex ψ** | Assumed | Emerges from phase frustration |
 | **Born Rule** | Postulated | Proven from ergodicity |
-| **d=4** | Assumed | Uniquely stable under SOTE |
+| **d=4** | Assumed | Uniquely stable under ARO |
 | **Gauge Group** | SM assumption | SU(3)×SU(2)×U(1) uniquely forced |
 
 ---
@@ -127,9 +127,9 @@ Intrinsic-Resonance-Holography-/
 ├── src/
 │   ├── core/                      # Foundational modules
 │   │   ├── substrate_v11.py       # Discrete information substrate
-│   │   ├── sote_v11.py            # SOTE action functional
+│   │   ├── sote_v11.py            # ARO action functional
 │   │   └── quantum_v11.py         # Quantum emergence (non-circular)
-│   ├── optimization/              # SOTE optimization suite
+│   ├── optimization/              # ARO optimization suite
 │   │   ├── quantum_annealing.py   # Global search
 │   │   ├── replica_exchange.py    # Local refinement
 │   │   └── renormalization.py     # GSRG fixed point
@@ -159,7 +159,7 @@ Intrinsic-Resonance-Holography-/
 > Geometric frustration in graphs with odd-length cycles **forces** the introduction of complex weights. The average holonomy per plaquette converges to α_EM = 1/137.036.
 
 ### Theorem 2.1: Unique Stability at d=4
-> The SOTE functional exhibits a **global minimum** in spectral action when d_spec = 4, satisfying:
+> The ARO functional exhibits a **global minimum** in spectral action when d_spec = 4, satisfying:
 > 1. Holographic consistency (I ~ A)
 > 2. Scale invariance ([G] = 2)
 > 3. Causal propagation (Huygens' principle)
@@ -167,8 +167,8 @@ Intrinsic-Resonance-Holography-/
 ### Theorem 3.1: Emergence of the Hamiltonian
 > The Hamiltonian is **uniquely determined** as the generator of information-preserving updates, derived via Legendre transform from the update Lagrangian.
 
-### Theorem 4.1: Uniqueness of SOTE
-> S_SOTE = Tr(L²)/(det' L)^(1/(N ln N)) is the **unique** functional (up to rescaling) satisfying intensive scaling, holographic compliance, and scale invariance.
+### Theorem 4.1: Uniqueness of ARO
+> ℋ_Harmony = Tr(L²)/(det' L)^(1/(N ln N)) is the **unique** functional (up to rescaling) satisfying intensive scaling, holographic compliance, and scale invariance.
 
 ### Theorem 5.2: Gauge Group Selection
 > SU(3)×SU(2)×U(1) is the **unique** 12-dimensional compact Lie group satisfying anomaly cancellation, asymptotic freedom, electroweak unification, and topological constraints.
@@ -243,7 +243,7 @@ Complete derivations available in [`docs/mathematical_proofs/`](docs/mathematica
 
 ## Development Status
 
-🟢 **Complete:** Core derivations, SOTE functional, quantum emergence  
+🟢 **Complete:** Core derivations, ARO functional, quantum emergence  
 🟡 **In Progress:** Optimization suite, full empirical predictions  
 🔴 **Planned:** HPC scaling, interactive visualizations, peer review submission
 

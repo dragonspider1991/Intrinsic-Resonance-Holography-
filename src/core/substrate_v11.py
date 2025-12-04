@@ -7,7 +7,7 @@ Implements Axioms 0-2 from v11.0:
 - Finite information bound (holographic principle)
 
 This module provides the foundational discrete structure from which all
-physics emerges through SOTE optimization.
+physics emerges through ARO optimization.
 """
 
 import numpy as np

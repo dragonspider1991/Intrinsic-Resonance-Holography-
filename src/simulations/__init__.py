@@ -1,8 +1,8 @@
 """
-SOTE Scaling Simulations for IRH Formalism v9.5
+ARO Scaling Simulations for IRH Formalism v9.5
 
 This package provides simulation tools for verifying the scaling arguments
-used in the Self-Organizing Topological Entropy (SOTE) Principle derivation.
+used in the Self-Organizing Topological Entropy (ARO) Principle derivation.
 
 Includes:
 - sote_scaling_verification: Random geometric graph analysis
@@ -24,7 +24,7 @@ from .dimensional_bootstrap import (
 )
 
 __all__ = [
-    # SOTE scaling verification
+    # ARO scaling verification
     "generate_random_geometric_graph",
     "compute_holographic_action",
     "verify_criticality",

@@ -5,7 +5,7 @@
    ============================================================================
    
    Purpose:
-     Implements mutation operators for the HAGO optimization loop. Supports
+     Implements mutation operators for the ARO optimization loop. Supports
      multiple mutation kernels including edge rewiring, weight perturbation,
      and phase rotation, with configurable scheduling.
    

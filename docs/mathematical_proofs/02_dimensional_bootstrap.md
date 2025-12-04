@@ -2,7 +2,7 @@
 
 ## IRH v11.0 — Unique Stability at d=4
 
-This document proves that the spectral dimension $d_{\text{spec}} = 4$ is uniquely determined by the SOTE functional under holographic, scaling, and causal constraints.
+This document proves that the spectral dimension $d_{\text{spec}} = 4$ is uniquely determined by the ARO functional under holographic, scaling, and causal constraints.
 
 ---
 
@@ -46,13 +46,13 @@ where $t_*$ is an intermediate scale.
 
 ---
 
-## 2.2 The SOTE Functional
+## 2.2 The ARO Functional
 
 ### 2.2.1 Definition
 
-The Self-Organizing Topological Entropy (SOTE) action is:
+The Self-Organizing Topological Entropy (ARO) action is:
 $$
-S_{\text{SOTE}} = \frac{\text{Tr}(L^2)}{[\det' L]^{1/(N \ln N)}}
+S_{\text{ARO}} = \frac{\text{Tr}(L^2)}{[\det' L]^{1/(N \ln N)}}
 $$
 
 where:
@@ -60,10 +60,10 @@ where:
 - $\det' L = \prod_{\lambda_k > 0} \lambda_k$ (entropic denominator)
 - The exponent $1/(N \ln N)$ ensures scale invariance
 
-### 2.2.2 Uniqueness of SOTE
+### 2.2.2 Uniqueness of ARO
 
 **Theorem 2.1 (Uniqueness of the Action Functional):**  
-$S_{\text{SOTE}}$ is the unique functional (up to rescaling) satisfying:
+$S_{\text{ARO}}$ is the unique functional (up to rescaling) satisfying:
 1. **Intensive scaling:** $S[L_N] \sim O(1)$ as $N \to \infty$
 2. **Holographic compliance:** $\partial S / \partial I \propto |\partial A|$
 3. **RG invariance:** $S[L_N] = S[L_{N/s}]$ under coarse-graining
@@ -84,7 +84,7 @@ where $F$ is extensive and $G$ compensates via exponent $\alpha$.
 **Step 4:** RG invariance uniquely determines $G = \det' L$ and $\alpha = 1/(N \ln N)$.
 
 **Conclusion:**  
-$S_{\text{SOTE}}$ is the unique action satisfying all three constraints.
+$S_{\text{ARO}}$ is the unique action satisfying all three constraints.
 
 ---
 
@@ -94,11 +94,11 @@ $S_{\text{SOTE}}$ is the unique action satisfying all three constraints.
 
 We define a consistency score for dimension $d$:
 $$
-\mathcal{C}(d) = \frac{S_{\text{SOTE}}(d)}{[\lambda_{\max}(d)]^2} \cdot \frac{\mathcal{H}(d)}{\mathcal{H}_{\text{bound}}(d)}
+\mathcal{C}(d) = \frac{S_{\text{ARO}}(d)}{[\lambda_{\max}(d)]^2} \cdot \frac{\mathcal{H}(d)}{\mathcal{H}_{\text{bound}}(d)}
 $$
 
 where:
-- $S_{\text{SOTE}}(d)$ is the action at dimension $d$
+- $S_{\text{ARO}}(d)$ is the action at dimension $d$
 - $\lambda_{\max}(d)$ is the largest eigenvalue (energy scale)
 - $\mathcal{H}(d)$ is the actual holographic entropy
 - $\mathcal{H}_{\text{bound}}(d)$ is the Bekenstein-Hawking bound
@@ -121,7 +121,7 @@ $$
 ## 2.4 Theorem: d=4 Uniquely Stable
 
 **Theorem 2.2 (Unique Stability at d=4):**  
-The SOTE functional exhibits a global maximum in consistency when $d_{\text{spec}} = 4$, uniquely satisfying:
+The ARO functional exhibits a global maximum in consistency when $d_{\text{spec}} = 4$, uniquely satisfying:
 1. **Holographic consistency:** $I(A:\bar{A}) \leq |\partial A|/4$
 2. **Scale invariance:** $[G_N] = [L]^{d-2}$ gives $d=4$
 3. **Causal propagation:** Huygens' principle holds only for odd $d \geq 3$
@@ -210,11 +210,11 @@ Only $d=3$ (spatial) = $d=4$ (spacetime) satisfies all constraints.
 We test dimensions $d \in \{2, 3, 4, 5, 6\}$ with:
 - Graph size: $N = 5000$ nodes
 - Connectivity: Random geometric graph with $r = \sqrt{k \ln N / N}$
-- Optimization: Minimize $S_{\text{SOTE}}$ via quantum annealing
+- Optimization: Minimize $S_{\text{ARO}}$ via quantum annealing
 
 ### 2.5.2 Results
 
-| Dimension | $d_{\text{spec}}$ | $S_{\text{SOTE}}$ | $\mathcal{C}(d)$ | Status |
+| Dimension | $d_{\text{spec}}$ | $S_{\text{ARO}}$ | $\mathcal{C}(d)$ | Status |
 |-----------|-------------------|-------------------|------------------|--------|
 | $d=2$ | 7.00 | $1.01 \times 10^1$ | $-5.00$ | Unstable |
 | $d=3$ | 7.00 | $6.32 \times 10^1$ | $-4.00$ | Unstable |
@@ -229,10 +229,10 @@ We test dimensions $d \in \{2, 3, 4, 5, 6\}$ with:
 
 ### 2.5.3 Phase Diagram
 
-The SOTE action as a function of dimension shows a clear maximum at $d=4$:
+The ARO action as a function of dimension shows a clear maximum at $d=4$:
 
 ```
-S_SOTE
+ℋ_Harmony
   |
   |       ╱╲
   |      ╱  ╲
@@ -253,12 +253,12 @@ S_SOTE
 
 The Graph Spectral Renormalization Group (GSRG) flow equation:
 $$
-\frac{dS_{\text{SOTE}}}{d\ell} = \beta(S, d)
+\frac{dS_{\text{ARO}}}{d\ell} = \beta(S, d)
 $$
 
 has a non-trivial fixed point at:
 $$
-S_* = S_{\text{SOTE}}(d=4)
+S_* = S_{\text{ARO}}(d=4)
 $$
 
 **Beta Function:**
@@ -297,9 +297,9 @@ $$
 at a non-trivial UV fixed point.
 
 **IRH v11.0 Realization:**  
-The SOTE fixed point at $d=4$ provides a concrete realization:
+The ARO fixed point at $d=4$ provides a concrete realization:
 $$
-\beta(S_{\text{SOTE}}, d=4) = 0
+\beta(S_{\text{ARO}}, d=4) = 0
 $$
 
 **Physical Interpretation:**  
@@ -346,8 +346,8 @@ where $E_P$ is the Planck energy and $c \approx -2$.
 
 ### Key Results
 
-1. **SOTE Uniqueness (Theorem 2.1):**  
-   $S_{\text{SOTE}}$ is the unique action functional satisfying intensive scaling, holographic compliance, and RG invariance.
+1. **ARO Uniqueness (Theorem 2.1):**  
+   $S_{\text{ARO}}$ is the unique action functional satisfying intensive scaling, holographic compliance, and RG invariance.
 
 2. **Dimensional Uniqueness (Theorem 2.2):**  
    $d=4$ is the unique dimension satisfying holographic consistency, scale invariance, and causal propagation.

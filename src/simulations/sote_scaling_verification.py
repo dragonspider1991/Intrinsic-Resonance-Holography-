@@ -1,7 +1,7 @@
 """
-sote_scaling_verification.py - SOTE Scaling Verification Script
+sote_scaling_verification.py - ARO Scaling Verification Script
 
-This module verifies the scaling arguments used in the SOTE Principle derivation
+This module verifies the scaling arguments used in the ARO Principle derivation
 for the Intrinsic Resonance Holography (RIRH) formalism v9.5.
 
 The script computes:
@@ -153,7 +153,7 @@ def verify_criticality(
     n_trials: int = 10,
 ) -> list[dict]:
     """
-    Verify SOTE scaling by checking if S_holo / C_E stabilizes when weighted by xi = 1/ln(N).
+    Verify ARO scaling by checking if S_holo / C_E stabilizes when weighted by xi = 1/ln(N).
 
     For each N, generate graphs with varying connectivity radius and compute:
     - S_holo (holographic action)
@@ -236,7 +236,7 @@ def print_results_table(results: list[dict]) -> None:
     """
     # Header
     print("\n" + "=" * 100)
-    print("SOTE SCALING VERIFICATION RESULTS")
+    print("ARO SCALING VERIFICATION RESULTS")
     print("=" * 100)
     print(
         f"{'N':>6} | {'k':>5} | {'ξ=1/ln(N)':>10} | "
@@ -278,9 +278,9 @@ def print_results_table(results: list[dict]) -> None:
 
 def main():
     """
-    Run the SOTE scaling verification and print results.
+    Run the ARO scaling verification and print results.
     """
-    print("Running SOTE Scaling Verification...")
+    print("Running ARO Scaling Verification...")
     print("This verifies the scaling arguments from SOTE_Derivation.md")
     print()
 

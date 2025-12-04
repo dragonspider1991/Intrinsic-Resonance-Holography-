@@ -42,7 +42,7 @@ This implementation delivers a comprehensive automation and orchestration system
 
 6. **`irh_wolfram_kernel.wls`**
    - Wolfram Language script
-   - Mirrors GTEC Python logic
+   - Mirrors ARO Python logic
    - Executable with wolframscript
    - 150+ lines of Mathematica code
 
@@ -72,7 +72,7 @@ This implementation delivers a comprehensive automation and orchestration system
 
 ### 2. Interactive Configuration Wizard
 - ✅ Grid size selection (10-100,000)
-- ✅ Module selection (GTEC, NCGG, Cosmology)
+- ✅ Module selection (ARO, NCGG, Cosmology)
 - ✅ Verbosity control (brief/debug)
 - ✅ Advanced options (iterations, precision, GPU)
 - ✅ Config persistence across runs
@@ -86,12 +86,12 @@ This implementation delivers a comprehensive automation and orchestration system
 
 ### 4. Wolfram Integration
 - ✅ Auto-generates .wls scripts
-- ✅ Mirrors Python GTEC logic
+- ✅ Mirrors Python ARO logic
 - ✅ LLM notebook prompts
 - ✅ Physics context included
 
 ### 5. Execution Engine
-- ✅ Orchestrates GTEC, NCGG, Cosmology modules
+- ✅ Orchestrates ARO, NCGG, Cosmology modules
 - ✅ Real-time output capture
 - ✅ Timeout protection
 - ✅ Module isolation
@@ -123,7 +123,7 @@ This implementation delivers a comprehensive automation and orchestration system
 │        ┌────────────┼────────────┐                          │
 │        │            │            │                          │
 │   ┌────▼───┐   ┌───▼────┐  ┌───▼────┐                      │
-│   │ GTEC   │   │ NCGG   │  │Cosmol. │                      │
+│   │ ARO   │   │ NCGG   │  │Cosmol. │                      │
 │   └────────┘   └────────┘  └────────┘                      │
 │                                                             │
 │  ┌──────────────────┐  ┌──────────────────┐                │

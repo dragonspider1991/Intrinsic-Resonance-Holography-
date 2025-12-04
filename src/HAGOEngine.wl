@@ -5,7 +5,7 @@
    ============================================================================
    
    Purpose:
-     Orchestrates the main HAGO optimization loop, coordinating mutation,
+     Orchestrates the main ARO optimization loop, coordinating mutation,
      acceptance, parameter updates, checkpointing, and logging. This is
      the central engine that drives IRH spacetime evolution.
    
@@ -40,12 +40,12 @@
 
 BeginPackage["IRHSuite`HAGOEngine`"];
 
-HAGOEngine::usage = "HAGOEngine[initGraph, opts] runs the HAGO optimization loop. \
+HAGOEngine::usage = "HAGOEngine[initGraph, opts] runs the ARO optimization loop. \
 Options: \"MaxIterations\", \"Temperature\", \"CheckpointInterval\", etc. \
 Returns an Association with the optimized graph and optimization history.
 Example: result = HAGOEngine[g, \"MaxIterations\" -> 1000]";
 
-HAGOStep::usage = "HAGOStep[state] performs a single HAGO iteration. \
+HAGOStep::usage = "HAGOStep[state] performs a single ARO iteration. \
 Used internally by HAGOEngine but exposed for debugging.";
 
 Begin["`Private`"];
@@ -156,7 +156,7 @@ HAGOEngine[initGraph_?GraphStateQ, opts:OptionsPattern[]] := Module[
   converged = False;
   
   (* Log start *)
-  IRHLog["INFO", StringForm["HAGO Engine started. MaxIterations=`1`", maxIter]];
+  IRHLog["INFO", StringForm["ARO Engine started. MaxIterations=`1`", maxIter]];
   IRHLog["INFO", StringForm["Initial Gamma=`1`", currentGamma]];
   
   (* Main optimization loop *)
@@ -259,7 +259,7 @@ HAGOEngine[initGraph_?GraphStateQ, opts:OptionsPattern[]] := Module[
   checkpoint[bestGraph, history, outputDir, "final"];
   
   (* Log completion *)
-  IRHLog["INFO", StringForm["HAGO Engine completed. Final Gamma=`1`, Best=`2`", 
+  IRHLog["INFO", StringForm["ARO Engine completed. Final Gamma=`1`, Best=`2`", 
     currentGamma, bestGamma]];
   IRHLog["INFO", StringForm["Total time: `1` seconds", AbsoluteTime[] - startTime]];
   

@@ -4,7 +4,7 @@ matter.py - Topological Defect Classifier for Matter Genesis
 RIRH v9.5 Matter Genesis Framework
 
 This module implements the Topological Defect Classifier for identifying
-fundamental cycles (quantum knots) in the hypergraph that correspond to
+fundamental cycles (quantum knots) in the Cymatic Resonance Network that correspond to
 particle-like excitations.
 
 Key Components:
@@ -28,7 +28,7 @@ class Topological_Defect_Classifier:
     """
     Topological Defect Classifier for Matter Genesis.
 
-    Identifies fundamental cycles in the hypergraph using networkx.cycle_basis
+    Identifies fundamental cycles in the Cymatic Resonance Network using networkx.cycle_basis
     and computes holonomies to filter for non-trivial (independent) cycles.
 
     The K-Theory index argument predicts exactly 12 independent generators
@@ -36,7 +36,7 @@ class Topological_Defect_Classifier:
     to the 12-dimensional algebra.
 
     Attributes:
-        adj_matrix: Adjacency matrix of the hypergraph
+        adj_matrix: Adjacency matrix of the Cymatic Resonance Network
         N: Number of nodes
         graph: NetworkX graph representation
         cycles: List of fundamental cycles

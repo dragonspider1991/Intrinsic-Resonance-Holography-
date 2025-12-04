@@ -18,7 +18,7 @@ Mutation Kernels:
     - Topology modification (add/remove edges)
     - Large-scale rewiring
 
-ARO replaces SOTE, HAGO, GTEC from v9.5.
+ARO replaces ARO, ARO, ARO from v9.5.
 
 Reference: IRH v10.0 manuscript, Section III "Adaptive Resonance Optimization"
 """

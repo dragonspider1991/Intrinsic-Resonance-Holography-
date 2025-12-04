@@ -1,8 +1,8 @@
-# SOTE Principle: Rigorous Derivations
+# ARO Principle: Rigorous Derivations
 
 ## Formalism v9.5 — Ontological Foundations
 
-This document provides the rigorous mathematical derivations of the Self-Organizing Topological Entropy (SOTE) Principle for the Intrinsic Resonance Holography (RIRH) formalism v9.5.
+This document provides the rigorous mathematical derivations of the Self-Organizing Topological Entropy (ARO) Principle for the Intrinsic Resonance Holography (RIRH) formalism v9.5.
 
 ---
 
@@ -18,7 +18,7 @@ $$
 
 where:
 - $L$ is the graph Laplacian matrix
-- $N$ is the number of nodes in the hypergraph
+- $N$ is the number of nodes in the Cymatic Resonance Network
 - $\det' L$ is the pseudo-determinant (product of non-zero eigenvalues)
 - $\text{Tr}(L^2) = \sum_i \lambda_i^2$ is the trace of $L^2$
 
@@ -143,7 +143,7 @@ $$
 \xi(N) \sim \sqrt{\ln N}
 $$
 
-However, in the SOTE formalism, we work with the normalized correlation parameter:
+However, in the ARO formalism, we work with the normalized correlation parameter:
 
 ### 3.4 Derivation of $\xi \sim 1/\ln N$
 
@@ -171,7 +171,7 @@ $$
 \xi_{\text{dim}} = \frac{\lambda_1}{\langle \lambda \rangle} \sim \frac{1/\ln N}{k \ln N} = \frac{1}{k (\ln N)^2}
 $$
 
-**Alternative formulation:** The SOTE coupling constant $\xi$ is defined as the RG flow parameter:
+**Alternative formulation:** The ARO coupling constant $\xi$ is defined as the RG flow parameter:
 $$
 \xi(N) = \frac{\partial \log S_{\text{Holo}}}{\partial \log N}
 $$
@@ -193,7 +193,7 @@ The scaling $\xi \sim 1/\ln N$ implies:
 
 ## 4. Complete Holographic Action
 
-Combining the above derivations, the SOTE holographic action is:
+Combining the above derivations, the ARO holographic action is:
 
 $$
 S_{\text{Holo}} = \frac{\text{Tr}(L^2)}{\exp\left(\frac{\log \det' L}{N \ln N}\right)}

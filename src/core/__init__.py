@@ -2,7 +2,7 @@
 IRH Core Mathematical Kernels - Formalism v9.5
 
 This module provides explicit mathematical kernels for:
-- GTEC (Graph Topological Emergent Complexity) entanglement energy
+- ARO (Graph Topological Emergent Complexity) entanglement energy
 - NCGG (Non-Commutative Graph Geometry) covariant derivatives
 - Spacetime emergence via Dimensional Bootstrap
 - Matter genesis via Topological Defect Classification

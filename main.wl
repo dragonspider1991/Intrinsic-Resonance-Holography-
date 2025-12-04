@@ -6,7 +6,7 @@
    
    Purpose:
      Main orchestration script for Intrinsic Resonance Holography Suite.
-     Initializes configuration, runs the HAGO optimization loop, and
+     Initializes configuration, runs the ARO optimization loop, and
      generates all output artifacts.
    
    Inputs:
@@ -156,9 +156,9 @@ IRHMain[] := Module[
   Print["  Initial graph created with ", config["graphSize"], " nodes.\n"];
   
   (* ========================================
-     Phase 2: Run HAGO Optimization
+     Phase 2: Run ARO Optimization
      ======================================== *)
-  Print["Phase 2: Running HAGO optimization..."];
+  Print["Phase 2: Running ARO optimization..."];
   result = HAGOEngine[initGraph,
     "MaxIterations" -> config["maxIterations"],
     "CheckpointInterval" -> config["checkpointInterval"],
@@ -170,7 +170,7 @@ IRHMain[] := Module[
   ];
   
   If[result === $Failed,
-    Print["Error: HAGO optimization failed"];
+    Print["Error: ARO optimization failed"];
     Return[$Failed]
   ];
   

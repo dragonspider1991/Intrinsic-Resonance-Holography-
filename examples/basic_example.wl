@@ -62,7 +62,7 @@ Print["     DLor  = ", comps["DLor"]];
 Print["     Γ     = ", comps["Gamma"], "\n"];
 
 (* Run a short optimization *)
-Print["3. Running HAGO optimization (100 iterations)..."];
+Print["3. Running ARO optimization (100 iterations)..."];
 IRHInitializeLog[$TemporaryDirectory, "WARNING"];  (* Suppress most output *)
 
 result = HAGOEngine[gs,

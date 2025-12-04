@@ -41,5 +41,5 @@ All notable changes to the IRH Suite will be documented in this file.
 
 ### Wolfram Language Implementation
 - Original IRH_Suite in Mathematica/Wolfram Language
-- Full HAGO optimization loop
+- Full ARO optimization loop
 - Spectral analysis and constant derivation

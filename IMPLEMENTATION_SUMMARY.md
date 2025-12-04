@@ -193,14 +193,14 @@ This document summarizes the complete transformation of the Intrinsic Resonance 
 ## 🧬 Terminology Updates
 
 ### ✅ v10.0 Terminology (All Replaced)
-- [x] "Cymatic Resonance Network" (not hypergraph) ✓
-- [x] "Adaptive Resonance Optimization" (ARO, not SOTE/HAGO) ✓
+- [x] "Cymatic Resonance Network" (not Cymatic Resonance Network) ✓
+- [x] "Adaptive Resonance Optimization" (ARO, not ARO/ARO) ✓
 - [x] "Harmony Functional" (not Γ) ✓
 - [x] "Interference Matrix" (ℒ, not W/M) ✓
 - [x] "Holographic Hum" (not holographic entropy) ✓
-- [x] "Spinning Wave Patterns" (not Quantum Knots) ✓
-- [x] "Coherence Connections" (gauge fields) ✓
-- [x] "Timelike Propagation Direction" (arrow of time) ✓
+- [x] "Spinning Wave Patterns" (not Spinning Wave Patterns) ✓
+- [x] "Coherence Connections" (Coherence Connections) ✓
+- [x] "Timelike Propagation Direction" (Timelike Propagation Direction) ✓
 
 ---
 

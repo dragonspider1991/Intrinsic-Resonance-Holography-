@@ -1,10 +1,10 @@
 (* ::Package:: *)
 
 (* ============================================================================
-   IRH GTEC Kernel - Wolfram Language Implementation
+   IRH ARO Kernel - Wolfram Language Implementation
    ============================================================================
    
-   This script mirrors the Python GTEC (Graph Topological Emergent Complexity)
+   This script mirrors the Python ARO (Graph Topological Emergent Complexity)
    kernel using Mathematica/Wolfram Language.
    
    Purpose:
@@ -19,7 +19,7 @@
 N = 1000;  (* Grid size - modify as needed *)
 seed = 42;
 
-Print["IRH GTEC Kernel - Wolfram Language"];
+Print["IRH ARO Kernel - Wolfram Language"];
 Print["Grid Size N = ", N];
 
 (* ============================================================================
@@ -109,19 +109,19 @@ entropyValue = ComputeEntanglementEntropy[eigenvalues, eigenvectors, Floor[N/2]]
 Print["Entanglement Entropy S = ", entropyValue];
 
 (* ============================================================================
-   STEP 5: GTEC Energy and Dark Energy Cancellation
+   STEP 5: ARO Energy and Dark Energy Cancellation
    ============================================================================ *)
 
-Print["\nStep 5: Computing GTEC energy..."];
+Print["\nStep 5: Computing ARO energy..."];
 
-(* GTEC coupling constant μ ≈ 1/(N ln N) *)
+(* ARO coupling constant μ ≈ 1/(N ln N) *)
 mu = 1.0 / (N * Log[N]);
 
-(* GTEC energy: E_GTEC = -μ * S *)
+(* ARO energy: E_GTEC = -μ * S *)
 gtecEnergy = -mu * entropyValue;
 
-Print["GTEC coupling μ = ", mu];
-Print["GTEC Energy E_GTEC = ", gtecEnergy];
+Print["ARO coupling μ = ", mu];
+Print["ARO Energy E_GTEC = ", gtecEnergy];
 Print["This provides the negative vacuum energy contribution"];
 
 (* ============================================================================
@@ -143,5 +143,5 @@ Export["irh_gtec_results.json", results, "JSON"];
 Print["Results exported to irh_gtec_results.json"];
 
 Print["\n", StringRepeat["=", 80]];
-Print["GTEC KERNEL COMPLETE"];
+Print["ARO KERNEL COMPLETE"];
 Print[StringRepeat["=", 80]];
