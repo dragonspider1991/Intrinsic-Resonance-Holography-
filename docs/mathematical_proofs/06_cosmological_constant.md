@@ -325,7 +325,8 @@ $$
 \rho_{\Lambda} \approx 10^{-9} \text{ J/m}^3
 $$
 
-**Success!** This matches the observed value! ✓
+**Result:**  
+This value is in excellent agreement with cosmological observations. ✓
 
 ---
 
@@ -458,7 +459,8 @@ $$
 w(z=1) = -0.662 - 0.125 = -0.787
 $$
 
-**This matches the predicted values!**
+**Result:**  
+These values are consistent with the IRH v11.0 theoretical predictions.
 
 ---
 
