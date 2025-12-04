@@ -1,5 +1,5 @@
 """
-Tests for src/core NCGG and GTEC classes.
+Tests for src/core NCGG and ARO classes.
 
 Unit tests for the Quantum Emergence Framework:
 - NCGG_Operator_Algebra: Position/Momentum operators and commutators
@@ -214,11 +214,11 @@ class TestGTEC_Functional:
         result = gtec.verify_cancellation(Lambda_QFT=10.0, S_ent=S_ent)
 
         assert 'Lambda_obs' in result
-        assert 'E_GTEC' in result
+        assert 'E_ARO' in result
         assert 'Lambda_QFT' in result
         assert 'cancellation_ratio' in result
         assert 'successful' in result
-        assert result['E_GTEC'] <= 0  # GTEC energy is negative
+        assert result['E_ARO'] <= 0  # ARO energy is negative
 
     def test_cancellation_with_large_entropy(self, lattice_adj_matrix):
         """Test that large entropy leads to better cancellation."""
@@ -226,7 +226,7 @@ class TestGTEC_Functional:
 
         # Simulate large entropy case
         Lambda_QFT = 10.0
-        S_ent_large = Lambda_QFT / gtec.mu  # This should give E_GTEC = -Lambda_QFT
+        S_ent_large = Lambda_QFT / gtec.mu  # This should give E_ARO = -Lambda_QFT
 
         result = gtec.verify_cancellation(Lambda_QFT=Lambda_QFT, S_ent=S_ent_large)
 

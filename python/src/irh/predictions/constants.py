@@ -5,7 +5,7 @@ This module derives fundamental physical constants from graph structure:
 - α⁻¹ = 137.035999084 ± 2×10⁻¹² from holonomy loops
 - Σm_ν = 0.0583 eV from topological knot gaps
 - CKM matrix from overlap integrals
-- w_Λ = -0.75 from vacuum GTEC residual
+- w_Λ = -0.75 from vacuum ARO residual
 
 References:
 - CODATA 2022 values
@@ -271,7 +271,7 @@ def predict_ckm_matrix(graph: "HyperGraph") -> CKMResult:
 
 def predict_dark_energy(graph: "HyperGraph") -> DarkEnergyResult:
     """
-    Predict dark energy equation of state w_Λ from vacuum GTEC residual.
+    Predict dark energy equation of state w_Λ from vacuum ARO residual.
 
     w_Λ = p/ρ for dark energy, predicted from graph vacuum energy.
 
@@ -285,7 +285,7 @@ def predict_dark_energy(graph: "HyperGraph") -> DarkEnergyResult:
     """
     from ..gtec import gtec
 
-    # Compute GTEC complexity
+    # Compute ARO complexity
     result = gtec(graph)
 
     # Vacuum energy from residual complexity

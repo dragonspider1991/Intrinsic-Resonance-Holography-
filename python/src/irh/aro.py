@@ -60,7 +60,7 @@ def gtec(
     """
     Compute ARO (Adaptive Resonance Optimization) functional.
 
-    GTEC measures the balance between global disorder (entropy) and
+    ARO measures the balance between global disorder (entropy) and
     local structure (conditional entropy), capturing emergent complexity.
 
     C_E = H_global - H_local

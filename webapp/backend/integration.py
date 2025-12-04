@@ -188,7 +188,7 @@ class IRHSimulation:
         return predictions
     
     def compute_complexity_metrics(self) -> Dict[str, Any]:
-        """Compute GTEC and complexity metrics."""
+        """Compute ARO and complexity metrics."""
         if self.network is None:
             self.create_network()
         
