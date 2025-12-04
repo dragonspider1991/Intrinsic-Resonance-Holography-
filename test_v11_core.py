@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, '/home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography-')
 
 from src.core.substrate_v11 import InformationSubstrate
-from src.core.sote_v11 import SOTEFunctional
+from src.core.sote_v11 import AROFunctional
 from src.core.quantum_v11 import QuantumEmergence
 
 def test_substrate():
@@ -41,7 +41,7 @@ def test_sote(substrate):
     print("TEST 2: ARO Functional")
     print("=" * 70)
     
-    sote = SOTEFunctional(substrate)
+    sote = AROFunctional(substrate)
     S = sote.compute_action()
     
     print(f"✓ ARO action computed: S = {S:.4e}")
@@ -105,7 +105,7 @@ def main():
         print("=" * 70)
         print("\nCore v11.0 modules are functional:")
         print("  • InformationSubstrate: Discrete ontology without assumptions")
-        print("  • SOTEFunctional: Unique action principle")
+        print("  • AROFunctional: Unique action principle")
         print("  • QuantumEmergence: Non-circular QM derivation")
         print("\nReady for optimization and empirical predictions!")
         print("=" * 70)

@@ -28,7 +28,7 @@ Generate a complete Mathematica notebook that:
 
 5. Calculates ARO energy contribution
    - ARO coupling: μ = 1/(N ln N)
-   - ARO energy: E_GTEC = -μ * S
+   - ARO energy: E_ARO = -μ * S
 
 6. Visualizes results:
    - Histogram of eigenvalue distribution

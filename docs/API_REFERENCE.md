@@ -226,14 +226,14 @@ Expand[graphState, opts]
 
 ---
 
-## HAGOEngine Module
+## AROEngine Module
 
-### HAGOEngine
+### AROEngine
 
 Main optimization orchestration.
 
 ```mathematica
-HAGOEngine[initGraph, opts]
+AROEngine[initGraph, opts]
 ```
 
 **Options:**

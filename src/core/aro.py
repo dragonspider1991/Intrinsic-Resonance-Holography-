@@ -7,8 +7,8 @@ This module implements the ARO functional for computing entanglement entropy
 and verifying dark energy cancellation through vacuum entanglement.
 
 Key Components:
-- GTEC_Functional: Class for entanglement entropy and cancellation verification
-- gtec_entanglement_energy: Function for negative vacuum energy calculation
+- ARO_Functional: Class for entanglement entropy and cancellation verification
+- aro_entanglement_energy: Function for negative vacuum energy calculation
 
 The ARO mechanism provides the negative energy contribution that cancels
 the large positive QFT vacuum energy, resulting in the observed small
@@ -25,7 +25,7 @@ from scipy.linalg import eigh
 from scipy import sparse
 
 
-class GTEC_Functional:
+class ARO_Functional:
     """
     Graph Topological Emergent Complexity Functional.
 
@@ -192,11 +192,11 @@ class GTEC_Functional:
         """
         Verify dark energy cancellation via ARO mechanism.
 
-        The ARO mechanism provides negative energy E_GTEC = -μ S_ent
+        The ARO mechanism provides negative energy E_ARO = -μ S_ent
         that should cancel the large positive QFT vacuum energy.
 
         The observed cosmological constant is:
-        Λ_obs = Λ_QFT + E_GTEC
+        Λ_obs = Λ_QFT + E_ARO
 
         For successful cancellation, |Λ_obs| << |Λ_QFT|.
 
@@ -208,21 +208,21 @@ class GTEC_Functional:
         Returns:
             dict: Contains:
                 - 'Lambda_obs': Residual observed cosmological constant
-                - 'E_GTEC': Negative energy from entanglement
+                - 'E_ARO': Negative energy from entanglement
                 - 'Lambda_QFT': Input QFT vacuum energy
                 - 'cancellation_ratio': |Λ_obs| / |Λ_QFT| (smaller is better)
                 - 'successful': True if cancellation is significant
         """
         # ARO negative energy contribution
-        # E_GTEC = -μ * S_ent
+        # E_ARO = -μ * S_ent
         if self.mu is None:
             # Use default coupling if not initialized
             self.mu = 0.1
 
-        E_GTEC = -self.mu * S_ent
+        E_ARO = -self.mu * S_ent
 
         # Observed cosmological constant (residual)
-        Lambda_obs = Lambda_QFT + E_GTEC
+        Lambda_obs = Lambda_QFT + E_ARO
 
         # Cancellation ratio
         if np.abs(Lambda_QFT) > 1e-12:
@@ -235,7 +235,7 @@ class GTEC_Functional:
 
         return {
             'Lambda_obs': float(Lambda_obs),
-            'E_GTEC': float(E_GTEC),
+            'E_ARO': float(E_ARO),
             'Lambda_QFT': float(Lambda_QFT),
             'cancellation_ratio': float(cancellation_ratio),
             'successful': successful,
@@ -243,11 +243,11 @@ class GTEC_Functional:
         }
 
 
-def gtec_entanglement_energy(eigenvalues, coupling_mu, L_G, hbar_G):
+def aro_entanglement_energy(eigenvalues, coupling_mu, L_G, hbar_G):
     """
     Explicitly calculates the negative energy contribution from vacuum entanglement.
 
-    Formalism v9.5: E_GTEC = - mu * S_ent
+    Formalism v9.5: E_ARO = - mu * S_ent
 
     Args:
         eigenvalues (np.array): Normalized spectrum of the entanglement Hamiltonian.
@@ -280,17 +280,17 @@ if __name__ == "__main__":
     # Test 1: Uniform eigenvalue distribution
     print("\nTest 1: Uniform distribution (max entropy)")
     eigenvalues = np.array([0.25, 0.25, 0.25, 0.25])
-    E_gtec = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+    E_gtec = aro_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
     print(f"  Eigenvalues: {eigenvalues}")
-    print(f"  E_GTEC = {E_gtec:.6f}")
+    print(f"  E_ARO = {E_gtec:.6f}")
     print(f"  Expected: -0.2 (entropy = 2 bits)")
     
     # Test 2: Non-uniform distribution
     print("\nTest 2: Non-uniform distribution")
     eigenvalues = np.array([0.5, 0.3, 0.15, 0.05])
-    E_gtec = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+    E_gtec = aro_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
     print(f"  Eigenvalues: {eigenvalues}")
-    print(f"  E_GTEC = {E_gtec:.6f}")
+    print(f"  E_ARO = {E_gtec:.6f}")
     
     # Test 3: ARO Functional class
     print("\nTest 3: ARO Functional class on 4x4 lattice")
@@ -306,7 +306,7 @@ if __name__ == "__main__":
                 adj[idx, idx + 4] = 1
                 adj[idx + 4, idx] = 1
     
-    gtec = GTEC_Functional(adj)
+    gtec = ARO_Functional(adj)
     print(f"  Graph size N = {gtec.N}")
     print(f"  Coupling mu = {gtec.mu:.6f} (expected: 1/(N*ln(N)) = {1/(16*np.log(16)):.6f})")
     
@@ -319,7 +319,7 @@ if __name__ == "__main__":
     Lambda_QFT = 10.0
     cancel_result = gtec.verify_cancellation(Lambda_QFT, result['S_ent'])
     print(f"  Lambda_QFT = {Lambda_QFT}")
-    print(f"  E_GTEC = {cancel_result['E_GTEC']:.6f}")
+    print(f"  E_ARO = {cancel_result['E_ARO']:.6f}")
     print(f"  Lambda_obs = {cancel_result['Lambda_obs']:.6f}")
     print(f"  Cancellation ratio = {cancel_result['cancellation_ratio']:.4f}")
     

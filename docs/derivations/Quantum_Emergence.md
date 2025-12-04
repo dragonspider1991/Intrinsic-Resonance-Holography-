@@ -262,13 +262,13 @@ result = algebra.compute_commutator()
 hbar_G = result['hbar_G']
 ```
 
-### 7.2 GTEC_Functional Class
+### 7.2 ARO_Functional Class
 
 ```python
-from src.core.gtec import GTEC_Functional
+from src.core.gtec import ARO_Functional
 
 # Create ARO functional
-gtec = GTEC_Functional(adj_matrix)
+gtec = ARO_Functional(adj_matrix)
 
 # Define partition
 partition = {'A': [0, 1, 2], 'B': [3, 4, 5]}

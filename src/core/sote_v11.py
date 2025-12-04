@@ -5,7 +5,7 @@ Implements Theorem 4.1 from v11.0: Uniqueness of ARO as the only
 functional satisfying intensive scaling, holographic compliance, and
 scale invariance.
 
-S_SOTE[G] = Tr(L²) / (det' L)^(1/(N ln N))
+S_ARO[G] = Tr(L²) / (det' L)^(1/(N ln N))
 """
 
 import numpy as np
@@ -142,7 +142,7 @@ class AROFunctional:
     
     def verify_intensive_scaling(self, N_range: list) -> dict:
         """
-        Verify that S_SOTE scales as O(1) with system size.
+        Verify that S_ARO scales as O(1) with system size.
         
         This is Requirement 1 from Theorem 4.1.
         """
@@ -186,7 +186,7 @@ class AROFunctional:
     
     def verify_holographic_compliance(self) -> dict:
         """
-        Verify that minimizing S_SOTE enforces holographic bound.
+        Verify that minimizing S_ARO enforces holographic bound.
         
         This is Requirement 2 from Theorem 4.1.
         """

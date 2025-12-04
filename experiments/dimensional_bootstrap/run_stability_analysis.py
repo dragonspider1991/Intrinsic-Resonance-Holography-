@@ -5,7 +5,7 @@ This script executes the complete dimensional bootstrap analysis,
 verifying that d=4 emerges uniquely as the stable fixed point.
 
 Generates:
-1. Phase diagram showing S_SOTE vs dimension
+1. Phase diagram showing S_ARO vs dimension
 2. Spectral dimension measurements for d=2,3,4,5,6
 3. Statistical significance analysis
 """
@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, '/home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography-')
 
 from src.core.substrate_v11 import InformationSubstrate
-from src.core.sote_v11 import SOTEFunctional
+from src.core.sote_v11 import AROFunctional
 
 # Configuration
 DIMENSIONS = [2, 3, 4, 5, 6]
@@ -70,7 +70,7 @@ def analyze_dimension(d, sample_idx):
     substrate.compute_laplacian()
     
     # Compute ARO action
-    sote = SOTEFunctional(substrate)
+    sote = AROFunctional(substrate)
     S_action = sote.compute_action()
     
     # Measure spectral dimension
@@ -113,7 +113,7 @@ def run_dimensional_bootstrap():
             try:
                 result = analyze_dimension(d, sample_idx)
                 results.append(result)
-                print(f"    S_SOTE = {result['S_action']:.4e}, "
+                print(f"    S_ARO = {result['S_action']:.4e}, "
                       f"d_spec = {result['d_spectral']:.3f}, "
                       f"consistency = {result['consistency']:.4f}")
             except Exception as e:

@@ -3,7 +3,7 @@ Tests for src/core NCGG and ARO classes.
 
 Unit tests for the Quantum Emergence Framework:
 - NCGG_Operator_Algebra: Position/Momentum operators and commutators
-- GTEC_Functional: Entanglement entropy and dark energy cancellation
+- ARO_Functional: Entanglement entropy and dark energy cancellation
 """
 
 import numpy as np
@@ -16,7 +16,7 @@ src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
 from core.ncgg import NCGG_Operator_Algebra, ncgg_covariant_derivative
-from core.gtec import GTEC_Functional, gtec_entanglement_energy
+from core.gtec import ARO_Functional, aro_entanglement_energy
 
 
 class TestNCGG_Operator_Algebra:
@@ -134,8 +134,8 @@ class TestNCGG_Operator_Algebra:
         assert embedding.shape == (16, 4)
 
 
-class TestGTEC_Functional:
-    """Tests for GTEC_Functional class."""
+class TestARO_Functional:
+    """Tests for ARO_Functional class."""
 
     @pytest.fixture
     def lattice_adj_matrix(self):
@@ -160,29 +160,29 @@ class TestGTEC_Functional:
         return np.ones((N, N)) - np.eye(N)
 
     def test_initialization(self, lattice_adj_matrix):
-        """Test GTEC_Functional initialization."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        """Test ARO_Functional initialization."""
+        gtec = ARO_Functional(lattice_adj_matrix)
         assert gtec.N == 16
         assert gtec.laplacian is not None
         assert gtec.ground_state is not None
         assert gtec.mu is not None
 
     def test_initialization_without_matrix(self):
-        """Test GTEC_Functional initialization without adjacency matrix."""
-        gtec = GTEC_Functional()
+        """Test ARO_Functional initialization without adjacency matrix."""
+        gtec = ARO_Functional()
         assert gtec.N == 0
         assert gtec.adj_matrix is None
 
     def test_coupling_constant_scaling(self, lattice_adj_matrix):
         """Test that coupling mu scales as 1/(N ln N)."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
         N = 16
         expected_mu = 1.0 / (N * np.log(N))
         assert np.isclose(gtec.mu, expected_mu, rtol=1e-10)
 
     def test_compute_entanglement_entropy(self, lattice_adj_matrix):
         """Test entanglement entropy computation."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
         partition = {'A': list(range(8)), 'B': list(range(8, 16))}
 
         result = gtec.compute_entanglement_entropy(lattice_adj_matrix, partition)
@@ -195,7 +195,7 @@ class TestGTEC_Functional:
 
     def test_entropy_empty_partition(self, lattice_adj_matrix):
         """Test entropy with empty A partition."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
         partition = {'A': [], 'B': list(range(16))}
 
         result = gtec.compute_entanglement_entropy(lattice_adj_matrix, partition)
@@ -203,7 +203,7 @@ class TestGTEC_Functional:
 
     def test_verify_cancellation(self, lattice_adj_matrix):
         """Test dark energy cancellation verification."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
 
         # Compute entropy first
         partition = {'A': list(range(8)), 'B': list(range(8, 16))}
@@ -222,7 +222,7 @@ class TestGTEC_Functional:
 
     def test_cancellation_with_large_entropy(self, lattice_adj_matrix):
         """Test that large entropy leads to better cancellation."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
 
         # Simulate large entropy case
         Lambda_QFT = 10.0
@@ -236,7 +236,7 @@ class TestGTEC_Functional:
 
     def test_rho_A_is_positive_semidefinite(self, lattice_adj_matrix):
         """Test that reduced density matrix is positive semi-definite."""
-        gtec = GTEC_Functional(lattice_adj_matrix)
+        gtec = ARO_Functional(lattice_adj_matrix)
         partition = {'A': list(range(8)), 'B': list(range(8, 16))}
 
         result = gtec.compute_entanglement_entropy(lattice_adj_matrix, partition)
@@ -247,7 +247,7 @@ class TestGTEC_Functional:
 
     def test_complete_graph_entropy(self, complete_adj_matrix):
         """Test entropy on complete graph."""
-        gtec = GTEC_Functional(complete_adj_matrix)
+        gtec = ARO_Functional(complete_adj_matrix)
         partition = {'A': [0, 1, 2, 3], 'B': [4, 5, 6, 7]}
 
         result = gtec.compute_entanglement_entropy(complete_adj_matrix, partition)
@@ -255,26 +255,26 @@ class TestGTEC_Functional:
 
 
 class TestGtecEntanglementEnergy:
-    """Tests for gtec_entanglement_energy function."""
+    """Tests for aro_entanglement_energy function."""
 
     def test_positive_eigenvalues(self):
         """Test with positive eigenvalues."""
         eigenvalues = np.array([0.5, 0.3, 0.2])
-        result = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+        result = aro_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
         # Result should be negative (energy contribution)
         assert result < 0
 
     def test_zero_eigenvalues_filtered(self):
         """Test that zero eigenvalues are filtered."""
         eigenvalues = np.array([0.0, 0.0, 0.5, 0.3, 0.2])
-        result = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+        result = aro_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
         assert result < 0  # Should still compute valid result
 
     def test_uniform_distribution(self):
         """Test with uniform distribution."""
         # Uniform over 4 outcomes: H = log2(4) = 2 bits
         eigenvalues = np.array([0.25, 0.25, 0.25, 0.25])
-        result = gtec_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
+        result = aro_entanglement_energy(eigenvalues, coupling_mu=0.1, L_G=1.0, hbar_G=1.0)
         # E = -(L_G/hbar_G) * mu * S = -1 * 0.1 * 2 = -0.2
         assert np.isclose(result, -0.2, rtol=1e-10)
 
