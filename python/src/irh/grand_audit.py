@@ -455,14 +455,16 @@ def _audit_logical(graph: "HyperGraph") -> list[AuditResult]:
 
     # Check 4: Self-consistency of derivations
     # All derived quantities should be internally consistent
+    # Note: This is a structural check - full validation would require cross-validation
+    substrate_consistent = graph.N > 0 and graph.edge_count > 0
     results.append(
         AuditResult(
             name="Logical: Derivation Self-Consistency",
-            passed=True,  # Would require cross-validation of all derived quantities
-            value="Consistent",
+            passed=substrate_consistent,
+            value="Consistent" if substrate_consistent else "Inconsistent",
             target="Consistent",
             tolerance=None,
-            message="All derivations use consistent substrate",
+            message="Substrate structure is internally consistent (full cross-validation not yet implemented)",
         )
     )
 
@@ -481,14 +483,16 @@ def _audit_logical(graph: "HyperGraph") -> list[AuditResult]:
 
     # Check 6: Dimensional consistency
     # All derived quantities should have correct physical dimensions
+    # Note: This is a basic sanity check - full dimensional analysis not yet implemented
+    basic_dims_ok = hasattr(graph, 'hbar_G') and hasattr(graph, 'G_N') and hasattr(graph, 'L_G')
     results.append(
         AuditResult(
             name="Logical: Dimensional Consistency",
-            passed=True,  # Would require checking units of all derived quantities
-            value="Consistent",
+            passed=basic_dims_ok,
+            value="Consistent" if basic_dims_ok else "Missing constants",
             target="Consistent",
             tolerance=None,
-            message="All quantities have correct physical dimensions",
+            message="Basic physical constants present (full dimensional analysis not yet implemented)",
         )
     )
 
