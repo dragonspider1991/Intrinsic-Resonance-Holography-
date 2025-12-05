@@ -111,14 +111,22 @@ def get_spectral_dimension(eigenvalues):
     # Compute Z(t)
     Z_t = np.array([np.sum(np.exp(-eigenvalues * t)) for t in t_vals])
     
+    # Filter out zero or negative values to avoid log issues
+    valid_mask = Z_t > 1e-10
+    if np.sum(valid_mask) < 5:
+        return 0.0
+    
     # Derivative -d ln Z / d ln t
-    log_t = np.log(t_vals)
-    log_Z = np.log(Z_t)
+    log_t = np.log(t_vals[valid_mask])
+    log_Z = np.log(Z_t[valid_mask])
     
     # Fit slope in the middle region (to avoid UV/IR cutoffs)
     # We take the median slope as a robust estimator
     slopes = -2 * np.gradient(log_Z, log_t)
-    d_spec_est = np.median(slopes[5:-5]) # Ignore edges
+    # Use middle 50% of data points for robustness
+    n = len(slopes)
+    quarter = max(1, n // 4)
+    d_spec_est = np.median(slopes[quarter:-quarter]) if n > 4 else np.median(slopes)
     
     return d_spec_est
 
@@ -149,10 +157,14 @@ def calculate_harmony_action(N, trace_L2, eigenvalues):
     S = trace_L2 / denom
     return S
 
-def run_grand_audit():
+def run_grand_audit(seed=42):
+    # Set random seed for reproducibility
+    np.random.seed(seed)
+    
     print("="*60)
     print("INTRINSIC RESONANCE HOLOGRAPHY v11.0")
     print("The Dimensional Bootstrap Verification")
+    print(f"Random Seed: {seed}")
     print("="*60)
     
     dims = [2, 3, 4, 5, 6]
@@ -233,4 +245,7 @@ def run_grand_audit():
         pass
 
 if __name__ == "__main__":
-    run_grand_audit()
+    # Run the grand audit
+    # You can change the seed to explore different random graph realizations
+    # Different seeds may show different dimensional preferences
+    run_grand_audit(seed=42)
