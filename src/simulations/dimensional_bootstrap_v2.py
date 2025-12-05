@@ -40,14 +40,18 @@ def generate_rgg_kdtree(N, d, r_factor=1.5):
     pairs = tree.query_pairs(r_connect)
     
     # 4. Construct Sparse Adjacency Matrix
-    data = np.ones(len(pairs))
-    rows = [p[0] for p in pairs]
-    cols = [p[1] for p in pairs]
+    if len(pairs) == 0:
+        # No edges - return empty adjacency matrix
+        adj = sp.csr_matrix((N, N))
+        return adj, N, r_connect
+    
+    # Efficiently unpack pairs
+    rows, cols = zip(*pairs)
     
     # Make symmetric
     all_rows = np.concatenate([rows, cols])
     all_cols = np.concatenate([cols, rows])
-    all_data = np.concatenate([data, data])
+    all_data = np.ones(2 * len(pairs))
     
     adj = sp.csr_matrix((all_data, (all_rows, all_cols)), shape=(N, N))
     
@@ -126,7 +130,11 @@ def get_spectral_dimension(eigenvalues):
     # Use middle 50% of data points for robustness
     n = len(slopes)
     quarter = max(1, n // 4)
-    d_spec_est = np.median(slopes[quarter:-quarter]) if n > 4 else np.median(slopes)
+    # Ensure we have enough points for median
+    if n > 4:
+        d_spec_est = np.median(slopes[quarter:-quarter]) if quarter < n - quarter else np.median(slopes)
+    else:
+        d_spec_est = np.median(slopes)
     
     return d_spec_est
 
