@@ -14,7 +14,7 @@ This document describes the architecture of IRH_Suite v3.0, a computational engi
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      HAGOEngine.wl                                │
+│                      AROEngine.wl                                │
 │                 (Optimization Orchestration)                      │
 └─────────────────────────────────────────────────────────────────┘
           │              │              │              │
@@ -80,7 +80,7 @@ project_config.json ──► Configuration
     CreateGraphState[N] ──► Initial GraphState
          │
          ▼
-    HAGOEngine[...] ◄────────────────────────────┐
+    AROEngine[...] ◄────────────────────────────┐
          │                                        │
          ├──► MutateGraph ──► Candidate GraphState│
          │                           │            │
@@ -156,8 +156,8 @@ project_config.json ──► Configuration
 - `AcceptChange[ΔΓ, T, opts]`: Metropolis + momentum
 - Supports maximizing and minimizing modes
 
-### HAGOEngine.wl
-- `HAGOEngine[initGraph, opts]`: Full optimization loop
+### AROEngine.wl
+- `AROEngine[initGraph, opts]`: Full optimization loop
 - Features: Checkpointing, logging, convergence detection
 
 ### Analysis Modules

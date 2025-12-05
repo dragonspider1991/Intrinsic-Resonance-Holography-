@@ -27,7 +27,7 @@ Get["src/MutateGraph.wl"];
 Get["src/Acceptance.wl"];
 Get["src/ParameterController.wl"];
 Get["src/ScalingFlows.wl"];
-Get["src/HAGOEngine.wl"];
+Get["src/AROEngine.wl"];
 Get["src/SpectralDimension.wl"];
 Get["src/LorentzSignature.wl"];
 Get["src/IOFunctions.wl"];
@@ -62,7 +62,7 @@ Print["     DLor  = ", comps["DLor"]];
 Print["     Γ     = ", comps["Gamma"], "\n"];
 
 (* Run a short optimization *)
-Print["3. Running HAGO optimization (100 iterations)..."];
+Print["3. Running ARO optimization (100 iterations)..."];
 IRHInitializeLog[$TemporaryDirectory, "WARNING"];  (* Suppress most output *)
 
 result = HAGOEngine[gs,

@@ -5,7 +5,7 @@
    ============================================================================
    
    Purpose:
-     Implements acceptance criteria for the HAGO optimization loop. Uses a
+     Implements acceptance criteria for the ARO optimization loop. Uses a
      hybrid Metropolis-Hastings + Adam-inspired acceptance scheme that
      balances exploration and exploitation.
    

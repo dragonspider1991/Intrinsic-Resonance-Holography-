@@ -1,4 +1,4 @@
-# IRH_Suite v3.0 .gitignore
+# IRH_Suite v9.2 .gitignore
 
 # Output directory (generated at runtime)
 io/output/*.irh
@@ -7,6 +7,9 @@ io/output/*.pdf
 io/output/*.json
 io/output/*.png
 io/output/checkpoint_*.irh
+
+# Large output files (use Git LFS)
+*.irh
 
 # Keep directory structure
 !io/output/.gitkeep
@@ -21,6 +24,7 @@ io/output/checkpoint_*.irh
 *.mx
 *.m~
 *.wl~
+*.nb
 .Mathematica/
 FrontEnd/
 
@@ -39,6 +43,7 @@ desktop.ini
 
 # Log files (keep example, ignore generated)
 *.log
+logs/
 
 # Cache files
 *.cache

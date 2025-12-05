@@ -32,6 +32,36 @@ dependencies = [
     "h5py>=3.0.0",
     "matplotlib>=3.4.0",
     "networkx>=2.6.0",
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "irh-v10"
+version = "10.0.0"
+description = "Intrinsic Resonance Holography v10.0: Cymatic Resonance - A parameter-free Theory of Everything"
+readme = "README.md"
+authors = [
+    {name = "Brandon D. McCrary", email = "brandonmccrary.research@gmail.com"},
+]
+license = {text = "CC0-1.0"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.11.0",
+    "networkx>=3.1",
+    "qutip>=5.0.0",
+    "matplotlib>=3.7.0",
+    "tqdm>=4.65.0",
 ]
 
 [project.optional-dependencies]
