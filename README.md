@@ -21,6 +21,50 @@ Intrinsic Resonance Holography (IRH) v11.0 presents the first **mathematically c
 
 ---
 
+## 🚀 Easy Way to Run Computations
+
+Want to explore IRH without installation? Try our **interactive Jupyter notebooks** - they work directly in your browser via Google Colab!
+
+### 📓 Interactive Notebooks
+
+| Notebook | Description | Runtime | Launch |
+|----------|-------------|---------|--------|
+| **[01 - ARO Demo](notebooks/01_ARO_Demo.ipynb)** | Adaptive Resonance Optimization on small networks | ~5 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/01_ARO_Demo.ipynb) |
+| **[02 - Dimensional Bootstrap](notebooks/02_Dimensional_Bootstrap.ipynb)** | Derive d=4 from self-consistency | ~10 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/02_Dimensional_Bootstrap.ipynb) |
+| **[03 - Fine Structure](notebooks/03_Fine_Structure_Derivation.ipynb)** | Compute α⁻¹ ≈ 137.036 from first principles | ~15 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/03_Fine_Structure_Derivation.ipynb) |
+| **[04 - Dark Energy](notebooks/04_Dark_Energy_w(a).ipynb)** | Predict dark energy equation of state | ~10 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/04_Dark_Energy_w(a).ipynb) |
+| **[05 - Wave Patterns](notebooks/05_Spinning_Wave_Patterns.ipynb)** | Visualize emergent wave dynamics | ~8 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/05_Spinning_Wave_Patterns.ipynb) |
+| **[06 - Grand Audit](notebooks/06_Grand_Audit.ipynb)** | **NEW!** Comprehensive validation framework | ~10 min | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/06_Grand_Audit.ipynb) |
+
+### 💻 Command Line Tools
+
+For local execution with full control:
+
+```bash
+# Quick grand audit (N=64, ~5 minutes)
+python scripts/run_enhanced_grand_audit.py --quick
+
+# Comprehensive audit (N=256, ~30 minutes)
+python scripts/run_enhanced_grand_audit.py --full
+
+# Custom configuration
+python scripts/run_enhanced_grand_audit.py --N 128 --convergence 64,128,256 --output results/
+```
+
+### 🎯 What the Grand Audit Validates
+
+The **Grand Audit** notebook/script is the most comprehensive validation tool, checking:
+
+✅ **20+ validation checks** across four foundational pillars  
+✅ **Ontological Clarity** (6 checks): substrate properties, spectral dimension, holographic bound  
+✅ **Mathematical Completeness** (4 checks): operator constructions, topology, convergence  
+✅ **Empirical Grounding** (6 checks): QM/GR/SM recovery, fundamental constants  
+✅ **Logical Coherence** (6 checks): DAG structure, self-consistency, dimensional analysis  
+✅ **Convergence Analysis**: validates results across multiple network sizes  
+✅ **Visualizations**: charts and plots of all validation results  
+
+---
+
 ## Quick Start
 
 ### Derive the Fine-Structure Constant
