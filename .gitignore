@@ -48,42 +48,58 @@ logs/
 # Cache files
 *.cache
 __pycache__/
-.pytest_cache/
-.mypy_cache/
 
-# Python
+# Python-specific
 *.pyc
 *.pyo
-*.egg-info/
-dist/
+*.pyd
+.Python
 build/
-*.egg
+develop-eggs/
+dist/
+downloads/
+eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 # Virtual environments
 venv/
-.venv/
 env/
-.env/
+ENV/
+env.bak/
+venv.bak/
 
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb_checkpoints
-
-# Coverage
+# Testing
+.tox/
+.nox/
 .coverage
-coverage.xml
+.coverage.*
 htmlcov/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# Archives
-archives/*.tar.gz
-archives/*.zip
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Pre-registration (keep YAML, ignore generated)
-pre_reg/*.hash
+# HDF5 data files
+*.h5
+*.hdf5
 
-# Orchestrator outputs and runtime files
-crash_report_for_llm.txt
-outputs/
-config.json
+# Experiment outputs
+experiments/output/
+experiments/*.h5
+experiments/*.png
+experiments/*.pdf
