@@ -32,8 +32,7 @@ dependencies = [
     "h5py>=3.0.0",
     "matplotlib>=3.4.0",
     "networkx>=2.6.0",
-requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.build_meta"
+]
 
 [project]
 name = "irh-v10"
