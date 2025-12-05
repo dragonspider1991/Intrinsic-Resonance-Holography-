@@ -25,12 +25,54 @@ From random initial conditions, the system robustly converges to:
 
 ### Installation
 
+#### Automated Installation (Recommended)
+
+For easy installation with an interactive installer:
+
+**Linux/macOS:**
 ```bash
 # Clone the repository
 git clone https://github.com/dragonspider1991/Intrinsic-Resonance-Holography-.git
 cd Intrinsic-Resonance-Holography-
 
-# Install the Python package
+# Run the installation script
+./install.sh
+```
+
+**Windows:**
+```cmd
+# Clone the repository
+git clone https://github.com/dragonspider1991/Intrinsic-Resonance-Holography-.git
+cd Intrinsic-Resonance-Holography-
+
+# Run the installation script
+install.bat
+```
+
+The installer will guide you through three installation options:
+1. **Conda/Anaconda** (recommended for scientific computing)
+2. **pip** (standard Python package manager)
+3. **Development mode** (for contributors)
+
+#### Manual Installation
+
+**Option 1: Conda/Anaconda (Recommended)**
+
+```bash
+# Create conda environment from environment.yml
+conda env create -f environment.yml
+
+# Activate the environment
+conda activate cncg
+```
+
+**Option 2: pip Installation**
+
+```bash
+# Install from repository
+pip install .
+
+# Or in development mode
 pip install -e .
 
 # Or install dependencies only
