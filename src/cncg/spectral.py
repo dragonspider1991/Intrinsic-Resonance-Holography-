@@ -14,7 +14,7 @@ Additional structures:
 - γ: Grading operator (chirality)
 
 Key axioms enforced:
-- [D, γ] = 0 (D anticommutes with grading)
+- {D, γ} = 0 (D anticommutes with grading)
 - [D, J] compatible with real structure
 """
 

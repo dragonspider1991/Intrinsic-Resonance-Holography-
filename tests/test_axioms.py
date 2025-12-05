@@ -64,8 +64,10 @@ class TestAxioms:
         """Test that enforce_axioms maintains {D, γ} = 0."""
         triple = FiniteSpectralTriple(N=50, seed=42)
         
+        N = triple.N
+        
         # Perturb D
-        perturbation = np.random.randn(50, 50) + 1j * np.random.randn(50, 50)
+        perturbation = np.random.randn(N, N) + 1j * np.random.randn(N, N)
         perturbation = (perturbation + perturbation.conj().T) / 2  # Keep Hermitian
         triple.D += perturbation
         
@@ -200,7 +202,8 @@ class TestChirality:
         """Test chiral projectors P_± = (1 ± γ)/2."""
         triple = FiniteSpectralTriple(N=50, seed=42)
         
-        I = np.eye(50, dtype=np.complex128)
+        N = triple.N
+        I = np.eye(N, dtype=np.complex128)
         P_plus = (I + triple.gamma) / 2
         P_minus = (I - triple.gamma) / 2
         

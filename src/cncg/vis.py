@@ -47,14 +47,16 @@ def plot_eigenvalue_flow(
     eigenvalue_trajectories = np.array(history).T
     
     # Plot each eigenvalue's trajectory
-    for i, traj in enumerate(eigenvalue_trajectories):
+    for traj in eigenvalue_trajectories:
         ax.plot(iterations, traj, alpha=0.3, linewidth=0.5, color='blue')
     
     # Highlight zero modes
+    zero_mode_labeled = False
     for traj in eigenvalue_trajectories:
         if np.abs(traj[-1]) < 1e-4:
-            ax.plot(iterations, traj, alpha=0.8, linewidth=1.5, color='red',
-                   label='Zero mode' if i == 0 else '')
+            label = 'Zero mode' if not zero_mode_labeled else ''
+            ax.plot(iterations, traj, alpha=0.8, linewidth=1.5, color='red', label=label)
+            zero_mode_labeled = True
     
     ax.set_xlabel('Iteration', fontsize=12)
     ax.set_ylabel('Eigenvalue', fontsize=12)

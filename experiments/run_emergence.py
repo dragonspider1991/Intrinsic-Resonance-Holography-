@@ -251,7 +251,6 @@ def main():
             
             spectrum_path = output_dir / f"spectrum_N{args.N}_seed{seed}.png"
             # Need to reconstruct triple for plotting
-            from cncg import FiniteSpectralTriple
             triple_final = FiniteSpectralTriple(N=args.N)
             triple_final.D = np.diag(results["final_spectrum"])
             plot_spectral_density(triple_final, save_path=str(spectrum_path))
