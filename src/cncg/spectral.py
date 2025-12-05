@@ -49,6 +49,7 @@ class FiniteSpectralTriple:
         J: Optional[NDArray[np.complex128]] = None,
         gamma: Optional[NDArray[np.complex128]] = None,
         seed: Optional[int] = None,
+        enforce_axioms_on_init: bool = True,
     ):
         """
         Initialize a finite spectral triple.
@@ -65,6 +66,8 @@ class FiniteSpectralTriple:
             Grading operator. If None, uses balanced chirality split.
         seed : Optional[int], default=None
             Random seed for reproducibility
+        enforce_axioms_on_init : bool, default=True
+            Whether to enforce axioms on initialization
         """
         self.N = N
         
@@ -94,7 +97,8 @@ class FiniteSpectralTriple:
             self.gamma = gamma.copy()
         
         # Enforce axioms on initial state
-        self.enforce_axioms()
+        if enforce_axioms_on_init:
+            self.enforce_axioms()
     
     def enforce_axioms(self) -> None:
         """
@@ -106,15 +110,18 @@ class FiniteSpectralTriple:
         
         This is done by projecting D onto the subspace where these
         conditions hold.
+        
+        For {D, γ} = 0, we need γDγ = -D.
+        The projection is: D_new = (D - γDγ) / 2
         """
         # Enforce Hermiticity: D = (D + D†)/2
         self.D = (self.D + self.D.conj().T) / 2.0
         
         # Enforce {D, γ} = 0
-        # This means γ D γ = -D
-        # Projection: D_new = (D - γ D γ) / 2
-        anticommutator = self.D @ self.gamma + self.gamma @ self.D
-        self.D = self.D - 0.5 * anticommutator
+        # The anticommutation relation {D, γ} = Dγ + γD = 0 means γDγ = -D
+        # To project: D_new = (D - γDγ) / 2 gives the component that anticommutes
+        gamma_D_gamma = self.gamma @ self.D @ self.gamma
+        self.D = (self.D - gamma_D_gamma) / 2.0
         
         # Re-enforce Hermiticity after projection
         self.D = (self.D + self.D.conj().T) / 2.0
@@ -243,6 +250,7 @@ class FiniteSpectralTriple:
             D=data["D"],
             J=data["J"],
             gamma=data["gamma"],
+            enforce_axioms_on_init=False,  # Don't re-enforce, assume data is valid
         )
     
     def __repr__(self) -> str:
