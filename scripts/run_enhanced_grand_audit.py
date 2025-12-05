@@ -207,7 +207,8 @@ def export_results(
     convergence_results: dict,
     graph: HyperGraph,
     audit_duration: float,
-    output_dir: Path
+    output_dir: Path,
+    audit_start_time: datetime
 ) -> None:
     """Export results to JSON and CSV formats."""
     print_section("EXPORTING RESULTS")
@@ -244,8 +245,9 @@ def export_results(
         "convergence": convergence_results
     }
     
-    # Save JSON
-    json_path = output_dir / f"grand_audit_N{graph.N}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    # Save JSON (use audit start time to prevent collisions)
+    timestamp_str = audit_start_time.strftime('%Y%m%d_%H%M%S')
+    json_path = output_dir / f"grand_audit_N{graph.N}_{timestamp_str}.json"
     with open(json_path, 'w') as f:
         json.dump(export_data, f, indent=2)
     print(f"  ✓ Saved JSON: {json_path}")
@@ -356,7 +358,7 @@ Examples:
         create_visualizations(report, convergence_results, output_dir)
     
     # Step 6: Export results
-    export_results(report, convergence_results, graph, audit_duration, output_dir)
+    export_results(report, convergence_results, graph, audit_duration, output_dir, audit_start)
     
     # Final summary
     print_header("AUDIT COMPLETE")

@@ -389,15 +389,17 @@ def _audit_empirical(graph: "HyperGraph") -> list[AuditResult]:
 
     # Check 6: Energy scale hierarchy
     # Verify that energy scales are properly ordered
-    energy_hierarchy_valid = True  # Placeholder - would need actual energy scale computation
+    # TODO: Implement actual energy scale computation and validation
+    # For now, this is a placeholder that validates substrate properties
+    energy_hierarchy_valid = graph.N > 0 and len(graph.W) > 0
     results.append(
         AuditResult(
             name="Empirical: Energy Scale Hierarchy",
             passed=energy_hierarchy_valid,
-            value="Valid",
+            value="Valid" if energy_hierarchy_valid else "Invalid",
             target="Valid",
             tolerance=None,
-            message="Energy scales properly ordered (Planck > GUT > EW > QCD)",
+            message="Substrate structure valid (full energy scale hierarchy validation not yet implemented)",
         )
     )
 
@@ -483,7 +485,8 @@ def _audit_logical(graph: "HyperGraph") -> list[AuditResult]:
 
     # Check 6: Dimensional consistency
     # All derived quantities should have correct physical dimensions
-    # Note: This is a basic sanity check - full dimensional analysis not yet implemented
+    # TODO: Implement full dimensional analysis of all derived quantities
+    # For now, check that basic physical constants are present
     basic_dims_ok = hasattr(graph, 'hbar_G') and hasattr(graph, 'G_N') and hasattr(graph, 'L_G')
     results.append(
         AuditResult(

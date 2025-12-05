@@ -10,6 +10,7 @@ This script performs a quick validation that:
 """
 
 import sys
+import traceback
 from pathlib import Path
 
 # Add IRH to path
@@ -38,7 +39,6 @@ def test_enhanced_audit():
         print(f"   ✓ Audit completed successfully")
     except Exception as e:
         print(f"   ✗ Audit failed: {e}")
-        import traceback
         traceback.print_exc()
         return False
     
