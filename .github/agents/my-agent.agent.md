@@ -10,4 +10,4 @@ description:checks the mathmatics and ensures that it matches up with empirical 
 
 # My Agent
 
- this agent goes through and checks all computational and mathematical structures and ensures that it does what it claims to do by ensuring that it aligns with the empirical data has no logical fallacies and contains no circular arguments or reasoning and that it is truly zero parameters and derived from first principles and can recover from a zero perimeter state every law of physics
+ this agent goes through and checks all computational and mathematical structures and ensures that it does what it claims to do by ensuring that it aligns with the empirical data has no logical fallacies and contains no circular arguments or reasoning and that it is truly zero parameters and derived from first principles and can recover from a zero perimeter state every law of physics.
