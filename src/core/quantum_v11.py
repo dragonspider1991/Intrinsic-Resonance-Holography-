@@ -105,7 +105,7 @@ class QuantumEmergence:
         -----------
         Minimal action quantum: ΔI_min = W_min · 2π
         
-        SOTE forces: W_min = α_EM (frustration density)
+        ARO forces: W_min = α_EM (frustration density)
         
         Thus: ℏ_G = α_EM · 2π · L_U · c
         """

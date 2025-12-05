@@ -1,17 +1,17 @@
 """
 spectral_dimension.py - Spectral Dimension Computation
 
-This module computes the spectral dimension of a hypergraph, which characterizes
+This module computes the spectral dimension of a Cymatic Resonance Network, which characterizes
 the effective dimensionality of discrete spacetime as probed by diffusion processes.
 
 Target: d_s ≈ 4 for physical 4D spacetime.
 
 Equations Implemented:
-- Heat kernel: P(t) = (1/N) * Tr[exp(-t·L_comb)] where L_comb is combinatorial Laplacian
+- Heat kernel: P(t) = (1/N) * Tr[exp(-t·ℒ_comb)] where ℒ_comb is combinatorial Interference Matrix
 - Spectral dimension: d_s = -2 * d(log P)/d(log t)
-- Stage 3 minimization: Psi(d_s, L_comb) = entropic_cost(d_s) + scaling_penalty
+- Stage 3 minimization: Psi(d_s, ℒ_comb) = entropic_cost(d_s) + scaling_penalty
 
-The derivation is non-circular: we start from the combinatorial (integer) Laplacian
+The derivation is non-circular: we start from the combinatorial (integer) Interference Matrix
 without assuming any dimensionality, then derive d_s from diffusion behavior.
 
 References:
@@ -31,7 +31,7 @@ from scipy.optimize import curve_fit
 from scipy.sparse.linalg import eigsh
 
 if TYPE_CHECKING:
-    from .graph_state import HyperGraph
+    from .graph_state import CymaticResonanceNetwork
 
 
 @dataclass
@@ -49,7 +49,7 @@ class SpectralDimensionResult:
     num_points: int
 
 
-def HeatKernelTrace(graph: HyperGraph, t: float) -> float:
+def HeatKernelTrace(graph: CymaticResonanceNetwork, t: float) -> float:
     """
     Compute the heat kernel trace Tr[exp(-t·L)] at diffusion time t.
 
@@ -59,17 +59,17 @@ def HeatKernelTrace(graph: HyperGraph, t: float) -> float:
     P(t) = (1/N) * Σᵢ exp(-λᵢ·t)
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         t: Diffusion time
 
     Returns:
         Heat kernel trace value
     """
     # Get combinatorial Laplacian (unweighted)
-    L_comb = _combinatorial_laplacian(graph)
+    ℒ_comb = _combinatorial_laplacian(graph)
 
     # Compute eigenvalues
-    eigenvalues = np.linalg.eigvalsh(L_comb)
+    eigenvalues = np.linalg.eigvalsh(ℒ_comb)
 
     # Heat kernel trace
     trace = np.sum(np.exp(-eigenvalues * t))
@@ -77,14 +77,14 @@ def HeatKernelTrace(graph: HyperGraph, t: float) -> float:
     return float(trace / graph.N)
 
 
-def _combinatorial_laplacian(graph: HyperGraph) -> NDArray[np.float64]:
+def _combinatorial_laplacian(graph: CymaticResonanceNetwork) -> NDArray[np.float64]:
     """
     Compute the combinatorial (integer) Laplacian.
 
-    L_comb = D - A where A is the unweighted adjacency matrix.
+    ℒ_comb = D - A where A is the unweighted adjacency matrix.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
 
     Returns:
         Combinatorial Laplacian matrix
@@ -97,7 +97,7 @@ def _combinatorial_laplacian(graph: HyperGraph) -> NDArray[np.float64]:
 
 
 def SpectralDimension(
-    graph: HyperGraph,
+    graph: CymaticResonanceNetwork,
     fit_range: tuple[float, float] = (0.01, 10.0),
     num_points: int = 50,
     use_eigenvalues: bool = True,
@@ -112,7 +112,7 @@ def SpectralDimension(
         d_s = -2 · d(log P)/d(log t)
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         fit_range: (t_min, t_max) for fitting
         num_points: Number of sample points
         use_eigenvalues: If True, use eigenvalue method (faster)
@@ -173,23 +173,23 @@ def SpectralDimension(
 
 
 def _heat_kernel_from_eigen(
-    graph: HyperGraph, t_values: NDArray[np.float64]
+    graph: CymaticResonanceNetwork, t_values: NDArray[np.float64]
 ) -> NDArray[np.float64]:
     """
     Compute heat kernel trace from eigenvalues (vectorized).
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         t_values: Array of diffusion times
 
     Returns:
         Array of heat kernel trace values
     """
     # Get combinatorial Laplacian
-    L_comb = _combinatorial_laplacian(graph)
+    ℒ_comb = _combinatorial_laplacian(graph)
 
     # Compute eigenvalues
-    eigenvalues = np.linalg.eigvalsh(L_comb)
+    eigenvalues = np.linalg.eigvalsh(ℒ_comb)
 
     # P(t) = (1/N) * Σᵢ exp(-λᵢ·t) for each t
     # Vectorized: shape (len(t_values),)
@@ -245,22 +245,22 @@ def _linear_fit(
     return float(slope), float(intercept), float(se_slope), float(r_squared), residuals
 
 
-def combinatorial_heat_kernel(L_comb: NDArray[np.float64], t_steps: int = 100) -> float:
+def combinatorial_heat_kernel(ℒ_comb: NDArray[np.float64], t_steps: int = 100) -> float:
     """
-    Compute heat kernel trace P_C = (1/N) * Tr[exp(-t·L_comb)].
+    Compute heat kernel trace P_C = (1/N) * Tr[exp(-t·ℒ_comb)].
 
     This is the pure combinatorial version using the integer Laplacian,
     used for non-circular dimensional bootstrap.
 
     Args:
-        L_comb: Combinatorial (integer) Laplacian matrix
+        ℒ_comb: Combinatorial (integer) Laplacian matrix
         t_steps: Number of time steps for averaging
 
     Returns:
         Average heat kernel trace
     """
-    N = L_comb.shape[0]
-    eigenvalues = np.linalg.eigvalsh(L_comb)
+    N = ℒ_comb.shape[0]
+    eigenvalues = np.linalg.eigvalsh(ℒ_comb)
 
     # Average over time range
     t_values = np.linspace(0.1, 10.0, t_steps)
@@ -270,7 +270,7 @@ def combinatorial_heat_kernel(L_comb: NDArray[np.float64], t_steps: int = 100) -
 
 
 def compute_ds_combinatorial(
-    L_comb: NDArray[np.float64], t_range: tuple[float, float] = (0.1, 10.0)
+    ℒ_comb: NDArray[np.float64], t_range: tuple[float, float] = (0.1, 10.0)
 ) -> float:
     """
     Compute spectral dimension from combinatorial Laplacian.
@@ -278,14 +278,14 @@ def compute_ds_combinatorial(
     d_s_comb = -2 * lim_{t->0} d(log P_C)/d(log t)
 
     Args:
-        L_comb: Combinatorial Laplacian
+        ℒ_comb: Combinatorial Laplacian
         t_range: Time range for fitting
 
     Returns:
         Spectral dimension estimate
     """
-    N = L_comb.shape[0]
-    eigenvalues = np.linalg.eigvalsh(L_comb)
+    N = ℒ_comb.shape[0]
+    eigenvalues = np.linalg.eigvalsh(ℒ_comb)
 
     # Sample points
     t_values = np.exp(np.linspace(np.log(t_range[0]), np.log(t_range[1]), 50))
@@ -309,24 +309,24 @@ def compute_ds_combinatorial(
     return -2 * slope
 
 
-def minimize_psi(graph: HyperGraph, target_ds: float = 4.0) -> dict:
+def minimize_psi(graph: CymaticResonanceNetwork, target_ds: float = 4.0) -> dict:
     """
-    Minimize Ψ(d_s, L_comb) = entropic_cost(d_s) + scaling_penalty.
+    Minimize Ψ(d_s, ℒ_comb) = entropic_cost(d_s) + scaling_penalty.
 
     Stage 3 of dimensional bootstrap: find unique minimum at d_s ≈ 4.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         target_ds: Target spectral dimension
 
     Returns:
         Dictionary with minimization results
     """
-    L_comb = _combinatorial_laplacian(graph)
+    ℒ_comb = _combinatorial_laplacian(graph)
     N = graph.N
 
     # Current spectral dimension
-    ds_current = compute_ds_combinatorial(L_comb)
+    ds_current = compute_ds_combinatorial(ℒ_comb)
 
     # Entropic cost: penalize deviation from target
     entropic_cost = (ds_current - target_ds) ** 2
@@ -353,7 +353,7 @@ def minimize_psi(graph: HyperGraph, target_ds: float = 4.0) -> dict:
 
 
 def dimensional_bootstrap_test(
-    graph: HyperGraph, tolerance: float = 0.02
+    graph: CymaticResonanceNetwork, tolerance: float = 0.02
 ) -> dict:
     """
     Test dimensional bootstrap: verify d_s ≈ 4 emerges uniquely.
@@ -361,7 +361,7 @@ def dimensional_bootstrap_test(
     This implements the Stage 3 validation from the IRH framework.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         tolerance: Acceptable deviation from d_s = 4
 
     Returns:

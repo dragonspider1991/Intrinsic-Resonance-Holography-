@@ -1,23 +1,23 @@
 """
-graph_state.py - Hypergraph Substrate for Intrinsic Resonance Holography
+graph_state.py - Cymatic Resonance Network Substrate for Intrinsic Resonance Holography
 
-This module implements the complex-weighted hypergraph substrate that forms
+This module implements the Cymatic Resonance Network substrate that forms
 the foundational data structure for discrete quantum spacetime.
 
-A HyperGraph encapsulates:
+A CymaticResonanceNetwork encapsulates:
 - Vertex set V = {0, 1, ..., N-1}
 - Hyperedge set E (k-tuples for k <= 4)
 - Complex weights W: E -> C with |W| in [0,1] and arg(W) in [0, 2π)
 - L_U self-consistency derivation
 
 Equations Implemented:
-- Random hypergraph generation via Erdős-Rényi model
+- Random Cymatic Resonance Network generation via Erdős-Rényi model
 - Complex weight initialization: w = |w| * exp(i*φ)
-- L_U = L_G * sqrt(hbar_G * G_N) (stub numericals from SOTE)
+- L_U = L_G * sqrt(hbar_G * G_N) (stub numericals from ARO)
 - Holographic bound enforcement: S <= A/4 (with Lagrange multiplier)
 
 References:
-- IRH Theory: Discrete hypergraph as quantum spacetime substrate
+- IRH Theory: Discrete Cymatic Resonance Network as quantum spacetime substrate
 - Holographic principle and entropy bounds
 """
 
@@ -35,8 +35,8 @@ from numpy.typing import NDArray
 
 
 @dataclass
-class HyperGraphMetadata:
-    """Metadata for HyperGraph creation and tracking."""
+class CymaticResonanceNetworkMetadata:
+    """Metadata for CymaticResonanceNetwork creation and tracking."""
 
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     seed: int | None = None
@@ -45,14 +45,14 @@ class HyperGraphMetadata:
     edge_probability: float = 0.3
     weight_distribution: str = "Uniform"
     phase_distribution: str = "Uniform"
-    version: str = "9.2"
+    version: str = "10.0"
 
 
-class HyperGraph:
+class CymaticResonanceNetwork:
     """
-    Complex-weighted hypergraph representing discrete quantum spacetime.
+    Cymatic Resonance Network representing discrete quantum spacetime.
 
-    This class implements a hypergraph with:
+    This class implements a network with:
     - N nodes (vertices)
     - Hyperedges as k-tuples (k <= 4) with complex weights
     - NetworkX HyperDiGraph backend for standard graph operations
@@ -62,17 +62,17 @@ class HyperGraph:
         V: Vertex set {0, 1, ..., N-1}
         E: List of hyperedges (tuples)
         W: Dictionary mapping edges to complex weights
-        adjacency_matrix: Weighted adjacency matrix
+        interference_matrix: Interference Matrix (Graph Laplacian ℒ)
         phases: Phase factors on edges (anti-symmetric)
         metadata: Creation metadata
 
-    Physical Constants (stub values from SOTE):
+    Physical Constants (stub values from ARO):
         hbar_G: Reduced Planck constant in geometric units
         G_N: Newton's gravitational constant
         L_G: Graph length scale
     """
 
-    # Physical constants (stub values - to be derived from SOTE)
+    # Physical constants (stub values - to be derived from ARO)
     hbar_G: float = 1.054571817e-34  # J·s (Planck's reduced constant)
     G_N: float = 6.67430e-11  # m³/(kg·s²) (Newton's constant)
     L_G: float = 1.616255e-35  # m (Planck length scale)
@@ -89,7 +89,7 @@ class HyperGraph:
         phase_distribution: str = "Uniform",
     ) -> None:
         """
-        Initialize a HyperGraph.
+        Initialize a CymaticResonanceNetwork.
 
         Args:
             N: Number of nodes (must be >= 2)
@@ -115,7 +115,7 @@ class HyperGraph:
         self._rng = np.random.default_rng(seed)
 
         # Initialize metadata
-        self.metadata = HyperGraphMetadata(
+        self.metadata = CymaticResonanceNetworkMetadata(
             seed=seed,
             topology=topology,
             edge_probability=edge_probability,
@@ -239,7 +239,7 @@ class HyperGraph:
                 self.W[edge] = complex(1.0, 0.0)
 
     def _build_matrices(self) -> None:
-        """Build adjacency matrix and phase matrix from edges."""
+        """Build coupling matrix and phase matrix from edges."""
         self.adjacency_matrix: NDArray[np.float64] = np.zeros(
             (self.N, self.N), dtype=np.float64
         )
@@ -292,7 +292,7 @@ class HyperGraph:
 
     def validate_substrate(self) -> bool:
         """
-        Validate the hypergraph substrate.
+        Validate the Cymatic Resonance Network substrate.
 
         Checks:
         - Finiteness: N < infinity
@@ -335,7 +335,7 @@ class HyperGraph:
         """
         Derive L_U self-consistency scale.
 
-        From SOTE: L_U = L_G * sqrt(hbar_G * G_N)
+        From ARO: L_U = L_G * sqrt(hbar_G * G_N)
 
         Returns:
             L_U scale factor
@@ -394,10 +394,10 @@ class HyperGraph:
 
     def get_laplacian(self) -> NDArray[np.float64]:
         """
-        Compute the graph Laplacian L = D - A.
+        Compute the Interference Matrix (Graph Laplacian ℒ = D - A).
 
         Returns:
-            Laplacian matrix
+            Interference Matrix
         """
         degrees = np.sum(self.adjacency_matrix, axis=1)
         D = np.diag(degrees)
@@ -474,13 +474,13 @@ class HyperGraph:
 
     def save(self, filepath: str | Path) -> None:
         """
-        Save HyperGraph to JSON file.
+        Save CymaticResonanceNetwork to JSON file.
 
         Args:
             filepath: Path to save file
         """
         data = {
-            "type": "HyperGraph",
+            "type": "CymaticResonanceNetwork",
             "version": self.metadata.version,
             "N": self.N,
             "edges": [list(e) for e in self.E],
@@ -498,15 +498,15 @@ class HyperGraph:
             json.dump(data, f, indent=2)
 
     @classmethod
-    def load(cls, filepath: str | Path) -> HyperGraph:
+    def load(cls, filepath: str | Path) -> CymaticResonanceNetwork:
         """
-        Load HyperGraph from JSON file.
+        Load CymaticResonanceNetwork from JSON file.
 
         Args:
             filepath: Path to saved file
 
         Returns:
-            Loaded HyperGraph
+            Loaded CymaticResonanceNetwork
         """
         with open(filepath) as f:
             data = json.load(f)
@@ -528,7 +528,7 @@ class HyperGraph:
 
     def __repr__(self) -> str:
         return (
-            f"HyperGraph(N={self.N}, edges={len(self.E)}, "
+            f"CymaticResonanceNetwork(N={self.N}, edges={len(self.E)}, "
             f"topology={self.metadata.topology})"
         )
 
@@ -538,9 +538,9 @@ def create_graph_state(
     seed: int | None = None,
     topology: str = "Random",
     edge_probability: float = 0.3,
-) -> HyperGraph:
+) -> CymaticResonanceNetwork:
     """
-    Convenience function to create a HyperGraph.
+    Convenience function to create a CymaticResonanceNetwork.
 
     This mirrors the Wolfram CreateGraphState function.
 
@@ -551,9 +551,9 @@ def create_graph_state(
         edge_probability: Edge probability for random graphs
 
     Returns:
-        HyperGraph instance
+        CymaticResonanceNetwork instance
     """
-    return HyperGraph(
+    return CymaticResonanceNetwork(
         N=n,
         seed=seed,
         topology=topology,

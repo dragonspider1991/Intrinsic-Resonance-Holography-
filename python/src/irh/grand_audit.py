@@ -244,13 +244,13 @@ def _audit_mathematical(graph: "HyperGraph") -> list[AuditResult]:
     """Audit mathematical completeness pillar."""
     results = []
 
-    # Check 1: GTEC complexity
+    # Check 1: ARO complexity
     from .gtec import gtec
 
     gtec_result = gtec(graph)
     results.append(
         AuditResult(
-            name="Mathematical: GTEC Complexity",
+            name="Mathematical: ARO Complexity",
             passed=gtec_result.complexity > 0,
             value=gtec_result.complexity,
             target="> 0",

@@ -13,7 +13,7 @@ import pytest
 @pytest.fixture
 def small_graph():
     """Create a small test graph."""
-    from irh.graph_state import HyperGraph
+    from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
     return HyperGraph(N=16, seed=42, topology="Random", edge_probability=0.3)
 
@@ -21,7 +21,7 @@ def small_graph():
 @pytest.fixture
 def lattice_graph():
     """Create a lattice test graph."""
-    from irh.graph_state import HyperGraph
+    from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
     return HyperGraph(N=16, seed=42, topology="Lattice")
 
@@ -29,7 +29,7 @@ def lattice_graph():
 @pytest.fixture
 def complete_graph():
     """Create a complete graph."""
-    from irh.graph_state import HyperGraph
+    from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
     return HyperGraph(N=8, seed=42, topology="Complete")
 
@@ -37,7 +37,7 @@ def complete_graph():
 @pytest.fixture
 def cycle_graph():
     """Create a cycle graph."""
-    from irh.graph_state import HyperGraph
+    from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
     return HyperGraph(N=10, seed=42, topology="Cycle")
 
@@ -97,7 +97,7 @@ class TestGraphState:
         filepath = tmp_path / "test_graph.irh"
         small_graph.save(filepath)
 
-        from irh.graph_state import HyperGraph
+        from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
         loaded = HyperGraph.load(filepath)
         assert loaded.N == small_graph.N
@@ -169,14 +169,14 @@ class TestScalingFlows:
         assert result.positive_count >= 0
 
 
-# GTEC Tests
+# ARO Tests
 
 
-class TestGTEC:
+class TestARO:
     """Tests for gtec module."""
 
     def test_gtec_computation(self, small_graph):
-        """Test GTEC computation."""
+        """Test ARO computation."""
         from irh.gtec import gtec
 
         result = gtec(small_graph)
@@ -409,7 +409,7 @@ class TestReproducibility:
 
     def test_same_seed_same_graph(self):
         """Test same seed produces identical graphs."""
-        from irh.graph_state import HyperGraph
+        from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
         g1 = HyperGraph(N=20, seed=12345)
         g2 = HyperGraph(N=20, seed=12345)
@@ -419,7 +419,7 @@ class TestReproducibility:
 
     def test_different_seeds_different_graphs(self):
         """Test different seeds produce different graphs."""
-        from irh.graph_state import HyperGraph
+        from irh.graph_state import CymaticResonanceNetwork as HyperGraph
 
         g1 = HyperGraph(N=20, seed=12345)
         g2 = HyperGraph(N=20, seed=54321)

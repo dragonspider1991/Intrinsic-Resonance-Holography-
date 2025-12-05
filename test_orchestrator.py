@@ -166,7 +166,7 @@ def test_wolfram_integration():
         with open("irh_wolfram_kernel.wls", 'r') as f:
             wls_content = f.read()
             assert "(* ::Package:: *)" in wls_content
-            assert "IRH GTEC Kernel" in wls_content
+            assert "IRH ARO Kernel" in wls_content
             assert "Eigenvalues" in wls_content or "Eigensystem" in wls_content
         
         print("✓ Wolfram script (.wls) generated")
@@ -176,7 +176,7 @@ def test_wolfram_integration():
         with open("wolfram_notebook_prompt.txt", 'r') as f:
             prompt_content = f.read()
             assert "PROMPT FOR LLM-ENABLED WOLFRAM NOTEBOOK" in prompt_content
-            assert "GTEC" in prompt_content
+            assert "ARO" in prompt_content
             assert "Mathematica" in prompt_content
         
         print("✓ Notebook prompt generated")

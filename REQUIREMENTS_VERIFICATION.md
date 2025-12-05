@@ -43,7 +43,7 @@ This document verifies that all requirements from the problem statement have bee
 #### ✅ CLI Wizard Implementation
 - [x] Uses `input()` for user prompts
 - [x] Asks for Grid Size N (with default 1000)
-- [x] Asks for module selection (GTEC, NCGG, Cosmology)
+- [x] Asks for module selection (ARO, NCGG, Cosmology)
 - [x] Asks for output verbosity (brief/debug)
 - [x] Displays defaults in brackets
 - [x] Validates input ranges and types
@@ -98,7 +98,7 @@ This document verifies that all requirements from the problem statement have bee
 - [x] Creates `crash_report_for_llm.txt`
 - [x] Formatted as LLM prompt with clear structure
 - [x] Includes stack trace
-- [x] Includes calculation context (GTEC/NCGG/etc)
+- [x] Includes calculation context (ARO/NCGG/etc)
 - [x] Includes environment variables and system state
 - [x] Includes configuration at time of crash
 - [x] Includes suggested fixes
@@ -113,7 +113,7 @@ This document verifies that all requirements from the problem statement have bee
 #### ✅ Wolfram Asset Generation
 - [x] Implements `generate_wolfram_assets()` function
 - [x] Writes .wls (Wolfram Script) file to disk
-- [x] Mirrors Python GTEC kernel logic using Mathematica syntax
+- [x] Mirrors Python ARO kernel logic using Mathematica syntax
 - [x] Uses Eigenvalues[], Entropy[] and other Mathematica functions
 - [x] Generates .nb text representation / notebook prompt
 
@@ -124,7 +124,7 @@ This document verifies that all requirements from the problem statement have bee
 - [x] Computes graph Laplacian
 - [x] Performs eigenvalue decomposition
 - [x] Computes entanglement entropy
-- [x] Calculates GTEC energy (E = -μ * S)
+- [x] Calculates ARO energy (E = -μ * S)
 - [x] Exports results to JSON
 - [x] Includes comments and documentation
 

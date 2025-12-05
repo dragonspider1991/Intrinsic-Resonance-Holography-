@@ -6,7 +6,7 @@
    
    Purpose:
      Implements configurable controller strategies for updating the Harmony
-     Functional parameters {βH, μ, α} during HAGO optimization. Supports
+     Functional parameters {βH, μ, α} during ARO optimization. Supports
      fixed, adaptive, and learning-based update schemes.
    
    Inputs:

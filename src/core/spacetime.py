@@ -4,19 +4,19 @@ spacetime.py - Dimensional Bootstrap for Spacetime Emergence
 RIRH v9.5 Spacetime Emergence Framework
 
 This module implements the Dimensional Bootstrap mechanism for computing
-intrinsic dimensions of emergent spacetime from hypergraph dynamics.
+intrinsic dimensions of emergent spacetime from Cymatic Resonance Network dynamics.
 
 Key Components:
 - Dimensional_Bootstrap: Class for computing intrinsic dimensions via
   spectral and geometric methods
 - Heat kernel trace analysis for spectral dimension d_spectral
 - BFS volume scaling for growth dimension d_growth
-- SOTE penalty functional for dimension consistency
+- ARO penalty functional for dimension consistency
 
 References:
 - Heat kernel methods on graphs
 - Spectral dimension in quantum gravity
-- SOTE principle for dimensional emergence
+- ARO principle for dimensional emergence
 """
 
 import numpy as np
@@ -29,15 +29,15 @@ class Dimensional_Bootstrap:
     """
     Dimensional Bootstrap for Spacetime Emergence.
 
-    Computes intrinsic dimensions of a hypergraph using multiple methods:
+    Computes intrinsic dimensions of a Cymatic Resonance Network using multiple methods:
     1. Spectral dimension (d_spectral) from heat kernel trace slope
     2. Growth dimension (d_growth) from BFS volume scaling
 
-    The SOTE principle drives dimension consistency: at equilibrium,
+    The ARO principle drives dimension consistency: at equilibrium,
     d_spectral ≈ d_growth ≈ 4 for physically relevant configurations.
 
     Attributes:
-        adj_matrix: Adjacency matrix of the hypergraph
+        adj_matrix: Adjacency matrix of the Cymatic Resonance Network
         N: Number of nodes
         laplacian: Graph Laplacian matrix
         eigenvalues: Laplacian eigenvalues
@@ -80,7 +80,7 @@ class Dimensional_Bootstrap:
 
     def compute_intrinsic_dims(self, adj_matrix):
         """
-        Calculate intrinsic dimensions from the hypergraph structure.
+        Calculate intrinsic dimensions from the Cymatic Resonance Network structure.
 
         Computes two independent dimension estimates:
         1. d_spectral: From heat kernel trace slope (log-log fit)
@@ -292,9 +292,9 @@ class Dimensional_Bootstrap:
 
     def compute_sote_penalty(self, d_spectral, d_growth, d_volume=None):
         """
-        Compute SOTE (Self-Organizing Topological Entropy) penalty.
+        Compute ARO (Self-Organizing Topological Entropy) penalty.
 
-        The SOTE principle requires dimension consistency: all intrinsic
+        The ARO principle requires dimension consistency: all intrinsic
         dimension measures should agree. The penalty functional is:
         
         P = sum_i,j (d_i - d_j)^2
@@ -310,7 +310,7 @@ class Dimensional_Bootstrap:
                      and d_growth.
 
         Returns:
-            float: The SOTE penalty value. Zero indicates perfect
+            float: The ARO penalty value. Zero indicates perfect
                   dimension consistency.
         """
         dimensions = [d_spectral, d_growth]
@@ -354,7 +354,7 @@ if __name__ == "__main__":
     print(f"  Average dimension: {result['d_average']:.4f}")
     
     penalty = bootstrap.compute_sote_penalty(result['d_spectral'], result['d_growth'])
-    print(f"  SOTE penalty: {penalty:.6f}")
+    print(f"  ARO penalty: {penalty:.6f}")
     
     # Test 2: 1D cycle
     print("\nTest 2: 1D cycle (20 nodes)")
@@ -399,8 +399,8 @@ if __name__ == "__main__":
     print(f"  Growth dimension: {result['d_growth']:.4f}")
     print(f"  Average dimension: {result['d_average']:.4f}")
     
-    # Test 4: SOTE penalty gradient
-    print("\nTest 4: SOTE penalty gradient")
+    # Test 4: ARO penalty gradient
+    print("\nTest 4: ARO penalty gradient")
     penalties = []
     for d in [2.0, 3.0, 4.0, 5.0]:
         p = bootstrap.compute_sote_penalty(4.0, d)

@@ -273,7 +273,7 @@ $$
 This follows from minimizing the frustration energy subject to the holographic bound. The detailed derivation is in [04_gauge_uniqueness.md](04_gauge_uniqueness.md).
 
 **Physical Interpretation:**  
-Complex weights are not assumed but derived from geometric frustration. The phase structure naturally leads to gauge fields and electromagnetism.
+Complex weights are not assumed but derived from geometric frustration. The phase structure naturally leads to Coherence Connections and electromagnetism.
 
 ---
 

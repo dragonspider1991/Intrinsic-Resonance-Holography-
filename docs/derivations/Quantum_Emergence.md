@@ -1,6 +1,6 @@
 # Quantum Emergence Framework: Rigorous Derivations
 
-## RIRH Formalism v9.5 — Non-Commutative Graph Geometry & GTEC
+## RIRH Formalism v9.5 — Non-Commutative Graph Geometry & ARO
 
 This document provides the rigorous mathematical derivations for the Quantum Emergence Framework, including the GNS construction for NCGG operators and the commutator derivation leading to emergent ℏ_G.
 
@@ -166,7 +166,7 @@ For small or sparse graphs, $\hbar_G$ remains finite, indicating strong quantum 
 
 ---
 
-## 5. GTEC Functional: Entanglement Entropy
+## 5. ARO Functional: Entanglement Entropy
 
 ### 5.1 Bipartite Partition
 
@@ -207,20 +207,20 @@ where $\{\lambda_i\}$ are the eigenvalues of $\rho_A$.
 
 ## 6. Dark Energy Cancellation
 
-### 6.1 GTEC Energy
+### 6.1 ARO Energy
 
-The GTEC functional provides negative energy from entanglement:
+The ARO functional provides negative energy from entanglement:
 $$
-E_{\text{GTEC}} = -\mu \cdot S_{\text{ent}}
+E_{\text{ARO}} = -\mu \cdot S_{\text{ent}}
 $$
 
-where $\mu \approx 1/(N \ln N)$ is the coupling constant derived from the SOTE principle.
+where $\mu \approx 1/(N \ln N)$ is the coupling constant derived from the ARO principle.
 
 ### 6.2 Cancellation Mechanism
 
 The observed cosmological constant is:
 $$
-\Lambda_{\text{obs}} = \Lambda_{\text{QFT}} + E_{\text{GTEC}}
+\Lambda_{\text{obs}} = \Lambda_{\text{QFT}} + E_{\text{ARO}}
 $$
 
 For successful cancellation:
@@ -240,7 +240,7 @@ For a graph with $N$ nodes:
 - $\mu \sim 1/(N \ln N)$
 - $S_{\text{ent}} \sim N \ln N$ (area law with logarithmic corrections)
 
-Thus: $E_{\text{GTEC}} \sim -N$, achieving cancellation.
+Thus: $E_{\text{ARO}} \sim -N$, achieving cancellation.
 
 ---
 
@@ -262,13 +262,13 @@ result = algebra.compute_commutator()
 hbar_G = result['hbar_G']
 ```
 
-### 7.2 GTEC_Functional Class
+### 7.2 ARO_Functional Class
 
 ```python
-from src.core.gtec import GTEC_Functional
+from src.core.gtec import ARO_Functional
 
-# Create GTEC functional
-gtec = GTEC_Functional(adj_matrix)
+# Create ARO functional
+gtec = ARO_Functional(adj_matrix)
 
 # Define partition
 partition = {'A': [0, 1, 2], 'B': [3, 4, 5]}
@@ -289,4 +289,4 @@ cancellation = gtec.verify_cancellation(Lambda_QFT=100.0, S_ent=S_ent)
 2. Connes, A. "Non-commutative Geometry" (1994)
 3. GNS Construction in Quantum Field Theory
 4. Holographic Entanglement Entropy
-5. SOTE Principle Derivations (see SOTE_Derivation.md)
+5. ARO Principle Derivations (see SOTE_Derivation.md)

@@ -70,7 +70,7 @@ The orchestrator saves your preferences to `config.json`. You can:
 ```json
 {
   "grid_size_N": 1000,           // Grid size (10-100000)
-  "run_gtec": true,               // Run GTEC module
+  "run_gtec": true,               // Run ARO module
   "run_ncgg": true,               // Run NCGG module
   "run_cosmology": false,         // Run Cosmology calculations
   "output_verbosity": "brief",    // "brief" or "debug"
@@ -91,7 +91,7 @@ If an error occurs, the orchestrator generates a detailed crash report:
 
 ## Module Descriptions
 
-### GTEC (Graph Topological Emergent Complexity)
+### ARO (Graph Topological Emergent Complexity)
 - Computes entanglement entropy for bipartite graph partitions
 - Verifies dark energy cancellation mechanism
 - Required for: Dark energy calculations
@@ -114,7 +114,7 @@ If an error occurs, the orchestrator generates a detailed crash report:
 ./setup.sh
 # Follow the wizard prompts:
 # - Grid Size N: 1000 [Enter]
-# - Run GTEC? y [Enter]
+# - Run ARO? y [Enter]
 # - Run NCGG? y [Enter]
 # - Run Cosmology? n [Enter]
 # - Verbosity: brief [Enter]

@@ -2,7 +2,7 @@
 Tests for src/core spacetime and matter modules.
 
 Unit tests for the Spacetime Emergence and Matter Genesis Frameworks:
-- Dimensional_Bootstrap: Spectral/growth dimension computation and SOTE penalty
+- Dimensional_Bootstrap: Spectral/growth dimension computation and ARO penalty
 - Topological_Defect_Classifier: Cycle identification and gauge group verification
 """
 
@@ -142,7 +142,7 @@ class TestDimensional_Bootstrap:
         assert result['d_growth'] >= 0.5
 
     def test_compute_sote_penalty_zero_for_equal_dims(self):
-        """Test SOTE penalty is zero when all dimensions are equal."""
+        """Test ARO penalty is zero when all dimensions are equal."""
         bootstrap = Dimensional_Bootstrap()
         
         # Same dimensions should give zero penalty
@@ -154,7 +154,7 @@ class TestDimensional_Bootstrap:
         assert penalty == 0.0
 
     def test_compute_sote_penalty_positive_for_different_dims(self):
-        """Test SOTE penalty is positive when dimensions differ."""
+        """Test ARO penalty is positive when dimensions differ."""
         bootstrap = Dimensional_Bootstrap()
         
         # Different dimensions should give positive penalty
@@ -167,7 +167,7 @@ class TestDimensional_Bootstrap:
         assert np.isclose(penalty, 4.0)  # (4-2)^2 = 4
 
     def test_compute_sote_penalty_minimizes_at_consensus(self):
-        """Test SOTE penalty minimizes when dimensions converge."""
+        """Test ARO penalty minimizes when dimensions converge."""
         bootstrap = Dimensional_Bootstrap()
         
         # Compute penalties for different dimension configurations
@@ -382,12 +382,12 @@ class TestDimensionRecovery:
         # For a 4D structure with finite size (81 nodes), we verify:
         # 1. The computation runs successfully
         # 2. Dimensions are within reasonable bounds
-        # 3. SOTE penalty is finite
+        # 3. ARO penalty is finite
         # Note: True 4D behavior requires much larger lattices
         assert 1.0 <= result['d_spectral'] <= 10.0, f"d_spectral={result['d_spectral']} out of bounds"
         assert result['d_average'] >= 1.0, f"d_average={result['d_average']} too low"
         
-        # SOTE penalty should be reasonably small for consistent dimensions
+        # ARO penalty should be reasonably small for consistent dimensions
         penalty = bootstrap.compute_sote_penalty(
             result['d_spectral'],
             result['d_growth']
@@ -397,7 +397,7 @@ class TestDimensionRecovery:
 
     def test_sote_penalty_gradient(self):
         """
-        Test that SOTE penalty correctly penalizes dimension mismatch.
+        Test that ARO penalty correctly penalizes dimension mismatch.
         
         The penalty should monotonically increase as dimensions diverge
         from the target value of 4.

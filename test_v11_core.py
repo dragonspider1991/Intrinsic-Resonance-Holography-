@@ -3,7 +3,7 @@ Quick validation test for IRH v11.0 core modules.
 
 Tests:
 1. Substrate initialization
-2. SOTE action computation
+2. ARO action computation
 3. Quantum emergence verification
 """
 
@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, '/home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography-')
 
 from src.core.substrate_v11 import InformationSubstrate
-from src.core.sote_v11 import SOTEFunctional
+from src.core.sote_v11 import AROFunctional
 from src.core.quantum_v11 import QuantumEmergence
 
 def test_substrate():
@@ -36,15 +36,15 @@ def test_substrate():
     return substrate
 
 def test_sote(substrate):
-    """Test SOTE action computation."""
+    """Test ARO action computation."""
     print("\n" + "=" * 70)
-    print("TEST 2: SOTE Functional")
+    print("TEST 2: ARO Functional")
     print("=" * 70)
     
-    sote = SOTEFunctional(substrate)
+    sote = AROFunctional(substrate)
     S = sote.compute_action()
     
-    print(f"✓ SOTE action computed: S = {S:.4e}")
+    print(f"✓ ARO action computed: S = {S:.4e}")
     
     # Test holographic compliance
     compliance = sote.verify_holographic_compliance()
@@ -93,7 +93,7 @@ def main():
         # Test 1: Substrate
         substrate = test_substrate()
         
-        # Test 2: SOTE
+        # Test 2: ARO
         sote = test_sote(substrate)
         
         # Test 3: Quantum
@@ -105,7 +105,7 @@ def main():
         print("=" * 70)
         print("\nCore v11.0 modules are functional:")
         print("  • InformationSubstrate: Discrete ontology without assumptions")
-        print("  • SOTEFunctional: Unique action principle")
+        print("  • AROFunctional: Unique action principle")
         print("  • QuantumEmergence: Non-circular QM derivation")
         print("\nReady for optimization and empirical predictions!")
         print("=" * 70)

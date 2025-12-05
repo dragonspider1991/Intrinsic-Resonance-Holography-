@@ -112,7 +112,7 @@ def timelike_direction_from_aro(
     """
     Extract timelike direction from ARO evolution.
     
-    The arrow of time is the direction of decreasing Harmony.
+    The Timelike Propagation Direction is the direction of decreasing Harmony.
     
     Args:
         harmony_history: History of Harmony Functional values
@@ -136,7 +136,7 @@ def arrow_of_time_test(
     threshold: float = -1e-6,
 ) -> bool:
     """
-    Verify thermodynamic arrow of time.
+    Verify thermodynamic Timelike Propagation Direction.
     
     Harmony should decrease monotonically (on average).
     
@@ -145,7 +145,7 @@ def arrow_of_time_test(
         threshold: Maximum allowed increase per step
     
     Returns:
-        has_arrow: True if arrow of time is well-defined
+        has_arrow: True if Timelike Propagation Direction is well-defined
     """
     harmony_array = np.array(harmony_history)
     differences = np.diff(harmony_array)

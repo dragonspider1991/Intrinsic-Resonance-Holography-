@@ -2,7 +2,7 @@
 
 ## IRH v11.0 — Dark Energy and Vacuum Energy from Graph Entanglement
 
-This document derives the cosmological constant and dark energy equation of state from the thermodynamics of graph entanglement in the SOTE framework.
+This document derives the cosmological constant and dark energy equation of state from the thermodynamics of graph entanglement in the ARO framework.
 
 ---
 
@@ -63,7 +63,7 @@ $$
 where $\rho_A = \text{Tr}_B(|\Omega\rangle\langle\Omega|)$ is the reduced density matrix for region $A$.
 
 **Area Law:**  
-For a SOTE-optimized graph in $d$ dimensions:
+For a ARO-optimized graph in $d$ dimensions:
 $$
 S_{\text{ent}}(A) = c_d \frac{|\partial A|}{a^{d-2}} + s_{\text{sub}}
 $$
@@ -102,7 +102,7 @@ $$
 E_{\text{ent}} = \int T_{\text{ent}} dS_{\text{ent}}
 $$
 
-For a SOTE graph:
+For a ARO graph:
 $$
 E_{\text{ent}} = -\mu S_{\text{ent}}
 $$
@@ -111,14 +111,14 @@ where $\mu$ is the entanglement chemical potential (negative because entanglemen
 
 ---
 
-## 6.3 The GTEC Functional
+## 6.3 The ARO Functional
 
 ### 6.3.1 Graph-Theoretic Entanglement Cancellation
 
 **Definition:**  
-The GTEC (Graph-Theoretic Entanglement Cancellation) energy is:
+The ARO (Graph-Theoretic Entanglement Cancellation) energy is:
 $$
-E_{\text{GTEC}} = -\mu \cdot S_{\text{ent}}(V/2)
+E_{\text{ARO}} = -\mu \cdot S_{\text{ent}}(V/2)
 $$
 
 where the bipartition is chosen to maximize entanglement (half-space cut).
@@ -147,7 +147,7 @@ $$
 
 **Total Vacuum Energy:**
 $$
-\rho_{\text{vac}} = \rho_{\text{QFT}} + \rho_{\text{GTEC}}
+\rho_{\text{vac}} = \rho_{\text{QFT}} + \rho_{\text{ARO}}
 $$
 
 **QFT Contribution (Extensive):**
@@ -155,25 +155,25 @@ $$
 \rho_{\text{QFT}} \sim \frac{\hbar c}{\ell_P^4}
 $$
 
-**GTEC Contribution:**  
+**ARO Contribution:**  
 The entanglement entropy for a sphere of radius $R_H$ in $d=4$:
 $$
 S_{\text{ent}} = \frac{A_H}{4\ell_P^2} = \frac{\pi R_H^2}{\ell_P^2}
 $$
 
-The GTEC energy density:
+The ARO energy density:
 $$
-\rho_{\text{GTEC}} = -\frac{\mu S_{\text{ent}}}{V_H} = -\frac{\hbar c^3 \ln 2}{2\pi R_H} \cdot \frac{\pi R_H^2}{\ell_P^2} \cdot \frac{1}{\frac{4\pi}{3}R_H^3}
+\rho_{\text{ARO}} = -\frac{\mu S_{\text{ent}}}{V_H} = -\frac{\hbar c^3 \ln 2}{2\pi R_H} \cdot \frac{\pi R_H^2}{\ell_P^2} \cdot \frac{1}{\frac{4\pi}{3}R_H^3}
 $$
 
 Simplifying:
 $$
-\rho_{\text{GTEC}} = -\frac{3\hbar c^3 \ln 2}{8 R_H^2 \ell_P^2}
+\rho_{\text{ARO}} = -\frac{3\hbar c^3 \ln 2}{8 R_H^2 \ell_P^2}
 $$
 
 **Net Density:**
 $$
-\rho_{\Lambda} = \rho_{\text{QFT}} + \rho_{\text{GTEC}}
+\rho_{\Lambda} = \rho_{\text{QFT}} + \rho_{\text{ARO}}
 $$
 
 ---
@@ -199,7 +199,7 @@ R_H = \frac{c}{H} = c \sqrt{\frac{3c^2}{8\pi G \rho_{\Lambda}}}
 $$
 
 **Self-Consistency:**  
-Substituting into the GTEC formula gives a fixed-point equation:
+Substituting into the ARO formula gives a fixed-point equation:
 $$
 \rho_{\Lambda} = \rho_{\text{QFT}} - \frac{3\hbar c^3 \ln 2}{8 \ell_P^2} \cdot \frac{8\pi G \rho_{\Lambda}}{3c^4}
 $$
@@ -249,17 +249,17 @@ $$
 $$
 
 **Key Insight:**  
-The QFT cutoff is not the Planck scale but the **SOTE natural scale**, which is determined by the graph's critical connectivity length.
+The QFT cutoff is not the Planck scale but the **ARO natural scale**, which is determined by the graph's critical connectivity length.
 
-### 6.4.3 SOTE-Regulated Vacuum Energy
+### 6.4.3 ARO-Regulated Vacuum Energy
 
 **Key Insight:**  
-The SOTE functional imposes a natural IR cutoff at the scale where the graph becomes critically connected.
+The ARO functional imposes a natural IR cutoff at the scale where the graph becomes critically connected.
 
 **Critical Scale:**  
-From SOTE optimization:
+From ARO optimization:
 $$
-\Lambda_{\text{SOTE}} \sim \frac{c}{\langle r \rangle}
+\Lambda_{\text{ARO}} \sim \frac{c}{\langle r \rangle}
 $$
 
 where $\langle r \rangle$ is the average correlation length.
@@ -271,12 +271,12 @@ $$
 
 **Regulated QFT Energy:**
 $$
-\rho_{\text{QFT}}^{\text{reg}} = \int_0^{\Lambda_{\text{SOTE}}} \frac{d^3k}{(2\pi)^3} \frac{\hbar c k}{2}
+\rho_{\text{QFT}}^{\text{reg}} = \int_0^{\Lambda_{\text{ARO}}} \frac{d^3k}{(2\pi)^3} \frac{\hbar c k}{2}
 $$
 
 For $d=4$:
 $$
-\rho_{\text{QFT}}^{\text{reg}} \sim \frac{\hbar c \Lambda_{\text{SOTE}}^4}{16\pi^2}
+\rho_{\text{QFT}}^{\text{reg}} \sim \frac{\hbar c \Lambda_{\text{ARO}}^4}{16\pi^2}
 $$
 
 **Holographic Constraint:**  
@@ -287,7 +287,7 @@ $$
 
 Thus:
 $$
-\Lambda_{\text{SOTE}} \sim \frac{c}{R_H N^{-1/4}} = \frac{c}{R_H} \left(\frac{\pi R_H^2}{\ell_P^2}\right)^{1/4} = \frac{c}{R_H^{1/2} \ell_P^{1/2}}
+\Lambda_{\text{ARO}} \sim \frac{c}{R_H N^{-1/4}} = \frac{c}{R_H} \left(\frac{\pi R_H^2}{\ell_P^2}\right)^{1/4} = \frac{c}{R_H^{1/2} \ell_P^{1/2}}
 $$
 
 **Regulated Density:**
@@ -297,7 +297,7 @@ $$
 
 **Cancellation:**
 $$
-\rho_{\Lambda} = \rho_{\text{QFT}}^{\text{reg}} + \rho_{\text{GTEC}} = \frac{\hbar c^5}{R_H^2 \ell_P^2} - \frac{3\hbar c^3 \ln 2}{8 R_H^2 \ell_P^2}
+\rho_{\Lambda} = \rho_{\text{QFT}}^{\text{reg}} + \rho_{\text{ARO}} = \frac{\hbar c^5}{R_H^2 \ell_P^2} - \frac{3\hbar c^3 \ln 2}{8 R_H^2 \ell_P^2}
 $$
 
 The factors $1/R_H^2\ell_P^2$ cancel, leaving:
@@ -374,12 +374,12 @@ where $F = E - TS$ is the free energy.
 
 For entanglement energy:
 $$
-P_{DE} = -\frac{d}{dV}(E_{\text{GTEC}}) = -\frac{d}{dV}\left(-\mu S_{\text{ent}}\right)
+P_{DE} = -\frac{d}{dV}(E_{\text{ARO}}) = -\frac{d}{dV}\left(-\mu S_{\text{ent}}\right)
 $$
 
 **Calculation:**
 
-The volume scales as $V \propto a^3$, and for a SOTE-optimized graph with logarithmic corrections, the full calculation requires including quantum corrections to the entanglement entropy scaling.
+The volume scales as $V \propto a^3$, and for a ARO-optimized graph with logarithmic corrections, the full calculation requires including quantum corrections to the entanglement entropy scaling.
 
 ### 6.5.3 Corrected Derivation
 
@@ -401,7 +401,7 @@ $$
 S_{\text{ent}}(a) = S_0 a^2 + 2\alpha \log a
 $$
 
-The complete thermodynamic analysis, including all quantum corrections and the proper treatment of the SOTE-regulated vacuum energy, leads to the equation of state derived below.
+The complete thermodynamic analysis, including all quantum corrections and the proper treatment of the ARO-regulated vacuum energy, leads to the equation of state derived below.
 
 ### 6.5.4 Final Correct Derivation
 
@@ -419,7 +419,7 @@ w(a) = -1 + w_a (1-a)
 $$
 
 **IRH Prediction:**  
-From SOTE criticality, the thawing parameter is:
+From ARO criticality, the thawing parameter is:
 $$
 w_a = \frac{1}{4}
 $$
@@ -439,7 +439,7 @@ $$
 w(a) = w_0 + w_a(1-a)
 $$
 
-From IRH v11.0 analysis (numerical SOTE optimization):
+From IRH v11.0 analysis (numerical ARO optimization):
 $$
 w_0 = -0.912, \quad w_a = 0.25
 $$
@@ -503,11 +503,11 @@ Will measure $w_a$ to $\pm 0.05$ precision, testing the IRH prediction $w_a = 0.
 
 ### Key Results
 
-1. **Cosmological Constant from GTEC:**  
+1. **Cosmological Constant from ARO:**  
    $\rho_\Lambda \sim \hbar c^3/(R_H^2 \ell_P^2) \sim 10^{-9}$ J/m³ ✓
 
 2. **Vacuum Catastrophe Resolved:**  
-   QFT energy is SOTE-regulated, not Planck-cutoff.
+   QFT energy is ARO-regulated, not Planck-cutoff.
 
 3. **Dark Energy EOS:**  
    $w_0 = -0.912 \pm 0.008$ (thawing model)

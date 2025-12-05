@@ -101,7 +101,7 @@ See `/api/docs` for complete API documentation with request/response schemas.
 - ✓ Physical constant predictions (α⁻¹, etc.)
 - ✓ Grand audit (comprehensive validation)
 - ✓ Metric emergence
-- ✓ Complexity metrics (GTEC, frustration)
+- ✓ Complexity metrics (ARO, frustration)
 
 ### Visualizations
 

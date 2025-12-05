@@ -205,7 +205,7 @@ class ErrorAnalyzer:
         
         Args:
             exception: The caught exception
-            calculation_context: Description of what was being calculated (e.g., "GTEC", "NCGG")
+            calculation_context: Description of what was being calculated (e.g., "ARO", "NCGG")
             config: Configuration dictionary
         
         Returns:
@@ -315,9 +315,9 @@ class ConfigurationWizard:
         
         # Module Selection
         self.config["run_gtec"] = self._prompt_bool(
-            "Run GTEC (Graph Topological Emergent Complexity)?",
+            "Run ARO (Graph Topological Emergent Complexity)?",
             default=self.config["run_gtec"],
-            help_text="GTEC computes entanglement entropy and dark energy cancellation."
+            help_text="ARO computes entanglement entropy and dark energy cancellation."
         )
         
         self.config["run_ncgg"] = self._prompt_bool(
@@ -614,7 +614,7 @@ class WolframIntegration:
     def generate_wolfram_assets():
         """
         Generate Wolfram Language assets:
-        1. A .wls script file that mirrors Python GTEC kernel logic
+        1. A .wls script file that mirrors Python ARO kernel logic
         2. A text prompt for LLM-enabled Wolfram Notebooks
         """
         print("\n" + "="*80)
@@ -646,14 +646,14 @@ class WolframIntegration:
     
     @staticmethod
     def _generate_wls_script() -> str:
-        """Generate Wolfram Language Script (.wls) that mirrors GTEC logic."""
+        """Generate Wolfram Language Script (.wls) that mirrors ARO logic."""
         return '''(* ::Package:: *)
 
 (* ============================================================================
-   IRH GTEC Kernel - Wolfram Language Implementation
+   IRH ARO Kernel - Wolfram Language Implementation
    ============================================================================
    
-   This script mirrors the Python GTEC (Graph Topological Emergent Complexity)
+   This script mirrors the Python ARO (Adaptive Resonance Optimization)
    kernel using Mathematica/Wolfram Language.
    
    Purpose:
@@ -668,7 +668,7 @@ class WolframIntegration:
 N = 1000;  (* Grid size - modify as needed *)
 seed = 42;
 
-Print["IRH GTEC Kernel - Wolfram Language"];
+Print["IRH ARO Kernel - Wolfram Language"];
 Print["Grid Size N = ", N];
 
 (* ============================================================================
@@ -758,19 +758,19 @@ entropyValue = ComputeEntanglementEntropy[eigenvalues, eigenvectors, Floor[N/2]]
 Print["Entanglement Entropy S = ", entropyValue];
 
 (* ============================================================================
-   STEP 5: GTEC Energy and Dark Energy Cancellation
+   STEP 5: ARO Energy and Dark Energy Cancellation
    ============================================================================ *)
 
-Print["\\nStep 5: Computing GTEC energy..."];
+Print["\\nStep 5: Computing ARO energy..."];
 
-(* GTEC coupling constant μ ≈ 1/(N ln N) *)
+(* ARO coupling constant μ ≈ 1/(N ln N) *)
 mu = 1.0 / (N * Log[N]);
 
-(* GTEC energy: E_GTEC = -μ * S *)
+(* ARO energy: E_ARO = -μ * S *)
 gtecEnergy = -mu * entropyValue;
 
-Print["GTEC coupling μ = ", mu];
-Print["GTEC Energy E_GTEC = ", gtecEnergy];
+Print["ARO coupling μ = ", mu];
+Print["ARO Energy E_ARO = ", gtecEnergy];
 Print["This provides the negative vacuum energy contribution"];
 
 (* ============================================================================
@@ -792,7 +792,7 @@ Export["irh_gtec_results.json", results, "JSON"];
 Print["Results exported to irh_gtec_results.json"];
 
 Print["\\n", StringRepeat["=", 80]];
-Print["GTEC KERNEL COMPLETE"];
+Print["ARO KERNEL COMPLETE"];
 Print[StringRepeat["=", 80]];
 '''
     
@@ -805,7 +805,7 @@ PROMPT FOR LLM-ENABLED WOLFRAM NOTEBOOK
 ================================================================================
 
 I am working with the Intrinsic Resonance Holography (IRH) theoretical physics
-framework. Please generate Mathematica code to implement the GTEC (Graph 
+framework. Please generate Mathematica code to implement the ARO (Graph 
 Topological Emergent Complexity) kernel with the following specifications:
 
 TASK:
@@ -827,9 +827,9 @@ Generate a complete Mathematica notebook that:
    - Compute von Neumann entropy: S = -Tr(ρ log₂ ρ)
    - For a partition A|B where |A| = N/2
 
-5. Calculates GTEC energy contribution
-   - GTEC coupling: μ = 1/(N ln N)
-   - GTEC energy: E_GTEC = -μ * S
+5. Calculates ARO energy contribution
+   - ARO coupling: μ = 1/(N ln N)
+   - ARO energy: E_ARO = -μ * S
 
 6. Visualizes results:
    - Histogram of eigenvalue distribution
@@ -846,7 +846,7 @@ REQUIREMENTS:
 - Include error handling for numerical instabilities
 
 PHYSICS CONTEXT:
-The GTEC mechanism provides negative vacuum energy that cancels the large
+The ARO mechanism provides negative vacuum energy that cancels the large
 positive QFT vacuum energy, explaining the small observed cosmological constant.
 This is a key prediction of IRH theory.
 
@@ -884,11 +884,11 @@ class ExecutionEngine:
         executed_modules = []
         
         try:
-            # ACTION ITEM: Run GTEC if enabled
+            # ACTION ITEM: Run ARO if enabled
             if self.config.get("run_gtec", True):
-                print("\n[1/3] Running GTEC (Graph Topological Emergent Complexity)...")
-                self._run_module("GTEC", "src.core.gtec")
-                executed_modules.append("GTEC")
+                print("\n[1/3] Running ARO (Adaptive Resonance Optimization)...")
+                self._run_module("ARO", "src.core.gtec")
+                executed_modules.append("ARO")
             
             # ACTION ITEM: Run NCGG if enabled
             if self.config.get("run_ncgg", True):
@@ -960,14 +960,14 @@ sys.path.insert(0, '.')
 try:
     from {module_path} import *
     
-    # Example: Create and run GTEC if it's the GTEC module
-    if '{module_name}' == 'GTEC':
-        print("  Creating GTEC instance...")
+    # Example: Create and run ARO if it's the ARO module
+    if '{module_name}' == 'ARO':
+        print("  Creating ARO instance...")
         # Example instantiation - adjust based on actual API
         # gtec = GTEC_Functional()
         # results = gtec.compute_entanglement_entropy(partition_size={self.config['grid_size_N']})
         # print(f"  Entanglement entropy: {{results}}")
-        print("  GTEC module loaded (demo mode)")
+        print("  ARO module loaded (demo mode)")
     
     elif '{module_name}' == 'NCGG':
         print("  Creating NCGG instance...")

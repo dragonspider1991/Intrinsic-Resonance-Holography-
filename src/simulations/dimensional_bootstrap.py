@@ -309,7 +309,7 @@ def run_dimensional_scaling_analysis(
         print(f"  S_vN (entropic cost) = {result_4d['von_neumann']:.6f}")
         print(f"  Spectral gap λ_1 = {result_4d['spectral_gap']:.6f}")
         print(f"  Max eigenvalue λ_max = {result_4d['max_eigenvalue']:.6f}")
-        print(f"\nNote: 4D target dimension is consistent with SOTE principle.")
+        print(f"\nNote: 4D target dimension is consistent with ARO principle.")
     
     return results
 

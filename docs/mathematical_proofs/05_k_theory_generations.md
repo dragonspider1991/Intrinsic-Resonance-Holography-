@@ -2,7 +2,7 @@
 
 ## IRH v11.0 — Three Generations from Topological K-Theory
 
-This document proves that exactly three fermion generations emerge from the K-theory classification of the SOTE-optimized graph bundle structure.
+This document proves that exactly three fermion generations emerge from the K-theory classification of the ARO-optimized graph bundle structure.
 
 ---
 
@@ -47,7 +47,7 @@ The index counts the difference between left- and right-handed fermion zero mode
 ### 5.2.1 Emergent Fiber Bundle
 
 **Theorem 5.1 (Bundle Structure from Frustration):**  
-The SOTE-optimized graph with complex weights defines a principal U(1) bundle:
+The ARO-optimized graph with complex weights defines a principal U(1) bundle:
 $$
 U(1) \to E \to G
 $$
@@ -143,7 +143,7 @@ $$
 \hat{A}(S^4) = 1 - \frac{p_1(S^4)}{24}
 $$
 
-where $p_1$ is the first Pontryagin class. For the SOTE-optimized graph (near-flat geometry), $p_1(S^4) \approx 0$, thus $\hat{A}(S^4) \approx 1$.
+where $p_1$ is the first Pontryagin class. For the ARO-optimized graph (near-flat geometry), $p_1(S^4) \approx 0$, thus $\hat{A}(S^4) \approx 1$.
 
 **Step 2: Chern Character**
 
@@ -152,16 +152,16 @@ $$
 c_2 = \frac{1}{8\pi^2} \int_{S^4} \text{Tr}(F \wedge F)
 $$
 
-**Step 3: SOTE Critical Value**
+**Step 3: ARO Critical Value**
 
-The holographic bound and SOTE optimization uniquely determine:
+The holographic bound and ARO optimization uniquely determine:
 $$
 n_{\text{inst}}^{\text{critical}} = 3
 $$
 
 This value satisfies:
 1. Non-zero (at least one generation)
-2. Minimal stable configuration under SOTE
+2. Minimal stable configuration under ARO
 3. Anomaly-free (from gauge group constraints in [04_gauge_uniqueness.md](04_gauge_uniqueness.md))
 
 **Conclusion:**
@@ -196,7 +196,7 @@ This explains why higher generations are heavier.
 ### 5.4.2 Why Not More Generations?
 
 **Theorem 5.4 (Three-Generation Uniqueness):**  
-For $n_{\text{inst}} > 3$, the configuration becomes unstable under SOTE optimization.
+For $n_{\text{inst}} > 3$, the configuration becomes unstable under ARO optimization.
 
 *Proof:*
 
@@ -276,7 +276,7 @@ $$
 n_{\text{max}} < 1/0.118 \approx 8.5
 $$
 
-However, the **stability** requirement from SOTE optimization restricts to:
+However, the **stability** requirement from ARO optimization restricts to:
 $$
 n = 3
 $$
@@ -348,7 +348,7 @@ No fourth generation of fermions exists because $n=4$ violates the K-theory cons
 Direct searches at the LHC have ruled out a fourth generation with masses below ~600 GeV (for quarks) and ~100 GeV (for leptons).
 
 **IRH Interpretation:**  
-The SOTE constraint predicts that no fourth generation exists at **any** mass scale, not just below the TeV scale.
+The ARO constraint predicts that no fourth generation exists at **any** mass scale, not just below the TeV scale.
 
 ### 5.6.2 Fermion Mass Ratios
 
@@ -444,7 +444,7 @@ This is close to $2\pi/3 \approx 2.09$, suggesting partial quantization with qua
    $m_n \propto e^{-8\pi^2 n/\alpha}$ gives exponential hierarchy.
 
 3. **No Fourth Generation:**  
-   $n>3$ violates SOTE stability.
+   $n>3$ violates ARO stability.
 
 4. **CKM Mixing from Topology:**  
    Mixing angles determined by instanton overlaps.

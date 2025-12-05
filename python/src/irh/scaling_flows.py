@@ -1,12 +1,12 @@
 """
 scaling_flows.py - Coarse-Graining, Metric Emergence, and Lorentz Signature
 
-This module implements renormalization group-inspired scaling flows for hypergraphs,
+This module implements renormalization group-inspired scaling flows for Cymatic Resonance Networks,
 including GSRG (Graph Spectral Renormalization Group) coarse-graining,
 metric emergence from path densities, and Lorentzian signature detection.
 
 Equations Implemented:
-- GSRG decimation: high_modes = eigsh(L, k=N//scale); G' = contract(G, high_modes)
+- GSRG decimation: high_modes = eigsh(ℒ, k=N//scale); G' = contract(G, high_modes)
 - Metric emergence: g_μν = ⟨path_density⟩ ⊗ (L_G⁻¹·∇_x) ⊗ (L_G⁻¹·∇_y)
 - Lorentz signature: count negative eigenvalues (target: 1 for (-,+,+,+))
 - Gromov-Hausdorff distance to Minkowski M⁴
@@ -30,7 +30,7 @@ from scipy.linalg import eigh
 from scipy.sparse.linalg import eigsh
 
 if TYPE_CHECKING:
-    from .graph_state import HyperGraph
+    from .graph_state import CymaticResonanceNetwork
 
 
 @dataclass
@@ -78,7 +78,7 @@ class GromovHausdorffResult:
 
 
 def GSRGDecimate(
-    graph: HyperGraph, scale: int = 2, method: str = "spectral"
+    graph: CymaticResonanceNetwork, scale: int = 2, method: str = "spectral"
 ) -> GSRGResult:
     """
     GSRG (Graph Spectral Renormalization Group) coarse-graining.
@@ -92,7 +92,7 @@ def GSRGDecimate(
     3. Reconstruct coarsened Laplacian
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         scale: Decimation scale factor
         method: "spectral" or "random"
 
@@ -144,13 +144,13 @@ def GSRGDecimate(
 
 
 def gsrg_decimate(
-    graph: HyperGraph, scale: int = 2
+    graph: CymaticResonanceNetwork, scale: int = 2
 ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     """
     Convenience function for GSRG decimation.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         scale: Decimation scale factor
 
     Returns:
@@ -171,7 +171,7 @@ def gsrg_decimate(
     return result.coarsened_laplacian, high_modes
 
 
-def MetricEmergence(graph: HyperGraph) -> MetricResult:
+def MetricEmergence(graph: CymaticResonanceNetwork) -> MetricResult:
     """
     Compute emergent metric tensor from graph structure.
 
@@ -182,7 +182,7 @@ def MetricEmergence(graph: HyperGraph) -> MetricResult:
     to construct an effective metric.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
 
     Returns:
         MetricResult with emergent metric tensor
@@ -242,12 +242,12 @@ def MetricEmergence(graph: HyperGraph) -> MetricResult:
     )
 
 
-def path_density_geodesic(graph: HyperGraph) -> NDArray[np.float64]:
+def path_density_geodesic(graph: CymaticResonanceNetwork) -> NDArray[np.float64]:
     """
     Compute path density matrix via geodesic distances.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
 
     Returns:
         Path density matrix
@@ -272,7 +272,7 @@ def path_density_geodesic(graph: HyperGraph) -> NDArray[np.float64]:
 
 
 def LorentzSignature(
-    graph: HyperGraph, tolerance: float = 1e-10
+    graph: CymaticResonanceNetwork, tolerance: float = 1e-10
 ) -> LorentzSignatureResult:
     """
     Compute Lorentz signature from graph Laplacian.
@@ -281,7 +281,7 @@ def LorentzSignature(
     corresponding to the (-,+,+,+) Lorentzian signature.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         tolerance: Threshold for zero eigenvalues
 
     Returns:
@@ -335,7 +335,7 @@ def lorentz_signature(L: NDArray[np.float64]) -> int:
 
 
 def GromovHausdorffDistance(
-    graph: HyperGraph, target: str = "Minkowski4"
+    graph: CymaticResonanceNetwork, target: str = "Minkowski4"
 ) -> GromovHausdorffResult:
     """
     Compute approximate Gromov-Hausdorff distance to target manifold.
@@ -344,7 +344,7 @@ def GromovHausdorffDistance(
     the target continuous manifold.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         target: Target manifold ("Minkowski4", "Euclidean4")
 
     Returns:
@@ -411,13 +411,13 @@ def GromovHausdorffDistance(
 
 
 def hausdorff_distance(
-    graph: HyperGraph, target_manifold: str = "Minkowski4"
+    graph: CymaticResonanceNetwork, target_manifold: str = "Minkowski4"
 ) -> float:
     """
     Convenience function for Gromov-Hausdorff distance.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         target_manifold: Target manifold name
 
     Returns:
@@ -428,13 +428,13 @@ def hausdorff_distance(
 
 
 def continuum_limit_test(
-    graph: HyperGraph, scale: int = 2
+    graph: CymaticResonanceNetwork, scale: int = 2
 ) -> dict:
     """
     Test continuum limit: GH distance should decrease as N increases.
 
     Args:
-        graph: HyperGraph instance
+        graph: CymaticResonanceNetwork instance
         scale: Scale for comparison
 
     Returns:

@@ -34,39 +34,39 @@ class DAGValidationResult:
 # Nodes represent concepts/quantities, edges represent derivation dependencies
 IRH_DERIVATION_GRAPH = {
     # Foundational axioms (no dependencies)
-    "hypergraph_substrate": [],
+    "cymatic_resonance_network_substrate": [],
     "complex_weights": [],
     "holographic_principle": [],
     # Stage 1: Basic structures
-    "laplacian": ["hypergraph_substrate", "complex_weights"],
-    "eigenspectrum": ["laplacian"],
-    "heat_kernel": ["laplacian"],
+    "interference_matrix": ["cymatic_resonance_network_substrate", "complex_weights"],
+    "eigenspectrum": ["interference_matrix"],
+    "heat_kernel": ["interference_matrix"],
     # Stage 2: Dimensional emergence
     "spectral_dimension": ["heat_kernel"],
-    "combinatorial_laplacian": ["hypergraph_substrate"],
-    "d_s_bootstrap": ["combinatorial_laplacian", "spectral_dimension"],
+    "combinatorial_interference_matrix": ["cymatic_resonance_network_substrate"],
+    "d_s_bootstrap": ["combinatorial_interference_matrix", "spectral_dimension"],
     # Stage 3: Geometric emergence
-    "metric_tensor": ["laplacian", "eigenspectrum"],
+    "metric_tensor": ["interference_matrix", "eigenspectrum"],
     "lorentz_signature": ["metric_tensor"],
     "ricci_curvature": ["metric_tensor"],
     # Stage 4: Topological structure
-    "cycle_basis": ["hypergraph_substrate"],
+    "cycle_basis": ["cymatic_resonance_network_substrate"],
     "homotopy_group": ["cycle_basis"],
     "betti_numbers": ["homotopy_group"],
     # Stage 5: Physical quantities
-    "gtec_complexity": ["eigenspectrum", "complex_weights"],
-    "ncgg_operators": ["laplacian", "eigenspectrum"],
+    "aro_complexity": ["eigenspectrum", "complex_weights"],
+    "ncgg_operators": ["interference_matrix", "eigenspectrum"],
     "ccr_relations": ["ncgg_operators"],
     # Stage 6: Physics recovery
     "newton_gravity": ["metric_tensor", "ricci_curvature"],
     "einstein_equations": ["ricci_curvature", "metric_tensor"],
-    "gauge_couplings": ["homotopy_group", "betti_numbers"],
-    "beta_functions": ["gauge_couplings"],
+    "coherence_connections": ["homotopy_group", "betti_numbers"],
+    "beta_functions": ["coherence_connections"],
     # Stage 7: Predictions
-    "alpha_inverse": ["gauge_couplings", "cycle_basis"],
+    "alpha_inverse": ["coherence_connections", "cycle_basis"],
     "neutrino_masses": ["eigenspectrum", "betti_numbers"],
     "ckm_matrix": ["eigenspectrum"],
-    "dark_energy_eos": ["gtec_complexity", "holographic_principle"],
+    "dark_energy_eos": ["aro_complexity", "holographic_principle"],
 }
 
 
@@ -125,7 +125,7 @@ def render_dag_mermaid() -> str:
     lines = ["graph TD"]
 
     # Add nodes with styling
-    axiom_nodes = {"hypergraph_substrate", "complex_weights", "holographic_principle"}
+    axiom_nodes = {"cymatic_resonance_network_substrate", "complex_weights", "holographic_principle"}
 
     for node in IRH_DERIVATION_GRAPH:
         if node in axiom_nodes:
@@ -142,7 +142,7 @@ def render_dag_mermaid() -> str:
     lines.extend(
         [
             "",
-            "    style hypergraph_substrate fill:#f9f,stroke:#333",
+            "    style cymatic_resonance_network_substrate fill:#f9f,stroke:#333",
             "    style complex_weights fill:#f9f,stroke:#333",
             "    style holographic_principle fill:#f9f,stroke:#333",
         ]
@@ -186,7 +186,7 @@ def check_no_adhoc() -> dict:
             G.add_edge(dep, node)
 
     # Fundamental axioms
-    axioms = {"hypergraph_substrate", "complex_weights", "holographic_principle"}
+    axioms = {"cymatic_resonance_network_substrate", "complex_weights", "holographic_principle"}
 
     # Check all nodes can reach an axiom
     unreachable = []
@@ -224,13 +224,13 @@ def dynamic_selection_check(quantity: str) -> dict:
     dynamic_quantities = {
         "spectral_dimension": "Emerges from heat kernel behavior",
         "betti_numbers": "Emerges from topological constraints",
-        "gauge_couplings": "Emerges from holonomy structure",
+        "coherence_connections": "Emerges from holonomy structure",
         "neutrino_masses": "Emerges from eigenvalue gaps",
     }
 
     # Quantities that are fixed (from axioms)
     fixed_quantities = {
-        "hypergraph_substrate": "Fundamental axiom",
+        "cymatic_resonance_network_substrate": "Fundamental axiom",
         "complex_weights": "Fundamental axiom",
         "holographic_principle": "Fundamental axiom",
     }

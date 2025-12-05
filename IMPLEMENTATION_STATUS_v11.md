@@ -9,8 +9,8 @@
   - Complex weight generation from geometric frustration
   - Holographic bound verification
 
-- ✓ **SOTEFunctional** (`src/core/sote_v11.py`)
-  - Unique action principle: S_SOTE = Tr(L²)/(det' L)^(1/(N ln N))
+- ✓ **AROFunctional** (`src/core/sote_v11.py`)
+  - Unique action principle: ℋ_Harmony = Tr(L²)/(det' L)^(1/(N ln N))
   - Intensive scaling verification
   - Holographic compliance testing
   - Gradient computation for optimization
@@ -25,7 +25,7 @@
 - ✓ **Core Module Tests** (`test_v11_core.py`)
   - All core modules passing validation
   - Substrate initialization and holographic bounds
-  - SOTE action computation
+  - ARO action computation
   - Quantum emergence verification
 
 - ✓ **Dimensional Bootstrap Experiment** (`experiments/dimensional_bootstrap/run_stability_analysis.py`)
@@ -49,7 +49,7 @@
 ## 🚧 In Progress / Planned
 
 ### Optimization Suite
-- [ ] **QuantumAnnealer** - Global SOTE minimization
+- [ ] **QuantumAnnealer** - Global ARO minimization
 - [ ] **ReplicaExchange** - Local refinement via parallel tempering
 - [ ] **GraphRenormalization** - GSRG fixed point verification
 
@@ -85,7 +85,7 @@
 ### Core Module Tests (test_v11_core.py)
 ```
 ✓ InformationSubstrate: Holographic bound satisfied (ratio=0.947)
-✓ SOTEFunctional: Action computed (S=226.27)
+✓ AROFunctional: Action computed (S=226.27)
 ✓ QuantumEmergence: Hamiltonian derived
 ✓ QuantumEmergence: CCR satisfied
 ✓ QuantumEmergence: Born rule verified
@@ -93,7 +93,7 @@
 
 ### Dimensional Bootstrap Results
 ```
-Dimension | d_spectral | S_SOTE      | Consistency
+Dimension | d_spectral | ℋ_Harmony      | Consistency
 ----------|------------|-------------|------------
 d=2       | 7.000      | 1.01e+01    | -5.000
 d=3       | 7.000      | 6.32e+01    | -4.000
@@ -115,8 +115,8 @@ v11.0 successfully demonstrates that quantum mechanics **emerges** from classica
 - ℏ calculated from phase frustration (not assumed)
 - Born rule proven from ergodic theorem
 
-### 2. Complete SOTE Derivation
-The action functional S_SOTE is proven **unique** up to scaling, satisfying:
+### 2. Complete ARO Derivation
+The action functional ℋ_Harmony is proven **unique** up to scaling, satisfying:
 - Intensive scaling (S ~ O(1) as N→∞)
 - Holographic compliance (I_bulk ≤ I_boundary)
 - Scale invariance under coarse-graining
@@ -134,7 +134,7 @@ The foundation is truly minimal:
 
 ### Immediate Priorities
 1. **Refine spectral dimension calculation** - Fix zeta function pole detection
-2. **Implement optimization suite** - Enable full SOTE ground state search
+2. **Implement optimization suite** - Enable full ARO ground state search
 3. **Create fundamental constants module** - Extract α with full error budget
 4. **Add comprehensive test suite** - pytest framework for all modules
 
@@ -167,13 +167,13 @@ bound_check = substrate.verify_holographic_bound()
 print(f"Holographic compliance: {bound_check['satisfies_bound']}")
 ```
 
-### SOTE Action Calculation
+### ARO Action Calculation
 ```python
-from src.core.sote_v11 import SOTEFunctional
+from src.core.sote_v11 import AROFunctional
 
-sote = SOTEFunctional(substrate)
+sote = AROFunctional(substrate)
 S = sote.compute_action()
-print(f"SOTE action: S = {S:.4e}")
+print(f"ARO action: S = {S:.4e}")
 ```
 
 ### Quantum Emergence
@@ -248,7 +248,7 @@ Intrinsic-Resonance-Holography-/
 3. **Born rule test**: Small N can have large finite-size effects
 
 ### Lessons Learned
-1. **Modular design crucial**: Separating substrate, SOTE, and quantum modules enables independent testing
+1. **Modular design crucial**: Separating substrate, ARO, and quantum modules enables independent testing
 2. **Logging essential**: Helps trace numerical issues
 3. **Validation early**: Core tests caught several bugs before complex experiments
 

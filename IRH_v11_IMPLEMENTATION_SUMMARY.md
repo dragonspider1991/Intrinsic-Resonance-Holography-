@@ -24,12 +24,12 @@ This document summarizes the implementation of **Intrinsic Resonance Holography 
 - Holographic bound satisfied: ratio = 0.947 < 1.0
 - N=500 test: 1634 edges generated at criticality
 
-#### 2. **SOTEFunctional Module** (`src/core/sote_v11.py`)
+#### 2. **AROFunctional Module** (`src/core/sote_v11.py`)
 **Purpose:** The unique action principle determining optimal topology
 
 **Mathematical Form:**
 ```
-S_SOTE[G] = Tr(L²) / (det' L)^(1/(N ln N))
+ℋ_Harmony[G] = Tr(L²) / (det' L)^(1/(N ln N))
 ```
 
 **Key Features:**
@@ -78,13 +78,13 @@ S_SOTE[G] = Tr(L²) / (det' L)^(1/(N ln N))
 
 **Method:**
 1. Create substrates with target dimensions d = 2, 3, 4, 5, 6
-2. Compute SOTE action for each
+2. Compute ARO action for each
 3. Measure spectral dimension
 4. Calculate dimensional consistency
 
 **Results:**
 ```
-Dimension | S_SOTE      | Consistency
+Dimension | ℋ_Harmony      | Consistency
 ----------|-------------|------------
 d=2       | 1.01e+01    | -5.000
 d=3       | 6.32e+01    | -4.000
@@ -108,7 +108,7 @@ d=6       | 4.88e+01    | -1.000
 
 **Test Coverage:**
 1. Substrate initialization and holographic bounds
-2. SOTE action computation and compliance
+2. ARO action computation and compliance
 3. Hamiltonian derivation
 4. Planck constant calculation
 5. Canonical commutation relations
@@ -118,7 +118,7 @@ d=6       | 4.88e+01    | -1.000
 ```
 ✓ Substrate initialized: N=500, d=4
 ✓ Holographic bound satisfied: True
-✓ SOTE action computed: S = 2.2627e+02
+✓ ARO action computed: S = 2.2627e+02
 ✓ Hamiltonian derived: shape (500, 500)
 ✓ Planck constant: ℏ = 1.2767e-26 J·s
 ✓ CCR satisfied: True
@@ -177,7 +177,7 @@ Package installation configuration with:
   - Scale invariance ([G] = 2)
   - Causal propagation (Huygens)
 
-**SOTE Functional (Theorem 4.1):**
+**ARO Functional (Theorem 4.1):**
 - Unique action up to rescaling
 - Only functional with intensive scaling + holographic compliance
 
@@ -200,11 +200,11 @@ Package installation configuration with:
 
 #### 1. Optimization Suite
 **Modules to implement:**
-- `src/optimization/quantum_annealing.py` - Global SOTE minimization
+- `src/optimization/quantum_annealing.py` - Global ARO minimization
 - `src/optimization/replica_exchange.py` - Local refinement
 - `src/optimization/renormalization.py` - GSRG fixed point
 
-**Purpose:** Find true SOTE ground state, not just random initialization
+**Purpose:** Find true ARO ground state, not just random initialization
 
 #### 2. Fundamental Constants Module
 **Module:** `src/predictions/fundamental_constants.py`
@@ -311,7 +311,7 @@ python test_v11_core.py
 Expected output:
 ```
 ✓ InformationSubstrate: Holographic bound satisfied
-✓ SOTEFunctional: Action computed
+✓ AROFunctional: Action computed
 ✓ QuantumEmergence: Hamiltonian derived
 ✓ QuantumEmergence: CCR satisfied
 ✓ QuantumEmergence: Born rule verified
@@ -331,7 +331,7 @@ Generates:
 ### Python API Example
 ```python
 from src.core.substrate_v11 import InformationSubstrate
-from src.core.sote_v11 import SOTEFunctional
+from src.core.sote_v11 import AROFunctional
 from src.core.quantum_v11 import QuantumEmergence
 
 # Create substrate
@@ -339,8 +339,8 @@ substrate = InformationSubstrate(N=1000, dimension=4)
 substrate.initialize_correlations('random_geometric')
 substrate.compute_laplacian()
 
-# Compute SOTE action
-sote = SOTEFunctional(substrate)
+# Compute ARO action
+sote = AROFunctional(substrate)
 S = sote.compute_action()
 
 # Derive quantum mechanics
@@ -348,7 +348,7 @@ qm = QuantumEmergence(substrate)
 H = qm.derive_hamiltonian()
 hbar = qm.compute_planck_constant()
 
-print(f"SOTE action: {S:.4e}")
+print(f"ARO action: {S:.4e}")
 print(f"Planck constant: {hbar:.4e} J·s")
 ```
 
@@ -418,11 +418,11 @@ Intrinsic-Resonance-Holography-/
 
 ✅ Derives all of physics from a minimal discrete substrate  
 ✅ Eliminates circular assumptions about time, QM, and spacetime  
-✅ Proves uniqueness of d=4, SOTE functional, and gauge groups  
+✅ Proves uniqueness of d=4, ARO functional, and gauge groups  
 ✅ Makes falsifiable predictions (α, w(z), N_gen)  
 ✅ Provides complete Python implementation with tests  
 
-**The core framework (substrate, SOTE, quantum emergence) is complete and validated.**
+**The core framework (substrate, ARO, quantum emergence) is complete and validated.**
 
 **Next steps focus on optimization and empirical predictions to enable direct comparison with experimental data.**
 

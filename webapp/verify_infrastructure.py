@@ -193,7 +193,7 @@ def main():
         ("MetricEmergence", "Emergent spacetime metric"),
         ("predict_alpha_inverse", "Fine structure constant α⁻¹"),
         ("grand_audit", "Comprehensive theory validation"),
-        ("GTEC", "Complexity metrics"),
+        ("ARO", "Complexity metrics"),
         ("NCGG", "Quantum operators and frustration"),
     ]
     
