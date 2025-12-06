@@ -48,7 +48,7 @@ class AROOptimizer:
     IRH v13.0 Section 4.2: ARO Optimization Loop
     """
     
-    def __init__(self, N: int, rng_seed: Optional[int] = None):
+    def __init__(self, N: int, rng_seed: Optional[int] = None, connection_probability: Optional[float] = None):
         self.N = int(N)
         self.rng = np.random.default_rng(rng_seed)
         self.current_W: Optional[sp.spmatrix] = None
@@ -56,6 +56,10 @@ class AROOptimizer:
         self.best_W: Optional[sp.spmatrix] = None
         self.best_S: float = -np.inf
         self.convergence_metric: List[dict] = []
+        
+        # Auto-initialize if connection_probability is provided
+        if connection_probability is not None:
+            self.initialize_network(scheme='random', connectivity_param=connection_probability)
         
     def initialize_network(
         self,
@@ -126,10 +130,12 @@ class AROOptimizer:
         iterations: int = 1000,
         learning_rate: float = 0.01,
         mutation_rate: float = 0.05,
-        temp_start: float = 1.0,
+        temp: float = 1.0,
+        temp_start: Optional[float] = None,
+        cooling_rate: float = 0.99,
         convergence_tol: float = 1e-6,
         verbose: bool = True
-    ) -> sp.spmatrix:
+    ) -> np.ndarray:
         """
         Execute ARO optimization loop.
         
@@ -141,8 +147,12 @@ class AROOptimizer:
             Step size for weight perturbations.
         mutation_rate : float
             Probability of topological mutations.
-        temp_start : float
-            Initial temperature for annealing.
+        temp : float
+            Initial temperature (for compatibility with main.py interface).
+        temp_start : float, optional
+            Alternative parameter for initial temperature.
+        cooling_rate : float
+            Temperature cooling rate per iteration.
         convergence_tol : float
             Convergence criterion for early stopping.
         verbose : bool
@@ -150,8 +160,8 @@ class AROOptimizer:
             
         Returns
         -------
-        best_W : sp.spmatrix
-            Optimized network configuration.
+        best_W : np.ndarray
+            Optimized network configuration as dense array.
             
         Notes
         -----
@@ -162,6 +172,10 @@ class AROOptimizer:
         """
         if self.current_W is None:
             raise ValueError("Network not initialized. Call initialize_network() first.")
+        
+        # Use temp_start if provided, otherwise use temp
+        if temp_start is None:
+            temp_start = temp
         
         current_S = harmony_functional(self.current_W)
         self.best_S = current_S
@@ -176,8 +190,8 @@ class AROOptimizer:
         max_no_improvement = 50
         
         for i in range(iterations):
-            # Dynamic annealing temperature
-            T = temp_start * np.exp(-i / (iterations / 3))
+            # Dynamic annealing temperature with cooling_rate
+            T = temp_start * (cooling_rate ** i)
             
             # Stage 1: Weight perturbation (complex rotation + magnitude scaling)
             W_candidate = self._perturb_weights(self.current_W, learning_rate)
@@ -229,7 +243,8 @@ class AROOptimizer:
         if verbose:
             print(f"[ARO] Optimization complete. Final S_H = {self.best_S:.5f}")
         
-        return self.best_W
+        # Return dense array for compatibility with main.py
+        return self.best_W.toarray()
     
     def _perturb_weights(
         self,

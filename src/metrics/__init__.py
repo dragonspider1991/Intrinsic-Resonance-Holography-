@@ -16,14 +16,16 @@ from .dimensions import (
     spectral_dimension,
     dimensional_coherence_index,
     hausdorff_dimension,
-    validate_dimensional_predictions
+    validate_dimensional_predictions,
+    DimensionalityAnalyzer
 )
 
 __all__ = [
     "spectral_dimension",
     "dimensional_coherence_index",
     "hausdorff_dimension",
-    "validate_dimensional_predictions"
+    "validate_dimensional_predictions",
+    "DimensionalityAnalyzer"
 ]
 
 __version__ = "13.0.0"
