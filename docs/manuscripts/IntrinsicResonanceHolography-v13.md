@@ -2,7 +2,7 @@
 
 **Author:** Brandon D. McCrary  
 **ORCID:** 0009-0008-2804-7165  
-**Date:** December 2027 (Revised and Validated)  
+**Date:** December 2025 (Revised and Validated)  
 **Repository:** https://github.com/dragonspider1991/Intrinsic-Resonance-Holography-
 
 ---
@@ -587,4 +587,4 @@ The computational validation is now ready to proceed. The mathematics is sound, 
 ---
 
 *Document Version: v13.0 (Polished)*  
-*Last Updated: December 2027*
+*Last Updated: December 2025*
