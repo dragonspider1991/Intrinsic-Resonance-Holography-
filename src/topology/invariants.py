@@ -15,6 +15,7 @@ References: IRH v13.0 Theorems 1.2, 5.1, Section 9.1
 import numpy as np
 import networkx as nx
 import scipy.sparse as sp
+import random
 from typing import List, Tuple, Optional
 from numpy.typing import NDArray
 
@@ -104,8 +105,6 @@ def _sample_cycles(
     For each sampled edge (u,v), attempts to find shortest cycle
     containing that edge.
     """
-    import random
-    
     cycles = []
     edges = list(G.edges())
     

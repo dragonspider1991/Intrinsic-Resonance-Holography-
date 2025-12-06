@@ -105,7 +105,14 @@ def harmony_functional(
     try:
         # Compute eigenvalues using Arnoldi iteration (ARPACK)
         # 'LM' = Largest Magnitude - relies on spectral gap dominance
-        eigenvalues = eigs(M, k=k_eigenvalues, which='LM', return_eigenvectors=False)
+        # For small matrices or when k is too large, fall back to dense solver
+        if k_eigenvalues >= N - 2 or N < 500:
+            # Use dense eigenvalue solver for small/full spectrum cases
+            M_dense = M.toarray()
+            all_eigenvalues = np.linalg.eigvalsh(M_dense)
+            eigenvalues = all_eigenvalues[-k_eigenvalues:]  # Take largest k
+        else:
+            eigenvalues = eigs(M, k=k_eigenvalues, which='LM', return_eigenvectors=False)
         
         # Numerator: Tr(M²) ≈ sum(λᵢ²)
         # Represents "kinetic energy" of coherent algorithmic information flow

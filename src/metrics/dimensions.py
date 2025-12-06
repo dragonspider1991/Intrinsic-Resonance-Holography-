@@ -14,6 +14,7 @@ References: IRH v13.0 Section 6, Theorem 3.1
 
 import numpy as np
 import scipy.sparse as sp
+import networkx as nx
 from scipy.sparse.linalg import expm_multiply, eigsh
 from typing import Tuple, Optional
 from numpy.typing import NDArray
@@ -265,8 +266,6 @@ def hausdorff_dimension(
     needed to cover the network.
     """
     # Convert to NetworkX for graph-theoretic box counting
-    import networkx as nx
-    
     G = nx.from_scipy_sparse_array(W.real if np.iscomplexobj(W.data) else W)
     N = G.number_of_nodes()
     

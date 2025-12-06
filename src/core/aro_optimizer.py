@@ -13,6 +13,7 @@ import numpy as np
 import scipy.sparse as sp
 from typing import Optional, Tuple, List
 from numpy.typing import NDArray
+from math import gamma
 
 from .harmony import harmony_functional, compute_information_transfer_matrix
 
@@ -94,7 +95,6 @@ class AROOptimizer:
             tree = KDTree(coords)
             
             # Critical connectivity radius heuristic
-            from math import gamma
             vol_factor = (np.pi**(d_initial/2) / gamma(d_initial/2 + 1))
             radius = (connectivity_param * np.log(self.N) / (self.N * vol_factor))**(1/d_initial)
             
