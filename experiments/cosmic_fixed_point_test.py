@@ -66,9 +66,16 @@ def run_cosmic_fixed_point_test(N=500, iterations=1000, seed=42, output_dir='exp
     # Step 1: Initialize ARO optimizer
     print(f"\n[1/5] Initializing ARO Optimizer (N={N})...")
     opt = AROOptimizer(N=N, rng_seed=seed)
+    
+    # Connectivity parameter controls initial edge density
+    # Typical values: 0.05-0.2 (higher = denser initial network)
+    # May need adjustment based on N: larger N can use lower connectivity
+    # For N~300: 0.1 works well; for N~1000+: 0.05-0.1 is sufficient
+    CONNECTIVITY_PARAM = 0.1
+    
     opt.initialize_network(
         scheme='geometric',
-        connectivity_param=0.1,  # Adjust if needed for denser networks
+        connectivity_param=CONNECTIVITY_PARAM,
         d_initial=4
     )
     initial_edges = opt.current_W.nnz
@@ -117,6 +124,9 @@ def run_cosmic_fixed_point_test(N=500, iterations=1000, seed=42, output_dir='exp
     rho_frust = calculate_frustration_density(W_opt, max_cycles=5000, sampling=True)
     alpha_inv, alpha_match = derive_fine_structure_constant(rho_frust)
     
+    # Fine-structure constant experimental value
+    # Source: CODATA 2018 recommended value
+    # Reference: Tiesinga et al., Rev. Mod. Phys. 93, 025010 (2021)
     experimental_alpha = 137.035999084
     alpha_error = abs(alpha_inv - experimental_alpha)
     alpha_percent_error = (alpha_error / experimental_alpha) * 100
@@ -178,13 +188,26 @@ def run_cosmic_fixed_point_test(N=500, iterations=1000, seed=42, output_dir='exp
     # Determine success criteria
     # For realistic convergence, we need much larger N and more iterations
     # But we can still assess trends
-    alpha_excellent = alpha_error < 1.0
-    alpha_good = alpha_error < 10.0
-    alpha_trending = alpha_inv > 50 and alpha_inv < 300  # Reasonable range
     
-    d_spec_excellent = d_spec_error < 1.0
-    d_spec_good = d_spec_error < 2.0
-    d_spec_trending = d_spec > 1.0 and d_spec < 8.0  # Reasonable range
+    # Threshold constants for validation criteria
+    # These are based on empirical observation of convergence behavior
+    ALPHA_EXCELLENT_THRESHOLD = 1.0      # Within experimental uncertainty
+    ALPHA_GOOD_THRESHOLD = 10.0          # Order of magnitude agreement
+    ALPHA_MIN_REASONABLE = 50.0          # Lower bound for trending
+    ALPHA_MAX_REASONABLE = 300.0         # Upper bound for trending
+    
+    D_SPEC_EXCELLENT_THRESHOLD = 1.0     # Within 1 dimension of target
+    D_SPEC_GOOD_THRESHOLD = 2.0          # Within 2 dimensions of target
+    D_SPEC_MIN_REASONABLE = 1.0          # Must be at least 1D
+    D_SPEC_MAX_REASONABLE = 8.0          # Upper bound for physical spacetime
+    
+    alpha_excellent = alpha_error < ALPHA_EXCELLENT_THRESHOLD
+    alpha_good = alpha_error < ALPHA_GOOD_THRESHOLD
+    alpha_trending = alpha_inv > ALPHA_MIN_REASONABLE and alpha_inv < ALPHA_MAX_REASONABLE
+    
+    d_spec_excellent = d_spec_error < D_SPEC_EXCELLENT_THRESHOLD
+    d_spec_good = d_spec_error < D_SPEC_GOOD_THRESHOLD
+    d_spec_trending = d_spec > D_SPEC_MIN_REASONABLE and d_spec < D_SPEC_MAX_REASONABLE
     
     print(f"\n{'Metric':<30} {'Predicted':<15} {'Target':<15} {'Error':<15}")
     print("-"*70)
@@ -234,10 +257,26 @@ def run_cosmic_fixed_point_test(N=500, iterations=1000, seed=42, output_dir='exp
         'd_spec_good': d_spec_good
     }
     
-    # Save results
+    # Save results with custom JSON encoder for numpy types
     output_file = os.path.join(output_dir, f'cosmic_fixed_point_results_N{N}_iter{iterations}.json')
+    
+    def json_serializer(obj):
+        """Custom JSON serializer for numpy and datetime types."""
+        import numpy as np
+        from datetime import datetime
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, datetime):
+            return obj.isoformat()
+        else:
+            return str(obj)
+    
     with open(output_file, 'w') as f:
-        json.dump(results, f, indent=2, default=str)
+        json.dump(results, f, indent=2, default=json_serializer)
     
     print(f"\nResults saved to: {output_file}")
     
