@@ -200,3 +200,93 @@ def validate_harmony_properties(
     }
     
     return results
+
+
+class HarmonyEngine:
+    """
+    Wrapper class providing static methods for the Harmony Functional.
+    This provides compatibility with the main.py interface.
+    """
+    
+    @staticmethod
+    def compute_information_transfer_matrix(W):
+        """
+        Compute Information Transfer Matrix for dense numpy arrays.
+        
+        Parameters
+        ----------
+        W : np.ndarray
+            Complex adjacency matrix (N, N).
+            
+        Returns
+        -------
+        M : np.ndarray
+            Information Transfer Matrix.
+        """
+        if sp.issparse(W):
+            W_sparse = W
+        else:
+            W_sparse = sp.csr_matrix(W)
+        
+        M_sparse = compute_information_transfer_matrix(W_sparse)
+        return M_sparse.toarray()
+    
+    @staticmethod
+    def spectral_zeta_regularization(eigenvalues, alpha):
+        """
+        Compute spectral zeta regularization term.
+        
+        Parameters
+        ----------
+        eigenvalues : np.ndarray
+            Eigenvalues of the Information Transfer Matrix.
+        alpha : float
+            Regularization exponent.
+            
+        Returns
+        -------
+        det_term : float
+            Regularized determinant term.
+        """
+        valid_evals = eigenvalues[np.abs(eigenvalues) > 1e-10]
+        if len(valid_evals) == 0:
+            return 1.0
+        log_det = np.sum(np.log(np.abs(valid_evals)))
+        denominator = np.exp(log_det * alpha)
+        return denominator
+    
+    @staticmethod
+    def calculate_harmony(W, N):
+        """
+        Calculate Harmony Functional for dense numpy arrays.
+        
+        Parameters
+        ----------
+        W : np.ndarray
+            Complex adjacency matrix (N, N).
+        N : int
+            Number of nodes.
+            
+        Returns
+        -------
+        S_H : float
+            Harmony functional value.
+        """
+        from scipy import linalg
+        
+        M = HarmonyEngine.compute_information_transfer_matrix(W)
+        M_squared = np.dot(M, M)
+        numerator = np.abs(np.trace(M_squared))
+        
+        if N > 1:
+            alpha = 1.0 / (N * np.log(N))
+        else:
+            alpha = 1.0
+        
+        eigenvalues = linalg.eigvals(M)
+        denominator = HarmonyEngine.spectral_zeta_regularization(eigenvalues, alpha)
+        
+        if denominator < 1e-15:
+            denominator = 1e-15
+        
+        return numerator / denominator
