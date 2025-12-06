@@ -1,0 +1,55 @@
+{
+  "config": {
+    "N": 300,
+    "iterations": 500,
+    "seed": 42,
+    "timestamp": "2025-12-06T08:36:51.922943"
+  },
+  "initialization": {
+    "edges": 120,
+    "edge_density": 0.0013333333333333333,
+    "S_H": 31.912338699677097
+  },
+  "optimization": {
+    "S_H_initial": 31.912338699677097,
+    "S_H_final": 33.55550111573986,
+    "S_H_improvement": 1.6431624160627614,
+    "final_edges": 122
+  },
+  "topology": {
+    "rho_frust": 2.4802724850240505,
+    "alpha_inv_predicted": 2.533264125259471,
+    "alpha_inv_experimental": 137.035999084,
+    "alpha_error": 134.50273495874052,
+    "alpha_percent_error": 98.15138785268633,
+    "alpha_match": false
+  },
+  "dimensions": {
+    "d_spec_predicted": 1.0,
+    "d_spec_target": 4.0,
+    "d_spec_error": 3.0,
+    "d_spec_percent_error": 75.0,
+    "d_spec_info": {
+      "slope": "(-1.0005231988912765e-15+4.121035643135879e-15j)",
+      "samples": 20,
+      "r_squared": "(-0.13431963892871676+0.06009316042700012j)",
+      "status": "success"
+    },
+    "chi_D": 0.02788075828600381,
+    "chi_components": {
+      "d_spec": 1.0,
+      "E_H": 0.8,
+      "E_R": 0.049787068367863944,
+      "E_C": 0.7,
+      "target_d": 4
+    }
+  },
+  "validation": {
+    "status": "\u274c NEEDS IMPROVEMENT - Predictions not converged",
+    "grade": "C",
+    "alpha_excellent": false,
+    "alpha_good": false,
+    "d_spec_excellent": false,
+    "d_spec_good": false
+  }
+}
