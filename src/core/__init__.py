@@ -25,7 +25,8 @@ from .matter import Topological_Defect_Classifier
 from .harmony import (
     harmony_functional,
     compute_information_transfer_matrix,
-    validate_harmony_properties
+    validate_harmony_properties,
+    HarmonyEngine
 )
 from .aro_optimizer import AROOptimizer
 
@@ -41,5 +42,6 @@ __all__ = [
     "harmony_functional",
     "compute_information_transfer_matrix",
     "validate_harmony_properties",
+    "HarmonyEngine",
     "AROOptimizer",
 ]

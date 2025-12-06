@@ -17,14 +17,16 @@ from .invariants import (
     calculate_frustration_density,
     derive_fine_structure_constant,
     calculate_betti_numbers,
-    validate_topological_predictions
+    validate_topological_predictions,
+    TopologyAnalyzer
 )
 
 __all__ = [
     "calculate_frustration_density",
     "derive_fine_structure_constant",
     "calculate_betti_numbers",
-    "validate_topological_predictions"
+    "validate_topological_predictions",
+    "TopologyAnalyzer"
 ]
 
 __version__ = "13.0.0"
