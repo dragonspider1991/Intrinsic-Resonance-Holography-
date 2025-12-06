@@ -30,13 +30,6 @@ def test_derive_fine_structure_constant_precision():
     assert 'absolute_error' in details
     assert 'relative_error' in details
     assert 'sigma_deviation' in details
-    
-    # Print detailed comparison
-    print(f"\nPredicted α⁻¹: {details['predicted']:.10f}")
-    print(f"Experimental α⁻¹: {details['experimental']:.10f}")
-    print(f"Absolute error: {details['absolute_error']:.2e}")
-    print(f"Relative error: {details['relative_error']:.2e}")
-    print(f"σ deviation: {details['sigma_deviation']:.2f}")
 
 
 def test_fine_structure_from_v15_target():
@@ -63,11 +56,6 @@ def test_fine_structure_from_v15_target():
     # Should also be close to CODATA value
     assert abs(alpha_inv - codata_value) < 0.001, \
         f"α⁻¹ = {alpha_inv:.10f}, CODATA = {codata_value:.10f}"
-    
-    print(f"\nTheoretical ρ_frust: {theoretical_rho_frust:.10f}")
-    print(f"α⁻¹ computed: {alpha_inv:.10f}")
-    print(f"CODATA 2022:  {codata_value:.10f}")
-    print(f"Agreement: {details['within_threshold']}")
 
 
 def test_frustration_density_calculation():
@@ -85,8 +73,6 @@ def test_frustration_density_calculation():
     assert rho_frust >= 0, "Frustration density should be non-negative"
     assert not np.isnan(rho_frust), "Frustration density should not be NaN"
     assert not np.isinf(rho_frust), "Frustration density should be finite"
-    
-    print(f"\nFrustration density for N={N}: {rho_frust:.6f}")
 
 
 def test_edge_cases():
@@ -116,10 +102,11 @@ def test_precision_levels():
             rho_frust, precision_digits=precision
         )
         
-        print(f"\nPrecision {precision} digits:")
-        print(f"  Predicted: {alpha_inv:.10f}")
-        print(f"  Error: {details['absolute_error']:.2e}")
-        print(f"  Match: {match}")
+        # Verify calculation succeeds at all precision levels
+        assert alpha_inv > 0
+        assert 'absolute_error' in details
+        assert 'precision_digits' in details
+        assert details['precision_digits'] == precision
 
 
 def test_backwards_compatibility():

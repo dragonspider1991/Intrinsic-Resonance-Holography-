@@ -13,7 +13,7 @@ References: IRH v15.0 §1, Axiom 0
 """
 
 import numpy as np
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, List
 from dataclasses import dataclass
 from numpy.typing import NDArray
 
@@ -211,7 +211,7 @@ def create_ahs_network(
     info_generator: Optional[callable] = None,
     phase_distribution: str = 'uniform',
     rng: Optional[np.random.Generator] = None
-) -> list[AlgorithmicHolonomicState]:
+) -> List[AlgorithmicHolonomicState]:
     """
     Create a collection of Algorithmic Holonomic States.
     
@@ -229,7 +229,7 @@ def create_ahs_network(
         
     Returns
     -------
-    states : list of AlgorithmicHolonomicState
+    states : List[AlgorithmicHolonomicState]
         Collection of N algorithmic holonomic states.
         
     Notes

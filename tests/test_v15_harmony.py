@@ -53,7 +53,6 @@ def test_harmony_scale_independence():
     # Just verify all values are computed successfully
     for N, S_H in results:
         assert S_H > -np.inf, f"Failed for N={N}"
-        print(f"N={N}: S_H={S_H:.6f}")
 
 
 def test_harmony_components():
