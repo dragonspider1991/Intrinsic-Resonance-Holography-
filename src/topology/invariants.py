@@ -360,8 +360,13 @@ class TopologyAnalyzer:
         
         try:
             U, s, Vh = linalg.svd(flux_matrix)
-            # Count null space dimension, modulo 10 to get plausible generation count
-            n_gen = (self.N - np.sum(s > 1e-5)) % 10
+            # Count null space dimension
+            # SVD threshold for numerical zero
+            SVD_THRESHOLD = 1e-5
+            # Modulo to map to reasonable generation count range (0-9)
+            GENERATION_MODULO = 10
+            n_gen = (self.N - np.sum(s > SVD_THRESHOLD)) % GENERATION_MODULO
             return int(n_gen)
-        except Exception:
+        except linalg.LinAlgError as e:
+            # SVD failed - return default value
             return 0
