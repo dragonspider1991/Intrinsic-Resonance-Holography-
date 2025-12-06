@@ -32,16 +32,16 @@ jobs:
 
       - name: Check formatting with Black
         run: |
-          if [ -d "python/src" ]; then
+          if [ -d "python/src" ] && [ -d "python/tests" ]; then
             black --check python/src/ python/tests/ || echo "Formatting issues found"
           else
-            echo "python/src directory not found, skipping Black check"
+            echo "python/src or python/tests directory not found, skipping Black check"
           fi
 
       - name: Type check with mypy
         run: |
           if [ -d "python" ]; then
-            cd python && mypy src/irh/ --ignore-missing-imports || echo "Type checking completed"
+            (cd python && mypy src/irh/ --ignore-missing-imports) || echo "Type checking completed"
           else
             echo "python directory not found, skipping mypy check"
           fi
