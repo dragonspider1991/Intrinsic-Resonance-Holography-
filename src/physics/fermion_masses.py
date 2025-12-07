@@ -71,11 +71,13 @@ def derive_mass_ratios(
     
     mass_ratios = tree_level.copy()
     
-    # Compute errors
-    errors = {
-        key: abs(mass_ratios[key] - experimental[key]) / experimental[key] * 100
-        for key in mass_ratios
-    }
+    # Compute errors (with guard against division by zero)
+    errors = {}
+    for key in mass_ratios:
+        if experimental[key] != 0:
+            errors[key] = abs(mass_ratios[key] - experimental[key]) / experimental[key] * 100
+        else:
+            errors[key] = float('inf')  # Infinite error if experimental value is zero
     
     match = all(err < 5.0 for err in errors.values())  # <5% error
     

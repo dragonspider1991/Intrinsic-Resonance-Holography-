@@ -605,17 +605,17 @@ Each notebook should:
 
 Phase 8 is complete when:
 
-1. ✅ Cosmic fixed point test run at N ≥ 10^10
-2. ✅ All predictions validated vs. experiment
-3. ✅ Final grade: A or A+
-4. ✅ Complete documentation published
-5. ✅ Replication guide tested by independent user
-6. ✅ Jupyter notebooks functional
-7. ✅ Manuscript drafted
-8. ✅ All tests passing (>95% coverage)
-9. ✅ Code review completed
-10. ✅ Security scan clean
-11. ✅ Repository archived and tagged (v15.0.0)
+1. ⏳ Cosmic fixed point test run at N ≥ 10^10
+2. ⏳ All predictions validated vs. experiment
+3. ⏳ Final grade: A or A+
+4. ⏳ Complete documentation published
+5. ⏳ Replication guide tested by independent user
+6. ⏳ Jupyter notebooks functional
+7. ⏳ Manuscript drafted
+8. ⏳ All tests passing (>95% coverage)
+9. ⏳ Code review completed
+10. ⏳ Security scan clean
+11. ⏳ Repository archived and tagged (v15.0.0)
 
 ## Success Metrics
 
