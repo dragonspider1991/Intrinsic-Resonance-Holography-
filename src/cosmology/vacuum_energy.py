@@ -8,7 +8,7 @@ Phase 6: Cosmological Constant & Dark Energy
 """
 import numpy as np
 import scipy.sparse as sp
-from typing import Dict
+from typing import Dict, Optional
 
 
 def compute_vacuum_energy_density(
