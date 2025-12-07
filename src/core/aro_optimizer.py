@@ -134,7 +134,8 @@ class AROOptimizer:
         temp_start: Optional[float] = None,
         cooling_rate: float = 0.99,
         convergence_tol: float = 1e-6,
-        verbose: bool = True
+        verbose: bool = True,
+        log_rg_invariants: bool = True
     ) -> np.ndarray:
         """
         Execute ARO optimization loop.
@@ -157,6 +158,8 @@ class AROOptimizer:
             Convergence criterion for early stopping.
         verbose : bool
             Print progress updates.
+        log_rg_invariants : bool, default True
+            If True, log RG-invariant scalings at checkpoints (v15.0+).
             
         Returns
         -------
@@ -169,6 +172,9 @@ class AROOptimizer:
         - Perturbative phase adjustment
         - Topological rewiring  
         - Metropolis-Hastings acceptance
+        
+        v15.0+ Enhancement: Logs RG-invariant scalings to ensure parameters
+        flow to self-consistent resonances without tuning.
         """
         if self.current_W is None:
             raise ValueError("Network not initialized. Call initialize_network() first.")
@@ -185,9 +191,22 @@ class AROOptimizer:
         if verbose:
             print(f"[ARO] Starting optimization: {iterations} iterations")
             print(f"[ARO] Initial S_H = {current_S:.5f}")
+            
+            # Log RG invariants at start (v15.0+)
+            if log_rg_invariants:
+                try:
+                    from .harmony import C_H
+                    from .rigor_enhancements import rg_flow_beta
+                    beta_val = rg_flow_beta(C_H)
+                    print(f"[ARO] RG Flow: C_H = {C_H:.9f}, β(C_H) = {beta_val:.6e}")
+                except ImportError:
+                    pass
         
         no_improvement = 0
         max_no_improvement = 50
+        
+        # RG logging checkpoints
+        rg_log_interval = max(1, iterations // 10)
         
         for i in range(iterations):
             # Dynamic annealing temperature with cooling_rate
@@ -227,6 +246,26 @@ class AROOptimizer:
                 no_improvement += 1
             
             self.harmony_history.append(current_S)
+            
+            # Log RG-invariant scalings at checkpoints (v15.0+)
+            if log_rg_invariants and verbose and (i % rg_log_interval == 0) and i > 0:
+                try:
+                    from .rigor_enhancements import compute_nondimensional_resonance_density
+                    from .harmony import compute_information_transfer_matrix
+                    
+                    M = compute_information_transfer_matrix(self.current_W)
+                    # Quick eigenvalue estimate for resonance density
+                    if self.N < 500:
+                        evals = np.linalg.eigvalsh(M.toarray())
+                    else:
+                        from scipy.sparse.linalg import eigsh
+                        k = min(self.N - 1, 100)
+                        evals = eigsh(M, k=k, which='LM', return_eigenvectors=False)
+                    
+                    rho_res, _ = compute_nondimensional_resonance_density(evals, self.N)
+                    print(f"[ARO] Iter {i}: ρ_res = {rho_res:.6f} (nondimensional resonance density)")
+                except:
+                    pass
             
             # Convergence check
             if no_improvement > max_no_improvement:

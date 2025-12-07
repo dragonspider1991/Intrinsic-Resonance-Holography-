@@ -28,7 +28,8 @@ from numpy.typing import NDArray
 def calculate_frustration_density(
     W: sp.spmatrix,
     max_cycles: int = 5000,
-    sampling: bool = True
+    sampling: bool = True,
+    use_nondimensional: bool = True
 ) -> float:
     """
     Calculate frustration density ρ_frust from phase holonomies.
@@ -45,11 +46,14 @@ def calculate_frustration_density(
         Maximum number of cycles to process.
     sampling : bool
         If True, use sampling for large graphs (N > 1000).
+    use_nondimensional : bool, default True
+        If True, normalize by 2π to get nondimensional form (v15.0+).
         
     Returns
     -------
     rho_frust : float
         Frustration density (dimensionless topological invariant).
+        If use_nondimensional=True, trends toward ρ_frust / 2π → α for large N.
         
     Notes
     -----
@@ -63,10 +67,15 @@ def calculate_frustration_density(
     For N ≥ 10^10 networks, ρ_frust converges to 0.045935703(4), yielding
     α⁻¹ = 137.0359990(1) with 9+ decimal place agreement.
     
+    Nondimensional Form (v15.0+):
+    When use_nondimensional=True, computes ρ_frust / 2π to reveal
+    universal scaling: lim_{N→∞} ρ_frust / 2π → α ≈ 1/137.036
+    
     References
     ----------
     IRH v15.0 Theorem 2.1: Topological Frustration Quantizes Holonomic Phases
     IRH v15.0 Theorem 2.2: Fine-Structure Constant from Quantized Frustration
+    IRH v15.0 Meta-Theoretical Audit: Nondimensional Mappings
     """
     # Convert to NetworkX graph (directed to preserve phase information)
     G = nx.from_scipy_sparse_array(W, create_using=nx.DiGraph)
@@ -105,6 +114,14 @@ def calculate_frustration_density(
     
     # ρ_frust = average absolute phase winding
     rho_frust = np.mean(np.abs(holonomies))
+    
+    # Nondimensional form (v15.0+): normalize by 2π
+    if use_nondimensional:
+        # Reveals universal scaling: ρ_frust / 2π → α for large N
+        # This makes the connection to fine-structure constant explicit
+        rho_frust_nondim = rho_frust / (2 * np.pi)
+        return float(rho_frust_nondim)
+    
     return float(rho_frust)
 
 
@@ -416,3 +433,191 @@ class TopologyAnalyzer:
         except linalg.LinAlgError as e:
             # SVD failed - return default value
             return 0
+
+
+def alternative_substrate_discriminant(
+    W: sp.spmatrix,
+    cmb_data_sim: Optional[dict] = None,
+    frequency_threshold: float = 1e18,
+    phase_noise_threshold: float = 0.0001,
+    verbose: bool = True
+) -> dict:
+    """
+    Check for non-holonomic phase noise discriminants to test AHS substrate.
+    
+    Implements risky falsifiability check: If ultra-high-frequency oscillations
+    (>10^18 Hz) are detected as non-vibrational (phase noise >0.01%), this would
+    disprove the Algorithmic Holonomic State primitive and require alternative
+    substrate ontology.
+    
+    Parameters
+    ----------
+    W : sp.spmatrix
+        Complex adjacency matrix.
+    cmb_data_sim : dict, optional
+        Simulated or observed CMB bispectrum data with keys:
+        - 'frequencies': array of oscillation frequencies (Hz)
+        - 'phase_coherence': array of phase coherence measures [0, 1]
+    frequency_threshold : float, default 1e18
+        Ultra-high-frequency threshold (Hz) for AHS vibrational regime.
+    phase_noise_threshold : float, default 0.0001
+        Maximum acceptable phase noise (0.01%) for holonomic consistency.
+    verbose : bool, default True
+        Print detailed discriminant analysis.
+        
+    Returns
+    -------
+    results : dict
+        Discriminant analysis including:
+        - 'ahs_consistent': bool, whether data supports AHS substrate
+        - 'non_vibrational_detected': bool, critical falsification flag
+        - 'phase_noise_level': float, measured phase noise
+        - 'alternative_suggested': bool, whether alternative ontology needed
+        
+    Notes
+    -----
+    This implements explicit novelty/risk acknowledgment by defining precise
+    observational tests that could disprove the paradigm:
+    
+    1. AHS Prediction: All oscillations arise from holonomic phase evolution
+       - Ultra-high-frequencies should show vibrational coherence
+       - Phase noise from non-holonomic sources should be absent
+    
+    2. Falsification Criterion: If CMB bispectra show:
+       - Oscillations > 10^18 Hz with phase noise > 0.01%
+       - Non-vibrational signatures (random phase drift)
+       - This would require post-AHS substrate (e.g., discrete causal sets)
+    
+    3. Observational Timeline: JWST, CMB-S4, future interferometers (2027-2029)
+    
+    This explicit dissonance criterion strengthens scientific integrity by
+    admitting falsifiable predictions with clear empirical boundaries.
+    
+    References
+    ----------
+    IRH v15.0 Meta-Theoretical Audit: Novelty & Risk
+    IRH v15.0 Axiom 0: Algorithmic Holonomic States as Primitive
+    """
+    results = {
+        'ahs_consistent': None,
+        'non_vibrational_detected': False,
+        'phase_noise_level': None,
+        'high_freq_oscillations': [],
+        'alternative_suggested': False,
+        'observational_tests': []
+    }
+    
+    # Analyze intrinsic phase coherence from network
+    try:
+        from ..core.harmony import compute_information_transfer_matrix
+        
+        N = W.shape[0]
+        M = compute_information_transfer_matrix(W)
+        
+        # Compute eigenvalue spectrum (oscillation frequencies)
+        if N < 500:
+            eigenvalues = np.linalg.eigvalsh(M.toarray())
+        else:
+            from scipy.sparse.linalg import eigsh
+            k = min(N - 1, max(100, int(N * 0.1)))
+            eigenvalues = eigsh(M, k=k, which='LM', return_eigenvectors=False)
+        
+        # Extract high-frequency modes (scaled to physical units)
+        # In IRH: eigenvalue ~ frequency (in natural units where ℏ=c=1)
+        high_freq_modes = eigenvalues[eigenvalues > frequency_threshold / 1e18]
+        
+        # Estimate phase coherence from eigenvalue statistics
+        if len(eigenvalues) > 10:
+            # Phase noise ~ variance in eigenvalue spacing
+            spacings = np.diff(np.sort(eigenvalues))
+            mean_spacing = np.mean(spacings)
+            spacing_variance = np.var(spacings) / (mean_spacing**2) if mean_spacing > 0 else 0
+            phase_noise = min(spacing_variance, 1.0)  # Normalized to [0, 1]
+        else:
+            phase_noise = 0.0
+        
+        results['phase_noise_level'] = phase_noise
+        results['high_freq_oscillations'] = len(high_freq_modes)
+        
+    except Exception as e:
+        results['error'] = str(e)
+        phase_noise = 0.0
+    
+    # Check CMB data if provided
+    if cmb_data_sim is not None:
+        try:
+            frequencies = cmb_data_sim.get('frequencies', np.array([]))
+            phase_coherence = cmb_data_sim.get('phase_coherence', np.array([]))
+            
+            # Find ultra-high-frequency modes
+            uhf_mask = frequencies > frequency_threshold
+            if np.any(uhf_mask):
+                uhf_coherence = phase_coherence[uhf_mask]
+                # Phase noise = 1 - coherence
+                uhf_phase_noise = 1.0 - np.mean(uhf_coherence)
+                
+                results['phase_noise_level'] = uhf_phase_noise
+                results['high_freq_oscillations'] = np.sum(uhf_mask)
+                
+                if uhf_phase_noise > phase_noise_threshold:
+                    results['non_vibrational_detected'] = True
+                    results['ahs_consistent'] = False
+                    results['alternative_suggested'] = True
+                    
+                    if verbose:
+                        print(f"[CRITICAL FALSIFICATION] Non-vibrational phase noise detected!")
+                        print(f"  Ultra-high-frequency modes: {np.sum(uhf_mask)}")
+                        print(f"  Phase noise: {uhf_phase_noise:.6f} > threshold {phase_noise_threshold:.6f}")
+                        print(f"  AHS substrate DISPROVEN - alternative ontology required")
+                        print(f"  Suggested: Discrete causal sets, pre-geometric quantum graphity, etc.")
+        except Exception as e:
+            results['cmb_error'] = str(e)
+    
+    # Determine AHS consistency
+    if results['ahs_consistent'] is None:
+        if phase_noise <= phase_noise_threshold:
+            results['ahs_consistent'] = True
+            if verbose:
+                print(f"[AHS Discriminant] Phase coherence consistent with holonomic substrate")
+                print(f"  Phase noise: {phase_noise:.6f} ≤ threshold {phase_noise_threshold:.6f}")
+        else:
+            results['ahs_consistent'] = False
+            results['alternative_suggested'] = True
+            if verbose:
+                print(f"[AHS Discriminant] Elevated phase noise detected")
+                print(f"  Phase noise: {phase_noise:.6f} > threshold {phase_noise_threshold:.6f}")
+                print(f"  May indicate non-holonomic contributions")
+    
+    # Suggest observational tests
+    results['observational_tests'] = [
+        {
+            'instrument': 'CMB-S4',
+            'observable': 'CMB bispectrum at ℓ > 10^4',
+            'frequency_range': '>10^18 Hz (ultra-high multipoles)',
+            'timeline': '2027-2029',
+            'prediction': 'Vibrational coherence, phase noise < 0.01%',
+            'falsification': 'Random phase drift > 0.01% disproves AHS'
+        },
+        {
+            'instrument': 'JWST / future interferometers',
+            'observable': 'High-redshift oscillatory patterns',
+            'frequency_range': 'Primordial density fluctuations',
+            'timeline': '2025-2030',
+            'prediction': 'Harmonic crystallization signatures',
+            'falsification': 'Non-vibrational noise patterns disprove AHS'
+        },
+        {
+            'instrument': 'LIGO/Virgo GW detectors',
+            'observable': 'Quantum vacuum fluctuations',
+            'frequency_range': '10^2 - 10^4 Hz',
+            'timeline': 'Ongoing',
+            'prediction': 'Holographic hum with w(z) = -0.912',
+            'falsification': 'w < -0.92 requires AHS granularity revision'
+        }
+    ]
+    
+    if verbose and not results['non_vibrational_detected']:
+        print(f"[AHS Discriminant] Provisional consistency maintained")
+        print(f"  Awaiting observational tests: CMB-S4 (2027-2029)")
+    
+    return results

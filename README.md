@@ -24,6 +24,12 @@ IRH v15.0 represents a **fundamental paradigm shift** that resolves all logical 
    - α⁻¹ = **137.0359990(1)** ✅ (9+ decimals match CODATA 2022)
    - w₀ = **-0.912 ± 0.008** (falsifiable dark energy prediction)
 
+6. **Enhanced Rigor (v15.0+)**: Nondimensional formulations and symbolic derivations
+   - **Nondimensional mappings** reveal universal oscillatory truths independent of units
+   - **Symbolic RG flow analysis** confirms C_H as fixed-point parameter
+   - **Explicit falsifiability thresholds** for empirical dissonance with observations
+   - **O(1/√N) convergence bounds** with analytical error analysis
+
 ---
 
 ## Overview
@@ -41,6 +47,7 @@ This framework implements:
 - **Hilbert Space Emergence** from coherent correlation (Theorem 3.1)
 - **General Relativity** from Harmony Functional variation (Theorem 8.2)
 - **Cosmic Fixed Point Test** with N ≥ 10¹⁰ scalability
+- **Nondimensional Rigor Enhancements** for analytical transparency (v15.0+)
 
 ## Key Predictions (IRH v15.0)
 
@@ -141,6 +148,108 @@ python experiments/cosmic_fixed_point_test.py --N 5000 --iterations 20000
 ```
 
 **Output**: Results are saved to `experiments/` as JSON and Markdown files with comprehensive analysis.
+
+## Rigor Enhancements (v15.0+)
+
+The v15.0+ rigor enhancements provide **nondimensional formulations** and **symbolic derivations** to expose universal oscillatory truths and strengthen falsifiability:
+
+### Nondimensional Mappings
+
+All dimensionful quantities are expressed in nondimensional form to reveal scale-invariant universality:
+
+```python
+from src.core.rigor_enhancements import (
+    compute_nondimensional_resonance_density,
+    dimensional_convergence_limit,
+    nondimensional_zeta
+)
+
+# Nondimensional resonance density
+eigenvalues = [...]  # From Interference Matrix
+ρ_res, info = compute_nondimensional_resonance_density(eigenvalues, N)
+print(f"Nondimensional resonance density: ρ_res = {ρ_res:.6f}")
+
+# Dimensional Coherence Index: χ_D = ρ_res / ρ_crit
+ρ_crit = 0.73  # Critical threshold from percolation theory
+χ_D = ρ_res / ρ_crit
+print(f"Dimensional Coherence Index: χ_D = {χ_D:.6f}")
+
+# Spectral dimension convergence with O(1/√N) error bounds
+d_spec, conv_info = dimensional_convergence_limit(N, eigenvalues, verbose=True)
+print(f"Spectral dimension: d_spec = {d_spec:.6f} ± {conv_info['error_bound']:.6f}")
+```
+
+### Symbolic RG Flow Analysis
+
+Renormalization group flow confirms C_H as a universal constant:
+
+```python
+from src.core.rigor_enhancements import rg_flow_beta, solve_rg_fixed_point
+
+# Compute RG beta function
+C_H = 0.045935703
+beta_val = rg_flow_beta(C_H, symbolic=False)
+print(f"β(C_H) = {beta_val:.6e}")
+
+# Solve for fixed points
+trivial_fp, cosmic_fp = solve_rg_fixed_point(verbose=True)
+print(f"Cosmic fixed point: C_H* = {cosmic_fp:.10f} (q = 1/137)")
+```
+
+### Falsifiability Thresholds
+
+Explicit empirical dissonance criteria define when observations would require paradigm refinement:
+
+```python
+from src.cosmology.vacuum_energy import falsifiability_check
+
+# Check dark energy observations (DESI 2024)
+results = falsifiability_check(
+    observed_w0=-0.827,
+    predicted_w0=-0.912,
+    threshold_w0=-0.92,
+    verbose=True
+)
+
+if not results['w0_consistent']:
+    print("Refinement needed:")
+    for suggestion in results['refinement_suggestions']:
+        print(f"  • {suggestion}")
+```
+
+### Alternative Substrate Discriminants
+
+Tests for non-holonomic phase noise that would disprove AHS primitive:
+
+```python
+from src.topology.invariants import alternative_substrate_discriminant
+
+# Simulate CMB bispectrum data
+cmb_sim = {
+    'frequencies': np.logspace(15, 20, 100),  # Hz
+    'phase_coherence': np.random.uniform(0.99, 1.0, 100)
+}
+
+results = alternative_substrate_discriminant(
+    W, 
+    cmb_data_sim=cmb_sim,
+    frequency_threshold=1e18,
+    phase_noise_threshold=0.0001,
+    verbose=True
+)
+
+if results['non_vibrational_detected']:
+    print("CRITICAL: AHS substrate disproven!")
+    print("Alternative ontology required (e.g., discrete causal sets)")
+```
+
+### Key Features
+
+1. **Analytical Transparency**: Symbolic derivations using `sympy` expose exact relationships
+2. **Universal Scaling**: Nondimensional forms reveal scale-invariant physics
+3. **Convergence Bounds**: Explicit O(1/√N) error terms quantify finite-N corrections
+4. **Empirical Falsifiability**: Precise thresholds define when paradigm requires revision
+5. **Provisional Truth**: Acknowledges alternatives and admits risky predictions
 
 ## Replication Guide
 
