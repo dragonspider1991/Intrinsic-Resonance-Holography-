@@ -32,12 +32,19 @@ jobs:
 
       - name: Check formatting with Black
         run: |
-          black --check python/src/ python/tests/ || echo "Formatting issues found"
+          if [ -d "python/src" ] && [ -d "python/tests" ]; then
+            black --check python/src/ python/tests/ || echo "Formatting issues found"
+          else
+            echo "python/src or python/tests directory not found, skipping Black check"
+          fi
 
       - name: Type check with mypy
         run: |
-          cd python
-          mypy src/irh/ --ignore-missing-imports || echo "Type checking completed"
+          if [ -d "python" ]; then
+            (cd python && mypy src/irh/ --ignore-missing-imports) || echo "Type checking completed"
+          else
+            echo "python directory not found, skipping mypy check"
+          fi
 
   test-python:
     name: Python Tests
@@ -58,15 +65,25 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd python
-          pip install --upgrade pip
-          pip install numpy scipy networkx sympy pytest pytest-cov
+          if [ -d "python" ]; then
+            cd python
+            pip install --upgrade pip
+            pip install numpy scipy networkx sympy pytest pytest-cov
+          else
+            echo "python directory not found, skipping dependency installation"
+            exit 1
+          fi
 
       - name: Run tests
         run: |
-          cd python
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-          pytest tests/ -v --cov=src/irh --cov-report=xml
+          if [ -d "python" ]; then
+            cd python
+            export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+            pytest tests/ -v --cov=src/irh --cov-report=xml
+          else
+            echo "python directory not found, skipping tests"
+            exit 1
+          fi
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
@@ -114,47 +131,57 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd python
-          pip install numpy scipy networkx sympy
+          if [ -d "python" ]; then
+            cd python
+            pip install numpy scipy networkx sympy
+          else
+            echo "python directory not found, skipping dependency installation"
+            exit 1
+          fi
 
       - name: Run benchmarks
         run: |
-          cd python
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-          python -c "
-          import time
-          from irh import HyperGraph
-          from irh.spectral_dimension import SpectralDimension
-          from irh.grand_audit import grand_audit
+          if [ -d "python" ]; then
+            cd python
+            export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+            python -c "
+            import time
+            from irh import HyperGraph
+            from irh.spectral_dimension import SpectralDimension
+            from irh.grand_audit import grand_audit
 
-          print('=== IRH v9.2 Benchmark Suite ===')
-          print()
+            print('=== IRH v9.2 Benchmark Suite ===')
+            print()
 
-          # Benchmark N=64
-          start = time.time()
-          G = HyperGraph(N=64, seed=42)
-          print(f'Create N=64 graph: {time.time()-start:.3f}s')
+            # Benchmark N=64
+            start = time.time()
+            G = HyperGraph(N=64, seed=42)
+            print(f'Create N=64 graph: {time.time()-start:.3f}s')
 
-          start = time.time()
-          ds = SpectralDimension(G)
-          print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
+            start = time.time()
+            ds = SpectralDimension(G)
+            print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
 
-          # Benchmark N=256
-          start = time.time()
-          G = HyperGraph(N=256, seed=42)
-          print(f'Create N=256 graph: {time.time()-start:.3f}s')
+            # Benchmark N=256
+            start = time.time()
+            G = HyperGraph(N=256, seed=42)
+            print(f'Create N=256 graph: {time.time()-start:.3f}s')
 
-          start = time.time()
-          ds = SpectralDimension(G)
-          print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
+            start = time.time()
+            ds = SpectralDimension(G)
+            print(f'Spectral dimension: {time.time()-start:.3f}s (d_s={ds.value:.2f})')
 
-          # Grand audit on small graph
-          G = HyperGraph(N=32, seed=42)
-          start = time.time()
-          report = grand_audit(G)
-          print(f'Grand audit N=32: {time.time()-start:.3f}s')
-          print(f'  Pass rate: {report.pass_count}/{report.total_checks}')
-          "
+            # Grand audit on small graph
+            G = HyperGraph(N=32, seed=42)
+            start = time.time()
+            report = grand_audit(G)
+            print(f'Grand audit N=32: {time.time()-start:.3f}s')
+            print(f'  Pass rate: {report.pass_count}/{report.total_checks}')
+            "
+          else
+            echo "python directory not found, skipping benchmarks"
+            exit 1
+          fi
 
   docs:
     name: Build Documentation
