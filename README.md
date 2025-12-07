@@ -664,17 +664,17 @@ python script.py --no-gpu
 
 ### Getting Help
 
-1. Check `QUICK_REFERENCE.md` for common patterns
+1. Check `docs/QUICK_REFERENCE.md` for common patterns
 2. See `experiments/COSMIC_FIXED_POINT_ANALYSIS.md` for test interpretation
-3. Review `AGENT_HANDOFF.md` for technical details
+3. Review `docs/archive/construction/AGENT_HANDOFF.md` for technical details
 4. Open an issue on GitHub with your test results
 
 ## Documentation
 
-- **`README_v13.md`** (this file): User guide and quick start
-- **`QUICK_REFERENCE.md`**: Developer quick reference
-- **`AGENT_HANDOFF.md`**: Complete technical documentation
-- **`WORK_SUMMARY.md`**: Implementation summary
+- **`README.md`** (this file): User guide and quick start
+- **`docs/QUICK_REFERENCE.md`**: Developer quick reference
+- **`docs/archive/construction/AGENT_HANDOFF.md`**: Complete technical documentation
+- **`docs/archive/construction/WORK_SUMMARY.md`**: Implementation summary
 - **`experiments/COSMIC_FIXED_POINT_ANALYSIS.md`**: Test results analysis
 - **`docs/STRUCTURE_v13.md`**: Repository structure guide
 - **`docs/manuscripts/IRH_v13_0_Theory.md`**: Theoretical framework
