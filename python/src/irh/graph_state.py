@@ -559,3 +559,7 @@ def create_graph_state(
         topology=topology,
         edge_probability=edge_probability,
     )
+
+
+# Backward compatibility alias
+HyperGraph = CymaticResonanceNetwork
