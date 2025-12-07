@@ -51,8 +51,10 @@ def compute_information_transfer_matrix(
     IRH v15.0 Theorem 4.1: Uniqueness of Harmony Functional
     """
     # Compute degree matrix D from row sums
+    # For complex/Hermitian matrices, take real part to ensure Hermitian Laplacian
     diag_sums = np.array(W.sum(axis=1)).flatten()
-    D = sp.diags(diag_sums, format='csr')
+    diag_sums_real = np.real(diag_sums)  # Use real part for Hermitian property
+    D = sp.diags(diag_sums_real, format='csr')
     
     # M = D - W (discrete complex Laplacian)
     M = D - W
