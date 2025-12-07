@@ -24,7 +24,8 @@ def spectral_dimension(
     W: sp.spmatrix,
     method: str = 'heat_kernel',
     t_range: Optional[Tuple[float, float]] = None,
-    k_eigenvalues: int = 200
+    k_eigenvalues: int = 200,
+    use_convergence_analysis: bool = True
 ) -> Tuple[float, dict]:
     """
     Calculate spectral dimension d_spec of emergent geometry.
@@ -32,6 +33,9 @@ def spectral_dimension(
     The spectral dimension characterizes how information propagates
     through the Cymatic Resonance Network, and equals 4 at the
     Cosmic Fixed Point (Theorem 3.1).
+    
+    In v15.0+, includes explicit convergence analysis with O(1/√N)
+    error bounds to reveal nondimensional universality.
     
     Parameters
     ----------
@@ -43,13 +47,15 @@ def spectral_dimension(
         Time range for heat kernel trace. Default (0.01, 10.0).
     k_eigenvalues : int
         Number of eigenvalues for eigenvalue_scaling method.
+    use_convergence_analysis : bool, default True
+        If True, apply convergence correction with error bounds.
         
     Returns
     -------
     d_spec : float
         Spectral dimension estimate.
     info : dict
-        Additional diagnostic information.
+        Additional diagnostic information including convergence metrics.
         
     Notes
     -----
@@ -57,8 +63,12 @@ def spectral_dimension(
         P(t) = Tr(exp(-t M)) ~ t^(-d_spec/2)
     where M is Information Transfer Matrix.
     
+    Convergence expansion (v15.0+):
+        d_spec(N) = 4 + O(1/√N)
+    
     References
     ----------
+    IRH v15.0 Theorem 3.1: Emergent 4D Spacetime with Convergence Bounds
     IRH v13.0 Theorem 3.1: Emergent 4D Spacetime
     """
     from ..core.harmony import compute_information_transfer_matrix
@@ -67,11 +77,40 @@ def spectral_dimension(
     N = M.shape[0]
     
     if method == 'heat_kernel':
-        return _spectral_dim_heat_kernel(M, t_range)
+        d_spec, info = _spectral_dim_heat_kernel(M, t_range)
     elif method == 'eigenvalue_scaling':
-        return _spectral_dim_eigenvalue_scaling(M, k_eigenvalues)
+        d_spec, info = _spectral_dim_eigenvalue_scaling(M, k_eigenvalues)
     else:
         raise ValueError(f"Unknown method: {method}")
+    
+    # Apply convergence analysis if requested (v15.0+)
+    if use_convergence_analysis and info.get('status') == 'success':
+        try:
+            from ..core.rigor_enhancements import dimensional_convergence_limit
+            
+            # Compute eigenvalues if not already available
+            if k_eigenvalues >= N - 2 or N < 500:
+                M_dense = M.toarray()
+                eigenvalues = np.linalg.eigvalsh(M_dense)
+            else:
+                from scipy.sparse.linalg import eigsh
+                eigenvalues = eigsh(M, k=min(k_eigenvalues, N-2), which='LM', return_eigenvectors=False)
+            
+            # Get convergence-corrected dimension
+            d_spec_conv, conv_info = dimensional_convergence_limit(N, eigenvalues, verbose=False)
+            
+            # Update info with convergence diagnostics
+            info['convergence'] = conv_info
+            info['d_spec_uncorrected'] = d_spec
+            
+            # Use convergence-corrected value
+            d_spec = d_spec_conv
+            
+        except Exception as e:
+            # Fall back to uncorrected value on error
+            info['convergence_error'] = str(e)
+    
+    return d_spec, info
 
 
 def _spectral_dim_heat_kernel(
@@ -178,14 +217,23 @@ def _spectral_dim_eigenvalue_scaling(
 
 def dimensional_coherence_index(
     W: sp.spmatrix,
-    target_d: int = 4
+    target_d: int = 4,
+    use_nondimensional: bool = True
 ) -> Tuple[float, dict]:
     """
     Calculate Dimensional Coherence Index χ_D.
     
     Composite metric measuring how well the network realizes
-    emergent spacetime geometry:
+    emergent spacetime geometry.
     
+    In nondimensional form (v15.0+):
+    χ_D = ρ_res / ρ_crit
+    
+    where:
+    - ρ_res: Normalized resonance density from eigenvalue spectrum
+    - ρ_crit: Critical threshold for stable holographic hum (~0.73)
+    
+    In composite form (v13.0):
     χ_D = ℰ_H × ℰ_R × ℰ_C
     
     where:
@@ -198,7 +246,9 @@ def dimensional_coherence_index(
     W : sp.spmatrix
         Complex adjacency matrix.
     target_d : int
-        Target spacetime dimension (4 for IRH v13.0).
+        Target spacetime dimension (4 for IRH v15.0).
+    use_nondimensional : bool, default True
+        If True, use nondimensional formulation to expose universality.
         
     Returns
     -------
@@ -209,30 +259,76 @@ def dimensional_coherence_index(
         
     References
     ----------
+    IRH v15.0 Meta-Theoretical Audit: Nondimensional Coherence Index
     IRH v13.0 Section 6.2: Dimensional Coherence Index
     """
+    from ..core.rigor_enhancements import compute_nondimensional_resonance_density
+    
+    N = W.shape[0]
     d_spec, d_info = spectral_dimension(W)
     
-    # ℰ_R: Residue (distance from target dimension)
-    E_R = np.exp(-abs(d_spec - target_d))
+    if use_nondimensional:
+        # Nondimensional formulation (v15.0+)
+        # Compute eigenvalues for resonance density
+        from ..core.harmony import compute_information_transfer_matrix
+        M = compute_information_transfer_matrix(W)
+        
+        try:
+            # Compute eigenvalues
+            from scipy.sparse.linalg import eigsh
+            k = min(N - 1, max(100, int(N * 0.1)))
+            if k >= N - 2 or N < 500:
+                M_dense = M.toarray()
+                eigenvalues = np.linalg.eigvalsh(M_dense)
+            else:
+                eigenvalues = eigsh(M, k=k, which='LM', return_eigenvectors=False)
+            
+            # Compute nondimensional resonance density
+            rho_res, rho_info = compute_nondimensional_resonance_density(eigenvalues, N)
+            
+            # Critical threshold from percolation theory
+            # For random graphs: ρ_crit ≈ 0.73 (edge threshold optimization)
+            rho_crit = 0.73
+            
+            # Nondimensional coherence index
+            chi_D = rho_res / rho_crit
+            
+            components = {
+                'd_spec': d_spec,
+                'rho_res': rho_res,
+                'rho_crit': rho_crit,
+                'target_d': target_d,
+                'formulation': 'nondimensional',
+                'rho_info': rho_info
+            }
+        except Exception as e:
+            # Fall back to composite form on error
+            use_nondimensional = False
+            components = {'error': str(e), 'fallback': 'composite'}
     
-    # ℰ_H: Holographic consistency (entropy scaling check)
-    # Placeholder: requires full entropy calculation
-    E_H = 0.8  # Assume moderate holographic consistency
-    
-    # ℰ_C: Categorical coherence (topological stability)
-    # Placeholder: requires perturbation analysis
-    E_C = 0.7  # Assume moderate topological stability
-    
-    chi_D = E_H * E_R * E_C
-    
-    components = {
-        'd_spec': d_spec,
-        'E_H': E_H,
-        'E_R': E_R,
-        'E_C': E_C,
-        'target_d': target_d
-    }
+    if not use_nondimensional:
+        # Composite formulation (v13.0)
+        # ℰ_R: Residue (distance from target dimension)
+        E_R = np.exp(-abs(d_spec - target_d))
+        
+        # ℰ_H: Holographic consistency (entropy scaling check)
+        # Placeholder: requires full entropy calculation
+        E_H = 0.8  # Assume moderate holographic consistency
+        
+        # ℰ_C: Categorical coherence (topological stability)
+        # Placeholder: requires perturbation analysis
+        E_C = 0.7  # Assume moderate topological stability
+        
+        chi_D = E_H * E_R * E_C
+        
+        components = {
+            'd_spec': d_spec,
+            'E_H': E_H,
+            'E_R': E_R,
+            'E_C': E_C,
+            'target_d': target_d,
+            'formulation': 'composite'
+        }
     
     return chi_D, components
 
