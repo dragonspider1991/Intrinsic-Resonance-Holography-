@@ -149,6 +149,7 @@ This roadmap coordinates the implementation of IRH v15.0 across multiple phases.
 ## Phase 5: Fermion Generations & Mass Hierarchy ⏳
 
 **Status**: Pending Phase 4  
+**Instructions**: [PHASE_5_FERMION_GENERATIONS.md](.github/agents/PHASE_5_FERMION_GENERATIONS.md)  
 **Priority**: MEDIUM
 
 ### Objectives
@@ -167,6 +168,7 @@ This roadmap coordinates the implementation of IRH v15.0 across multiple phases.
 ## Phase 6: Cosmological Constant & Dark Energy ⏳
 
 **Status**: Pending Phase 3  
+**Instructions**: [PHASE_6_COSMOLOGICAL_CONSTANT.md](.github/agents/PHASE_6_COSMOLOGICAL_CONSTANT.md)  
 **Priority**: MEDIUM
 
 ### Objectives
@@ -184,6 +186,7 @@ This roadmap coordinates the implementation of IRH v15.0 across multiple phases.
 ## Phase 7: Exascale Infrastructure ⏳
 
 **Status**: Pending all physics derivations  
+**Instructions**: [PHASE_7_EXASCALE_INFRASTRUCTURE.md](.github/agents/PHASE_7_EXASCALE_INFRASTRUCTURE.md)  
 **Priority**: LOW (can be parallel)
 
 ### Objectives
@@ -197,6 +200,7 @@ This roadmap coordinates the implementation of IRH v15.0 across multiple phases.
 ## Phase 8: Final Validation & Documentation ⏳
 
 **Status**: Final phase  
+**Instructions**: [PHASE_8_FINAL_VALIDATION.md](.github/agents/PHASE_8_FINAL_VALIDATION.md)  
 **Priority**: HIGH
 
 ### Objectives

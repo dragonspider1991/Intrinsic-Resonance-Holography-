@@ -84,13 +84,15 @@ def test_information_transfer_matrix():
     assert M.shape == (N, N), "M should have same shape as W"
     
     # Verify M = D - W structure
+    # Note: D uses real part of degrees to ensure Hermitian Laplacian
     degrees = np.array(W.sum(axis=1)).flatten()
-    D = sp.diags(degrees, format='csr')
+    degrees_real = np.real(degrees)  # Take real part as per implementation
+    D = sp.diags(degrees_real, format='csr')
     expected_M = D - W
     
     # Check equality (allowing for numerical precision)
     diff = (M - expected_M).toarray()
-    assert np.max(np.abs(diff)) < 1e-10, "M should equal D - W"
+    assert np.max(np.abs(diff)) < 1e-10, "M should equal D - W (with real degrees)"
 
 
 if __name__ == "__main__":
