@@ -1,12 +1,16 @@
 """
-Harmony Functional Implementation (Theorem 4.1)
+Harmony Functional Implementation (Theorem 4.1 - IRH v15.0)
 
 Implements the Spectral Zeta Regularized Harmony Functional:
-    S_H[G] = Tr(ℳ²) / (det' ℳ)^α
+    S_H[G] = Tr(ℳ²) / (det' ℳ)^C_H
 
 where ℳ is the Information Transfer Matrix (discrete complex Laplacian),
-α = 1/(N ln N) ensures intensive action density, and det' denotes the
+C_H = 0.045935703 is the universal dimensionless constant that governs
+critical information density (IRH v15.0 Theorem 4.1), and det' denotes the
 determinant computed from non-zero eigenvalues.
+
+Key change from v13.0: C_H is now a derived universal constant, not N-dependent,
+ensuring true intensive action density and RG invariance.
 """
 
 import numpy as np
@@ -14,6 +18,11 @@ import scipy.sparse as sp
 from scipy.sparse.linalg import eigs
 from typing import Tuple, Optional
 from numpy.typing import NDArray
+
+# Universal dimensionless constant governing critical information density
+# Derived from intensive action density and RG invariance requirements (IRH v15.0 Theorem 4.1)
+# This is a fundamental constant of the theory, not a free parameter
+C_H = 0.045935703  # Replaces N-dependent alpha = 1/(N ln N) from v13.0
 
 
 def compute_information_transfer_matrix(
@@ -38,11 +47,14 @@ def compute_information_transfer_matrix(
         
     References
     ----------
-    IRH v13.0 Section 4: The Harmony Functional
+    IRH v15.0 Section 4: The Harmony Functional
+    IRH v15.0 Theorem 4.1: Uniqueness of Harmony Functional
     """
     # Compute degree matrix D from row sums
+    # For complex/Hermitian matrices, take real part to ensure Hermitian Laplacian
     diag_sums = np.array(W.sum(axis=1)).flatten()
-    D = sp.diags(diag_sums, format='csr')
+    diag_sums_real = np.real(diag_sums)  # Use real part for Hermitian property
+    D = sp.diags(diag_sums_real, format='csr')
     
     # M = D - W (discrete complex Laplacian)
     M = D - W
@@ -80,12 +92,14 @@ def harmony_functional(
         
     Notes
     -----
-    The exponent α = 1/(N ln N) is uniquely determined by the requirement
-    of intensive action density and scale invariance under coarse-graining.
+    The exponent C_H = 0.045935703 is a universal constant uniquely determined 
+    by the requirement of intensive action density and scale invariance under 
+    coarse-graining (IRH v15.0 Theorem 4.1). This replaces the N-dependent 
+    alpha = 1/(N ln N) from v13.0, eliminating dimensional inconsistency.
     
     References
     ----------
-    IRH v13.0 Theorem 4.1: Uniqueness of Harmony Functional
+    IRH v15.0 Theorem 4.1: Uniqueness of Harmony Functional
     """
     N = W.shape[0]
     
@@ -131,10 +145,11 @@ def harmony_functional(
         # Use magnitude to ensure real-valued, well-defined logarithm
         log_det_prime = np.sum(np.log(np.abs(non_zero_eigenvalues)))
         
-        # Scaling exponent for holographic bound compliance (Theorem 4.1)
-        alpha = 1.0 / (N * np.log(N + 1e-9))
+        # Universal critical exponent for holographic bound compliance (Theorem 4.1)
+        # C_H = 0.045935703 is derived, not chosen (IRH v15.0)
+        alpha = C_H
         
-        # Complexity term: (det' M)^α
+        # Complexity term: (det' M)^C_H
         det_term = np.exp(log_det_prime * alpha)
         
         if np.isnan(det_term) or np.isinf(det_term) or det_term == 0:
@@ -142,7 +157,7 @@ def harmony_functional(
                 return -np.inf, np.real(trace_M2), 0.0
             return -np.inf
         
-        # S_H = Tr(M²) / (det' M)^α (must be real-valued scalar)
+        # S_H = Tr(M²) / (det' M)^C_H (must be real-valued scalar)
         S_H = np.real(trace_M2 / det_term)
         
         if np.isnan(S_H) or np.isinf(S_H):
@@ -193,7 +208,7 @@ def validate_harmony_properties(
     
     results = {
         'S_H': S_H,
-        'intensive': True,  # Validated by construction via α = 1/(N ln N)
+        'intensive': True,  # Validated by construction via C_H (universal constant)
         'holographic': True,  # Validated by construction via det' term
         'scale_invariant': None,  # Requires coarse-graining test
         'convergence': S_H > -np.inf
@@ -271,6 +286,10 @@ class HarmonyEngine:
         -------
         S_H : float
             Harmony functional value.
+            
+        Notes
+        -----
+        Uses universal constant C_H = 0.045935703 (IRH v15.0).
         """
         from scipy import linalg
         
@@ -278,10 +297,8 @@ class HarmonyEngine:
         M_squared = np.dot(M, M)
         numerator = np.abs(np.trace(M_squared))
         
-        if N > 1:
-            alpha = 1.0 / (N * np.log(N))
-        else:
-            alpha = 1.0
+        # Use universal constant C_H instead of N-dependent alpha
+        alpha = C_H
         
         eigenvalues = linalg.eigvals(M)
         denominator = HarmonyEngine.spectral_zeta_regularization(eigenvalues, alpha)
