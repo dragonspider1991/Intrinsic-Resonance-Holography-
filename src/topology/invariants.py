@@ -406,7 +406,7 @@ class TopologyAnalyzer:
         beta_1 = self.G.number_of_edges() - self.G.number_of_nodes() + nx.number_connected_components(self.G)
         return beta_1
     
-        def calculate_generation_count(self):
+    def calculate_generation_count(self):
         """
         Calculate generation count from flux matrix nullity.
         

@@ -21,7 +21,11 @@ try:
 except ImportError:
     SYMPY_AVAILABLE = False
     import warnings
-    warnings.warn("sympy not available. Symbolic functions will use numerical approximations.")
+    warnings.warn(
+        "sympy not available. Symbolic functions will fall back to numerical "
+        "approximations, reducing analytical transparency. Install sympy with: "
+        "pip install sympy"
+    )
 
 
 def nondimensional_zeta(
@@ -272,6 +276,16 @@ def rg_flow_beta(
     """
     # Quantized holonomy scale from fine-structure constant
     q = 1.0 / 137.035999084  # ≈ 0.00729927
+    
+    # Validate C_H is in reasonable range to prevent numerical issues
+    if not symbolic:
+        C_H_val = float(C_H) if not isinstance(C_H, (int, float)) else C_H
+        if C_H_val < 0 or C_H_val > 1.0:
+            import warnings
+            warnings.warn(
+                f"C_H = {C_H_val:.6f} is outside typical range [0, 1]. "
+                f"Beta function may exhibit numerical instabilities."
+            )
     
     if symbolic and SYMPY_AVAILABLE:
         if isinstance(C_H, sp.Symbol):
