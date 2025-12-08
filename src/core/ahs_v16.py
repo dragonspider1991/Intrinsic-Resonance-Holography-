@@ -56,7 +56,15 @@ class AlgorithmicHolonomicStateV16:
     metadata: dict = field(default_factory=dict)
     
     def __post_init__(self):
-        """Validate and normalize the state."""
+        """Validate and normalize the state.
+        
+        Notes
+        -----
+        Phase normalization to [0, 2π) is performed on the central value.
+        The error bound is preserved as-is, which is conservative for small errors.
+        For large errors that span the 2π boundary, users should be aware that
+        the error bound represents a worst-case estimate.
+        """
         # Ensure phase is CertifiedValue
         if not isinstance(self.holonomic_phase, CertifiedValue):
             # Convert float to CertifiedValue with machine precision error
@@ -68,6 +76,7 @@ class AlgorithmicHolonomicStateV16:
             )
         
         # Normalize phase to [0, 2π) while preserving error bound
+        # Note: This is conservative for errors that don't cross 2π boundary
         normalized_value = self.holonomic_phase.value % (2 * np.pi)
         self.holonomic_phase = CertifiedValue.from_value_and_error(
             normalized_value,

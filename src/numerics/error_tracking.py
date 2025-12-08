@@ -80,8 +80,13 @@ class ErrorBudget:
         -------
         rel_error : float
             Total error divided by absolute value.
+            Returns inf if value is zero (to indicate undefined relative error).
+        
+        Notes
+        -----
+        For zero or near-zero values, absolute error should be used instead.
         """
-        if value == 0:
+        if abs(value) < 1e-100:  # Effectively zero
             return float('inf')
         return self.total_error() / abs(value)
     

@@ -17,7 +17,7 @@ References:
 
 import numpy as np
 import zlib
-from typing import Optional, Tuple, Dict
+from typing import Optional, Tuple, Dict, List
 from dataclasses import dataclass
 from numpy.typing import NDArray
 
@@ -258,7 +258,7 @@ def compute_acw_v16(
 
 
 def build_acw_matrix_v16(
-    states: list[AlgorithmicHolonomicStateV16],
+    states: List[AlgorithmicHolonomicStateV16],
     fidelity: str = 'medium',
     sparse_threshold: float = 0.1,
     verbose: bool = False

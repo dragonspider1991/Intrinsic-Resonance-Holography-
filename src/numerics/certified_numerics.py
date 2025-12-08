@@ -311,6 +311,7 @@ def certified_product(
     if error_per_value is not None:
         # Sum relative errors
         rel_errors = error_per_value / np.abs(values)
+        # Note: Assumes zero values are exact (no error); this is a simplification
         rel_errors[np.abs(values) == 0] = 0  # Avoid division by zero
         total_rel_error = np.sum(rel_errors)
     else:
