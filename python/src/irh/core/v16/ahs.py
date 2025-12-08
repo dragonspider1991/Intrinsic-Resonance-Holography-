@@ -59,13 +59,25 @@ class AlgorithmicHolonomicState:
     complexity_Kt: Optional[float] = None  # Computed on demand
     
     def __post_init__(self):
-        """Validate AHS construction."""
+        """Validate and normalize AHS."""
         # Validate binary string
+        if not isinstance(self.binary_string, str):
+            raise TypeError("binary_string must be str")
+        if not self.binary_string:  # Empty string
+            raise ValueError("binary_string cannot be empty")
         if not all(c in '01' for c in self.binary_string):
             raise ValueError("binary_string must contain only '0' and '1'")
-            
-        # Normalize phase to [0, 2π)
-        self.holonomic_phase = self.holonomic_phase % (2 * np.pi)
+        
+        # Validate and normalize phase
+        if not isinstance(self.holonomic_phase, (int, float)):
+            raise TypeError("holonomic_phase must be numeric")
+        self.holonomic_phase = float(self.holonomic_phase) % (2 * np.pi)
+        
+        # Compute complexity if not provided
+        if self.complexity_Kt is None:
+            # For now, use simple estimate (length)
+            # TODO v16.0: Replace with proper K_t computation
+            self.complexity_Kt = float(len(self.binary_string))
         
     @property
     def complex_amplitude(self) -> complex:
@@ -87,25 +99,51 @@ class AlgorithmicHolonomicState:
         """
         return len(self.binary_string)
         
-    def compute_complexity(self, time_bound: int) -> float:
+    def compute_complexity(self, time_bound: int = 1000) -> float:
         """
-        Compute resource-bounded Kolmogorov complexity K_t.
+        Estimate K_t using simple LZW compression.
         
-        TODO v16.0: Implement using LZW compression with time bound
-        from [IRH-COMP-2025-02] §2.1
+        NOTE: This is a PLACEHOLDER. v16.0 requires certified multi-fidelity
+        evaluation from [IRH-COMP-2025-02].
         
         Args:
             time_bound: Computational time limit (in operations)
             
         Returns:
-            K_t estimate via LZW compression
+            K_t estimate via compression
             
         References:
             [IRH-COMP-2025-02] §2.1: Multi-fidelity K_t approximation
         """
-        raise NotImplementedError(
-            "v16.0: Requires LZW-based K_t computation with certified error bounds"
+        import zlib
+        # Use zlib (LZ77-based) as proxy for LZW
+        compressed = zlib.compress(self.binary_string.encode('ascii'))
+        self.complexity_Kt = float(len(compressed) * 8)  # bits
+        return self.complexity_Kt
+    
+    def __eq__(self, other: object) -> bool:
+        """Two AHS are equal if info and phase match."""
+        if not isinstance(other, AlgorithmicHolonomicState):
+            return NotImplemented
+        return (
+            self.binary_string == other.binary_string and
+            np.isclose(self.holonomic_phase, other.holonomic_phase, atol=1e-10)
         )
+
+    def __hash__(self) -> int:
+        """Hash for use in sets/dicts."""
+        # Hash binary string and quantized phase
+        phase_quant = int(self.holonomic_phase * 1e10)  # 10 decimal places
+        return hash((self.binary_string, phase_quant))
+    
+    def __repr__(self) -> str:
+        """Developer-friendly representation."""
+        info = self.binary_string[:8] + "..." if len(self.binary_string) > 8 else self.binary_string
+        return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
+
+    def __str__(self) -> str:
+        """User-friendly representation."""
+        return f"AHS[{len(self.binary_string)}bits, φ={self.holonomic_phase:.3f}rad]"
 
 
 class AHSAlgebra:
