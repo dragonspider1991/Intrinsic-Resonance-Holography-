@@ -470,14 +470,6 @@ def compute_phase_shift(
 
 ## Key Technical Considerations
 
-### Do NOT Attempt (Without Expertise)
-
-❌ **Exascale MPI/CUDA implementation** - Requires HPC expert  
-❌ **Certified numerics to 12+ decimals** - Requires numerical analyst  
-❌ **Quantum field theory derivations** - Requires physicist  
-❌ **Topological invariant calculations** - Requires algebraic topologist  
-❌ **Full Algorithmic Path Integral** - Requires theoretical foundations
-
 ### CAN Implement (With Care)
 
 ✅ **Data structures (AHS, ACW classes)** - Standard Python  
