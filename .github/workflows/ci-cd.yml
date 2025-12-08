@@ -1,9 +1,9 @@
-# IRH Suite v9.2 CI/CD Pipeline
+# IRH Suite v16.0 CI/CD Pipeline
 name: CI/CD
 
 on:
   push:
-    branches: [main, "feature/*"]
+    branches: [main, "feature/*", "copilot/*"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -34,17 +34,58 @@ jobs:
         run: |
           if [ -d "python/src" ] && [ -d "python/tests" ]; then
             black --check python/src/ python/tests/ || echo "Formatting issues found"
-          else
-            echo "python/src or python/tests directory not found, skipping Black check"
+          fi
+          if [ -d "src" ] && [ -d "tests" ]; then
+            black --check src/ tests/ || echo "Formatting issues found"
           fi
 
       - name: Type check with mypy
         run: |
           if [ -d "python" ]; then
             (cd python && mypy src/irh/ --ignore-missing-imports) || echo "Type checking completed"
-          else
-            echo "python directory not found, skipping mypy check"
           fi
+          if [ -d "src" ]; then
+            mypy src/ --ignore-missing-imports || echo "Type checking completed"
+          fi
+
+  test-v16:
+    name: v16.0 Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install numpy scipy networkx pytest pytest-cov
+
+      - name: Run v16.0 numerics tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest tests/test_v16_numerics.py -v --cov=src/numerics --cov-report=xml
+
+      - name: Run v16.0 core tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest tests/test_v16_core.py -v --cov=src/core --cov-append --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        if: matrix.python-version == '3.12'
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
 
   test-python:
     name: Python Tests
