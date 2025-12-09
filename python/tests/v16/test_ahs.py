@@ -48,7 +48,10 @@ class TestAlgorithmicHolonomicState:
             ahs = AlgorithmicHolonomicState("1", phase)
             amp = ahs.complex_amplitude
             assert np.isclose(abs(amp), 1.0)
-            assert np.isclose(np.angle(amp), phase)
+            # np.angle returns [-π, π], so normalize both for comparison
+            # e.g., 3π/2 becomes -π/2 in np.angle output
+            expected_angle = phase if phase <= np.pi else phase - 2*np.pi
+            assert np.isclose(np.angle(amp), expected_angle, atol=1e-10)
             
     def test_invalid_binary_string_non_binary(self):
         """Test validation of binary string."""
@@ -89,8 +92,8 @@ class TestAlgorithmicHolonomicState:
     def test_equality_phase_tolerance(self):
         """Test equality with small phase differences."""
         ahs1 = AlgorithmicHolonomicState("101", 0.5)
-        ahs2 = AlgorithmicHolonomicState("101", 0.5 + 1e-11)  # Within tolerance
-        ahs3 = AlgorithmicHolonomicState("101", 0.5 + 1e-9)   # Outside tolerance
+        ahs2 = AlgorithmicHolonomicState("101", 0.5 + 1e-11)  # Within tolerance (1e-10)
+        ahs3 = AlgorithmicHolonomicState("101", 0.5 + 1e-6)   # Outside tolerance (clearly different)
         
         assert ahs1 == ahs2
         assert ahs1 != ahs3

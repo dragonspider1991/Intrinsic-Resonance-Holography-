@@ -8,12 +8,14 @@ Modules:
     ahs: Algorithmic Holonomic States (Axiom 0)
     acw: Algorithmic Coherence Weights (Axiom 1)
     crn: Cymatic Resonance Network (Axiom 2)
+    holographic: Combinatorial Holographic Principle (Axiom 3)
     dynamics: Coherent Evolution (Axiom 4)
 
 Implementation Status:
     - Axiom 0 (AHS): COMPLETE
     - Axiom 1 (ACW): COMPLETE
     - Axiom 2 (CRN): COMPLETE
+    - Axiom 3 (Holographic): COMPLETE
     - Axiom 4 (Evolution): COMPLETE (basic version)
 
 References:
@@ -48,6 +50,15 @@ from .crn import (
     derive_epsilon_threshold,
 )
 
+# Axiom 3: Combinatorial Holographic Principle
+from .holographic import (
+    Subnetwork,
+    HolographicAnalyzer,
+    verify_holographic_principle,
+    HOLOGRAPHIC_CONSTANT_K,
+    HOLOGRAPHIC_CONSTANT_K_ERROR,
+)
+
 # Axiom 4: Coherent Evolution
 from .dynamics import (
     EvolutionState,
@@ -71,6 +82,12 @@ __all__ = [
     "EPSILON_THRESHOLD",
     "EPSILON_THRESHOLD_ERROR",
     "derive_epsilon_threshold",
+    # Axiom 3
+    "Subnetwork",
+    "HolographicAnalyzer",
+    "verify_holographic_principle",
+    "HOLOGRAPHIC_CONSTANT_K",
+    "HOLOGRAPHIC_CONSTANT_K_ERROR",
     # Axiom 4
     "EvolutionState",
     "CoherentEvolution",
