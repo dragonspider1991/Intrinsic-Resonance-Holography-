@@ -63,8 +63,10 @@ class AlgorithmicHolonomicState:
         # Validate binary string (bytes)
         if isinstance(self.binary_string, str):
             # Allow str input for backward compatibility
-            self.binary_string = self.binary_string.encode('ascii')
-        if not isinstance(self.binary_string, (bytes, bytearray)):
+            object.__setattr__(self, "binary_string", self.binary_string.encode('ascii'))
+        if isinstance(self.binary_string, bytearray):
+            object.__setattr__(self, "binary_string", bytes(self.binary_string))
+        if not isinstance(self.binary_string, bytes):
             raise TypeError("binary_string must be bytes")
         if not self.binary_string:  # Empty string
             raise ValueError("binary_string cannot be empty")
