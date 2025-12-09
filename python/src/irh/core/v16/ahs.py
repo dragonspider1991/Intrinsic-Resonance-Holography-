@@ -54,18 +54,21 @@ class AlgorithmicHolonomicState:
         - Add serialization for distributed computing
     """
     
-    binary_string: str  # Binary informational content
+    binary_string: bytes  # Binary informational content
     holonomic_phase: float  # φ ∈ [0, 2π)
     complexity_Kt: Optional[float] = None  # Computed on demand
     
     def __post_init__(self):
         """Validate and normalize AHS."""
-        # Validate binary string
-        if not isinstance(self.binary_string, str):
-            raise TypeError("binary_string must be str")
+        # Validate binary string (bytes)
+        if isinstance(self.binary_string, str):
+            # Allow str input for backward compatibility
+            self.binary_string = self.binary_string.encode('ascii')
+        if not isinstance(self.binary_string, (bytes, bytearray)):
+            raise TypeError("binary_string must be bytes")
         if not self.binary_string:  # Empty string
             raise ValueError("binary_string cannot be empty")
-        if not all(c in '01' for c in self.binary_string):
+        if not all(b in (48, 49) for b in self.binary_string):  # '0' or '1'
             raise ValueError("binary_string must contain only '0' and '1'")
         
         # Validate and normalize phase
@@ -117,7 +120,7 @@ class AlgorithmicHolonomicState:
         """
         import zlib
         # Use zlib (LZ77-based) as proxy for LZW
-        compressed = zlib.compress(self.binary_string.encode('ascii'))
+        compressed = zlib.compress(self.binary_string)
         self.complexity_Kt = float(len(compressed) * 8)  # bits
         return self.complexity_Kt
     
@@ -143,7 +146,9 @@ class AlgorithmicHolonomicState:
     
     def __repr__(self) -> str:
         """Developer-friendly representation."""
-        info = self.binary_string[:8] + "..." if len(self.binary_string) > 8 else self.binary_string
+        info_bytes = self.binary_string[:8]
+        info_str = info_bytes.decode('ascii')
+        info = info_str + "..." if len(self.binary_string) > 8 else info_str
         return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
 
     def __str__(self) -> str:
@@ -252,7 +257,7 @@ def create_ahs_network(
     for i in range(N):
         # Generate random binary string (10-20 bits for demonstration)
         bit_length = rng.integers(10, 21)
-        binary_str = ''.join(str(rng.integers(0, 2)) for _ in range(bit_length))
+        binary_str = ''.join(str(rng.integers(0, 2)) for _ in range(bit_length)).encode('ascii')
         
         # Initialize phase
         if phase_distribution == "uniform":

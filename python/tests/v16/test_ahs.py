@@ -17,26 +17,26 @@ class TestAlgorithmicHolonomicState:
     
     def test_basic_creation(self):
         """Test basic AHS creation."""
-        ahs = AlgorithmicHolonomicState("101010", np.pi)
-        assert ahs.binary_string == "101010"
+        ahs = AlgorithmicHolonomicState(b"101010", np.pi)
+        assert ahs.binary_string == b"101010"
         assert np.isclose(ahs.holonomic_phase, np.pi)
         assert ahs.information_content == 6
         
     def test_phase_normalization(self):
         """Test phase is normalized to [0, 2π)."""
-        ahs = AlgorithmicHolonomicState("1", 3 * np.pi)
+        ahs = AlgorithmicHolonomicState(b"1", 3 * np.pi)
         assert 0 <= ahs.holonomic_phase < 2 * np.pi
         assert np.isclose(ahs.holonomic_phase, np.pi)
         
     def test_negative_phase_normalization(self):
         """Test negative phase normalization."""
-        ahs = AlgorithmicHolonomicState("1", -np.pi/2)
+        ahs = AlgorithmicHolonomicState(b"1", -np.pi/2)
         assert 0 <= ahs.holonomic_phase < 2 * np.pi
         assert np.isclose(ahs.holonomic_phase, 3*np.pi/2)
         
     def test_complex_amplitude(self):
         """Test complex amplitude e^{iφ}."""
-        ahs = AlgorithmicHolonomicState("1", np.pi/4)
+        ahs = AlgorithmicHolonomicState(b"1", np.pi/4)
         amp = ahs.complex_amplitude
         assert np.isclose(abs(amp), 1.0)  # On unit circle
         assert np.isclose(np.angle(amp), np.pi/4)
@@ -45,7 +45,7 @@ class TestAlgorithmicHolonomicState:
         """Test complex amplitude for various phases."""
         phases = [0, np.pi/2, np.pi, 3*np.pi/2]
         for phase in phases:
-            ahs = AlgorithmicHolonomicState("1", phase)
+            ahs = AlgorithmicHolonomicState(b"1", phase)
             amp = ahs.complex_amplitude
             assert np.isclose(abs(amp), 1.0)
             wrapped_angle = (np.angle(amp) + 2 * np.pi) % (2 * np.pi)
@@ -54,34 +54,34 @@ class TestAlgorithmicHolonomicState:
     def test_invalid_binary_string_non_binary(self):
         """Test validation of binary string."""
         with pytest.raises(ValueError, match="only '0' and '1'"):
-            AlgorithmicHolonomicState("012", 0.0)
+            AlgorithmicHolonomicState(b"012", 0.0)
             
     def test_invalid_binary_string_letters(self):
         """Test rejection of non-binary characters."""
         with pytest.raises(ValueError, match="only '0' and '1'"):
-            AlgorithmicHolonomicState("abc", 0.0)
+            AlgorithmicHolonomicState(b"abc", 0.0)
     
     def test_empty_binary_string(self):
         """Test rejection of empty binary string."""
         with pytest.raises(ValueError, match="cannot be empty"):
-            AlgorithmicHolonomicState("", 0.0)
+            AlgorithmicHolonomicState(b"", 0.0)
     
     def test_invalid_binary_string_type(self):
         """Test rejection of non-string binary_string."""
-        with pytest.raises(TypeError, match="must be str"):
+        with pytest.raises(TypeError, match="must be bytes"):
             AlgorithmicHolonomicState(101010, 0.0)
     
     def test_invalid_phase_type(self):
         """Test rejection of non-numeric phase."""
         with pytest.raises(TypeError, match="must be numeric"):
-            AlgorithmicHolonomicState("101", "not a number")
+            AlgorithmicHolonomicState(b"101", "not a number")
             
     def test_equality(self):
         """Test AHS equality comparison."""
-        ahs1 = AlgorithmicHolonomicState("101", 0.5)
-        ahs2 = AlgorithmicHolonomicState("101", 0.5)
-        ahs3 = AlgorithmicHolonomicState("101", 0.6)
-        ahs4 = AlgorithmicHolonomicState("110", 0.5)
+        ahs1 = AlgorithmicHolonomicState(b"101", 0.5)
+        ahs2 = AlgorithmicHolonomicState(b"101", 0.5)
+        ahs3 = AlgorithmicHolonomicState(b"101", 0.6)
+        ahs4 = AlgorithmicHolonomicState(b"110", 0.5)
         
         assert ahs1 == ahs2
         assert ahs1 != ahs3  # Different phase
@@ -89,26 +89,26 @@ class TestAlgorithmicHolonomicState:
         
     def test_equality_phase_tolerance(self):
         """Test equality with small phase differences."""
-        ahs1 = AlgorithmicHolonomicState("101", 0.5)
-        ahs2 = AlgorithmicHolonomicState("101", 0.5 + 1e-11)  # Within tolerance
-        ahs3 = AlgorithmicHolonomicState("101", 0.5 + 1e-9)   # Outside tolerance
+        ahs1 = AlgorithmicHolonomicState(b"101", 0.5)
+        ahs2 = AlgorithmicHolonomicState(b"101", 0.5 + 1e-11)  # Within tolerance
+        ahs3 = AlgorithmicHolonomicState(b"101", 0.5 + 1e-9)   # Outside tolerance
         
         assert ahs1 == ahs2
         assert ahs1 != ahs3
         
     def test_hashing(self):
         """Test AHS can be used in sets/dicts."""
-        ahs1 = AlgorithmicHolonomicState("101", 0.5)
-        ahs2 = AlgorithmicHolonomicState("101", 0.5)
+        ahs1 = AlgorithmicHolonomicState(b"101", 0.5)
+        ahs2 = AlgorithmicHolonomicState(b"101", 0.5)
         
         ahs_set = {ahs1, ahs2}
         assert len(ahs_set) == 1  # Should be same
         
     def test_hashing_uniqueness(self):
         """Test different AHS have different hashes (usually)."""
-        ahs1 = AlgorithmicHolonomicState("101", 0.5)
-        ahs2 = AlgorithmicHolonomicState("110", 0.5)
-        ahs3 = AlgorithmicHolonomicState("101", 0.6)
+        ahs1 = AlgorithmicHolonomicState(b"101", 0.5)
+        ahs2 = AlgorithmicHolonomicState(b"110", 0.5)
+        ahs3 = AlgorithmicHolonomicState(b"101", 0.6)
         
         # Different AHS should typically have different hashes
         assert hash(ahs1) != hash(ahs2)
@@ -116,7 +116,7 @@ class TestAlgorithmicHolonomicState:
         
     def test_compute_complexity(self):
         """Test K_t complexity estimation."""
-        ahs = AlgorithmicHolonomicState("0" * 100, 0.0)
+        ahs = AlgorithmicHolonomicState(b"0" * 100, 0.0)
         kt = ahs.compute_complexity()
         assert kt > 0
         # Highly compressible string should have low K_t
@@ -125,7 +125,7 @@ class TestAlgorithmicHolonomicState:
     def test_compute_complexity_random(self):
         """Test K_t for random-looking string."""
         # Alternating pattern is somewhat compressible
-        ahs = AlgorithmicHolonomicState("01" * 50, 0.0)
+        ahs = AlgorithmicHolonomicState(b"01" * 50, 0.0)
         kt = ahs.compute_complexity()
         assert kt > 0
         # Should compress somewhat
@@ -133,13 +133,13 @@ class TestAlgorithmicHolonomicState:
         
     def test_complexity_auto_computed(self):
         """Test complexity is auto-computed on init."""
-        ahs = AlgorithmicHolonomicState("1010", 0.0)
+        ahs = AlgorithmicHolonomicState(b"1010", 0.0)
         assert ahs.complexity_Kt is not None
         assert ahs.complexity_Kt > 0
         
     def test_repr(self):
         """Test developer representation."""
-        ahs = AlgorithmicHolonomicState("10101010", np.pi)
+        ahs = AlgorithmicHolonomicState(b"10101010", np.pi)
         repr_str = repr(ahs)
         assert "AHS" in repr_str
         assert "10101010" in repr_str or "..." in repr_str
@@ -147,7 +147,7 @@ class TestAlgorithmicHolonomicState:
         
     def test_str(self):
         """Test user-friendly string."""
-        ahs = AlgorithmicHolonomicState("10101010", np.pi/2)
+        ahs = AlgorithmicHolonomicState(b"10101010", np.pi/2)
         str_repr = str(ahs)
         assert "AHS" in str_repr
         assert "8bits" in str_repr
