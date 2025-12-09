@@ -12,10 +12,10 @@ Modules:
     acw: Algorithmic Coherence Weights (Axiom 1) - IRHv16.md §1  
     crn: Cymatic Resonance Network (Axiom 2) - IRHv16.md §1
     harmony: Harmony Functional S_H[G] (Theorem 4.1) - IRHv16.md §4
+    aro: Adaptive Resonance Optimization (Definition 4.1) - IRHv16.md §4
     
 Coming in subsequent phases:
     evolution: Algorithmic Coherent Evolution (Axiom 4)
-    aro: Adaptive Resonance Optimization (Definition 4.1)
 
 References:
     docs/manuscripts/IRHv16.md - Complete v16.0 theoretical framework (2763 lines)
@@ -36,6 +36,7 @@ from .harmony import (
     validate_harmony_functional_properties,
     HarmonyFunctionalEvaluator
 )
+from .aro import AROConfiguration, AROOptimizerV16
 
 __version__ = "16.0.0-dev"
 __all__ = [
@@ -57,4 +58,8 @@ __all__ = [
     "compute_harmony_functional",
     "validate_harmony_functional_properties",
     "HarmonyFunctionalEvaluator",
+    
+    # Definition 4.1: ARO
+    "AROConfiguration",
+    "AROOptimizerV16",
 ]
