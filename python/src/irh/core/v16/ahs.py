@@ -64,12 +64,12 @@ class AlgorithmicHolonomicState:
         allowed_bytes = {ord('0'), ord('1')}
         original_binary = self.binary_string
         if isinstance(original_binary, str):
-            object.__setattr__(self, "binary_string", original_binary.encode('ascii'))
+            object.__setattr__(self, "binary_string", original_binary.encode('utf-8'))
         elif isinstance(original_binary, bytearray):
             object.__setattr__(self, "binary_string", bytes(original_binary))
         elif not isinstance(original_binary, bytes):
             raise TypeError("binary_string must be str, bytes, or bytearray")
-        if not self.binary_string:  # Empty string (bytes path)
+        if not self.binary_string:  # Empty after normalization
             raise ValueError("binary_string cannot be empty")
         if not all(b in allowed_bytes for b in self.binary_string):  # '0' or '1'
             raise ValueError("binary_string must contain only '0' and '1'")
