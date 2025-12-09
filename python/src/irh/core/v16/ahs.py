@@ -71,6 +71,8 @@ class AlgorithmicHolonomicState:
         elif isinstance(original_binary, bytearray):
             if not original_binary:
                 raise ValueError("binary_string cannot be empty")
+            if not all(b in (48, 49) for b in original_binary):
+                raise ValueError("binary_string must contain only '0' and '1'")
             object.__setattr__(self, "binary_string", bytes(original_binary))
         elif not isinstance(original_binary, bytes):
             raise TypeError("binary_string must be str, bytes, or bytearray")

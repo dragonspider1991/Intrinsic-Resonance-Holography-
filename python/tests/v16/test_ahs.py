@@ -156,7 +156,7 @@ class TestAlgorithmicHolonomicState:
     def test_information_content(self):
         """Test information_content property."""
         for length in [1, 10, 100]:
-            ahs = AlgorithmicHolonomicState("0" * length, 0.0)
+            ahs = AlgorithmicHolonomicState(b"0" * length, 0.0)
             assert ahs.information_content == length
 
 
