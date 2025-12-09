@@ -48,7 +48,7 @@ class TestAlgorithmicHolonomicState:
             ahs = AlgorithmicHolonomicState("1", phase)
             amp = ahs.complex_amplitude
             assert np.isclose(abs(amp), 1.0)
-            assert np.isclose(np.angle(amp), phase)
+            assert np.isclose(np.angle(amp) % (2 * np.pi), phase)
             
     def test_invalid_binary_string_non_binary(self):
         """Test validation of binary string."""
