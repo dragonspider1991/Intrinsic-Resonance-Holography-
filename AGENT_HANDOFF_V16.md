@@ -717,13 +717,13 @@ Following the AGENT_HANDOFF_V16 instructions (Option A: Incremental Foundation B
 ### Remaining Work for Next Session
 
 **Phase 2 Completion:**
-- [ ] Axiom 2: Network Emergence utilities (CRN construction)
-- [ ] Axiom 4: Coherent Evolution dynamics
+- [x] Axiom 2: Network Emergence utilities (CRN construction)
+- [x] Axiom 4: Coherent Evolution dynamics
 - [ ] Jupyter notebook for AHS/ACW demonstration
 
 **Phase 3 Preparation:**
-- [ ] Harmony Functional implementation
-- [ ] ARO optimization for v16.0
+- [x] Harmony Functional implementation (basic, in dynamics.py)
+- [x] ARO optimization for v16.0 (AdaptiveResonanceOptimization class)
 
 **Pre-existing Issues (not from this session):**
 - 2 failing tests in `test_ahs.py` (complex_amplitude_various_phases, equality_phase_tolerance)
@@ -735,8 +735,101 @@ Following the AGENT_HANDOFF_V16 instructions (Option A: Incremental Foundation B
 # Run all v16 tests
 cd python && python -m pytest tests/v16/ -v
 
-# Test ACW module specifically
-cd python && python -m pytest tests/v16/test_acw.py -v
+# Test specific modules
+cd python && python -m pytest tests/v16/test_crn.py -v
+cd python && python -m pytest tests/v16/test_dynamics.py -v
+```
+
+---
+
+## Session 3: Phase 3 Implementation (2025-12-09)
+
+### Completed This Session
+
+Following the AGENT_HANDOFF_V16 instructions, implemented remaining Axioms 2-4:
+
+**Axiom 2 Implementation (CRN Module - `python/src/irh/core/v16/crn.py`):**
+- ✅ `CymaticResonanceNetwork` class: Full CRN data structure per IRHv16.md §1 Axiom 2
+- ✅ `EPSILON_THRESHOLD = 0.730129`: Universal constant from manuscript
+- ✅ Network metrics: num_edges, edge_density, degree distribution
+- ✅ Connectivity analysis: is_connected() using scipy
+- ✅ Holonomy computation: cycle_holonomy(), cycle_phase() per IRHv16.md §2
+- ✅ Frustration density: compute_frustration_density() per Definition 2.1
+- ✅ Interference matrix: get_interference_matrix() for L = D - W
+- ✅ `derive_epsilon_threshold()`: Simplified phase transition analysis
+
+**Axiom 4 Implementation (Dynamics Module - `python/src/irh/core/v16/dynamics.py`):**
+- ✅ `EvolutionState` dataclass: Network state at time τ
+- ✅ `CoherentEvolution` class: Unitary evolution per IRHv16.md §1 Axiom 4
+  - Evolution operator U = exp(-i·dt·L) 
+  - W(τ+1) = U @ W @ U† similarity transformation
+  - Unitarity verification
+  - Information conservation check
+  - Harmony functional computation (basic version)
+- ✅ `AdaptiveResonanceOptimization` class: Global optimization
+  - ARO optimization loop
+  - Best state tracking
+  - Convergence metrics
+
+**Unit Tests:**
+- ✅ 21 new tests in `test_crn.py` covering CRN creation, properties, holonomy, frustration
+- ✅ 18 new tests in `test_dynamics.py` covering evolution, unitarity, ARO
+- ✅ All 39 new tests passing
+- ✅ Total: 90/92 tests passing (2 pre-existing failures in test_ahs.py)
+
+**Package Updates:**
+- ✅ Updated `__init__.py` to export all new classes and functions
+- ✅ Complete API for Axioms 0, 1, 2, and 4
+
+### Success Criteria Met
+
+**Phase 2 (Complete):**
+- ✅ Axiom 0 (AHS): Complete
+- ✅ Axiom 1 (ACW): Complete
+- ✅ Axiom 2 (CRN): Complete
+- ✅ Axiom 4 (Evolution): Complete
+
+**Phase 3 Preparation:**
+- ✅ Basic Harmony Functional (in dynamics.py)
+- ✅ ARO implementation (AdaptiveResonanceOptimization class)
+
+### Remaining Work
+
+**Documentation:**
+- [ ] Jupyter notebook demonstrating full pipeline
+- [ ] API documentation updates
+
+**Future Phases:**
+- [ ] Axiom 3: Holographic Principle (advanced)
+- [ ] Physics derivations (quantum emergence, gauge groups, etc.)
+- [ ] Exascale optimization
+
+### How to Use the New Implementation
+
+```python
+from irh.core.v16 import (
+    AlgorithmicHolonomicState,
+    create_ahs_network,
+    CymaticResonanceNetwork,
+    CoherentEvolution,
+    AdaptiveResonanceOptimization,
+)
+
+# Create AHS network (Axiom 0)
+states = create_ahs_network(N=50, seed=42)
+
+# Build CRN (Axiom 2)
+crn = CymaticResonanceNetwork.from_states(states)
+print(f"Network: {crn.N} nodes, {crn.num_edges} edges")
+
+# Compute frustration density
+rho = crn.compute_frustration_density()
+print(f"Frustration density: {rho:.6f}")
+
+# Run ARO optimization (Axiom 4)
+aro = AdaptiveResonanceOptimization(crn, dt=0.1)
+best = aro.optimize(max_steps=100, verbose=True)
+print(f"Best harmony: {best.harmony:.6f}")
 ```
 
 ---
