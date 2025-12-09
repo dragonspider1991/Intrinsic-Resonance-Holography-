@@ -10,7 +10,6 @@ References:
 
 import pytest
 import numpy as np
-from irh.core.v16.ahs import create_ahs_network
 from irh.core.v16.crn import CymaticResonanceNetwork
 from irh.core.v16.holographic import (
     Subnetwork,
