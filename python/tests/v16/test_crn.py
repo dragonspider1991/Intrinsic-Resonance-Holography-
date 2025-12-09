@@ -12,7 +12,7 @@ References:
 import pytest
 import numpy as np
 import scipy.sparse as sp
-from irh.core.v16.ahs import AlgorithmicHolonomicState, create_ahs_network
+from irh.core.v16.ahs import create_ahs_network
 from irh.core.v16.crn import (
     CymaticResonanceNetwork,
     EPSILON_THRESHOLD,
