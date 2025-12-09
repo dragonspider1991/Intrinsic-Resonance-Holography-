@@ -68,7 +68,7 @@ class TestAlgorithmicHolonomicState:
     
     def test_invalid_binary_string_type(self):
         """Test rejection of non-string binary_string."""
-        with pytest.raises(TypeError, match="must be bytes"):
+        with pytest.raises(TypeError, match="str, bytes, or bytearray"):
             AlgorithmicHolonomicState(101010, 0.0)
     
     def test_invalid_phase_type(self):
