@@ -217,8 +217,9 @@ def phase1_demonstration(N: int = 100, seed: int = 42):
         logger.info("  • Nodes: AHS (Algorithmic Holonomic States)")
         
         if use_full_impl:
-            logger.info(f"  • Edge threshold: ε = {EPSILON_THRESHOLD_CERTIFIED.value}")
-            logger.info(f"    (Derived from network criticality: ε = 0.730129 ± 10^-6)")
+            from numerics import EPSILON_THRESHOLD_CERTIFIED
+            logger.info(f"  • Edge threshold: ε = {EPSILON_THRESHOLD_CERTIFIED.value:.6f}")
+            logger.info(f"    (Derived from network criticality: ε = {EPSILON_THRESHOLD_CERTIFIED.value} ± {EPSILON_THRESHOLD_CERTIFIED.error})")
         else:
             logger.info(f"  • Edge threshold: ε ≈ 0.730129 (network criticality)")
         
@@ -231,6 +232,7 @@ def phase1_demonstration(N: int = 100, seed: int = 42):
         logger.info("  • ℒ: Complex graph Laplacian (Interference Matrix)")
         
         if use_full_impl:
+            from numerics import C_H_CERTIFIED
             logger.info(f"  • C_H: Universal constant = {C_H_CERTIFIED.value}")
             logger.info(f"    Error bound: ± {C_H_CERTIFIED.error}")
             logger.info(f"    Source: {C_H_CERTIFIED.source}")
