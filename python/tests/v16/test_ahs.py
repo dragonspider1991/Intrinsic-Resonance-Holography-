@@ -43,13 +43,13 @@ class TestAlgorithmicHolonomicState:
         
     def test_complex_amplitude_various_phases(self):
         """Test complex amplitude for various phases."""
-        phases = [0, np.pi/2, np.pi, 3*np.pi/2]
+        phases = [0, np.pi/2, np.pi, 3*np.pi/2, 2 * np.pi - 1e-12]
         for phase in phases:
             ahs = AlgorithmicHolonomicState("1", phase)
             amp = ahs.complex_amplitude
             assert np.isclose(abs(amp), 1.0)
-            wrapped_angle = (np.angle(amp) + 2 * np.pi) % (2 * np.pi)
-            assert np.isclose(wrapped_angle, phase)
+            wrapped_angle = np.mod(np.angle(amp), 2 * np.pi)
+            assert np.isclose(wrapped_angle, np.mod(phase, 2 * np.pi))
             
     def test_invalid_binary_string_non_binary(self):
         """Test validation of binary string."""
@@ -95,6 +95,11 @@ class TestAlgorithmicHolonomicState:
         
         assert ahs1 == ahs2
         assert ahs1 != ahs3
+    
+    def test_wrapped_phase_difference_pi(self):
+        """Test that a π difference wraps to -π."""
+        diff = AlgorithmicHolonomicState._wrapped_phase_difference(0.0, np.pi)
+        assert np.isclose(diff, -np.pi)
         
     def test_hashing(self):
         """Test AHS can be used in sets/dicts."""
