@@ -64,7 +64,7 @@ class AlgorithmicHolonomicState:
         allowed_bytes = {ord('0'), ord('1')}
         original_binary = self.binary_string
         if isinstance(original_binary, str):
-            object.__setattr__(self, "binary_string", original_binary.encode('utf-8'))
+            object.__setattr__(self, "binary_string", original_binary.encode('ascii'))
         elif isinstance(original_binary, bytearray):
             object.__setattr__(self, "binary_string", bytes(original_binary))
         elif not isinstance(original_binary, bytes):
@@ -150,7 +150,7 @@ class AlgorithmicHolonomicState:
     def __repr__(self) -> str:
         """Developer-friendly representation."""
         info_bytes = self.binary_string[:8]
-        info_str = info_bytes.decode('ascii', errors='ignore')
+        info_str = info_bytes.decode('ascii')
         info = info_str + "..." if len(self.binary_string) > 8 else info_str
         return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
 
@@ -260,7 +260,7 @@ def create_ahs_network(
     for i in range(N):
         # Generate random binary string (10-20 bits for demonstration)
         bit_length = rng.integers(10, 21)
-        binary_str = ''.join(str(rng.integers(0, 2)) for _ in range(bit_length)).encode('ascii')
+        binary_str = bytes([ord('0') + rng.integers(0, 2) for _ in range(bit_length)])
         
         # Initialize phase
         if phase_distribution == "uniform":
