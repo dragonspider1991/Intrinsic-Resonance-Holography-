@@ -31,7 +31,7 @@ References:
 """
 
 from __future__ import annotations
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
 
@@ -78,7 +78,7 @@ def compute_harmony_functional(
     crn: 'CymaticResonanceNetworkV16',
     use_certified_constant: bool = True,
     eigenvalue_threshold: float = 1e-10
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Compute the Harmony Functional S_H[G] for a Cymatic Resonance Network.
     
@@ -160,7 +160,7 @@ def compute_harmony_functional(
     }
 
 
-def validate_harmony_functional_properties(result: Dict[str, any]) -> bool:
+def validate_harmony_functional_properties(result: Dict[str, Any]) -> bool:
     """
     Validate that Harmony Functional result has expected properties.
     
@@ -251,7 +251,7 @@ class HarmonyFunctionalEvaluator:
             # Degenerate network - return very low fitness
             return -np.inf
     
-    def get_convergence_metrics(self) -> Dict[str, any]:
+    def get_convergence_metrics(self) -> Dict[str, Any]:
         """
         Get convergence metrics for ARO.
         

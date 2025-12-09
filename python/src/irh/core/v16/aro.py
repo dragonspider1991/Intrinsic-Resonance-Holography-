@@ -96,7 +96,7 @@ class AROOptimizerV16:
         self,
         N: int,
         population_size: int = 20,
-        epsilon_threshold: float = 0.5,  # Lower for Phase 1 testing
+        epsilon_threshold: float = 0.5,  # Lower than 0.730129 for Phase 1 (ensures edges exist)
         initial_temperature: float = 1.0,
         cooling_rate: float = 0.95,
         seed: Optional[int] = None
@@ -242,16 +242,23 @@ class AROOptimizerV16:
             for s in config.crn.states
         ]
         
+        # Initialize threshold_mutation to default
+        threshold_mutation = self.epsilon_threshold
+        
         if mutation_type == 'ahs_content':
             # Mutate binary strings of AHS
             idx = self.rng.integers(0, len(new_states))
-            # Flip a random bit
-            bits = list(new_states[idx].binary_string)
-            if len(bits) > 0:
-                flip_idx = self.rng.integers(0, len(bits))
-                bits[flip_idx] = '1' if bits[flip_idx] == '0' else '0'
+            # Flip a random bit (more efficient than list conversion)
+            binary_str = new_states[idx].binary_string
+            if len(binary_str) > 0:
+                flip_idx = self.rng.integers(0, len(binary_str))
+                new_binary = (
+                    binary_str[:flip_idx] + 
+                    ('1' if binary_str[flip_idx] == '0' else '0') + 
+                    binary_str[flip_idx+1:]
+                )
                 new_states[idx] = AlgorithmicHolonomicState(
-                    ''.join(bits),
+                    new_binary,
                     new_states[idx].holonomic_phase
                 )
         
@@ -259,20 +266,18 @@ class AROOptimizerV16:
             # Modify network by adjusting threshold slightly
             # This changes which edges exist
             threshold_mutation = self.epsilon_threshold * self.rng.uniform(0.95, 1.05)
-        else:
-            threshold_mutation = self.epsilon_threshold
         
         # Rebuild CRN with mutations
         new_crn = create_crn_from_states(
             new_states,
-            epsilon_threshold=threshold_mutation if mutation_type == 'topology' else self.epsilon_threshold
+            epsilon_threshold=threshold_mutation
         )
         
         return AROConfiguration(
             crn=new_crn,
             S_H=-np.inf,
             generation=self.generation + 1,
-            parent_ids=[id(config)]
+            parent_ids=[],  # Genealogy tracking simplified for Phase 1
         )
     
     def step(self) -> None:
