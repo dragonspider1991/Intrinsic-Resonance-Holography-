@@ -201,11 +201,11 @@ class TestCRNInterferenceMatrix:
         diag = np.diag(L)
         off_diag_row_sum = np.sum(L, axis=1) - diag
         
+        # Assert that the sum of each row (excluding the diagonal) is close to zero
+        assert np.allclose(off_diag_row_sum, 0, atol=1e-10)
         # L_ii should equal sum of |W_ij| for j != i
         # So L_ii + (-W_ii) - Σ_{j≠i} W_ij ≈ 0
         # This is approximate for complex weights
-
-
 class TestEpsilonThreshold:
     """Test epsilon threshold derivation."""
     
