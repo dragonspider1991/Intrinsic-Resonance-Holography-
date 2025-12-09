@@ -25,19 +25,14 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, List, Tuple, Dict, Set
+from typing import Optional, List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 import scipy.sparse as sp
 from scipy.sparse.csgraph import connected_components
 
 from .ahs import AlgorithmicHolonomicState, create_ahs_network
-from .acw import (
-    AlgorithmicCoherenceWeight,
-    compute_ncd_magnitude,
-    compute_phase_shift,
-    build_acw_matrix,
-)
+from .acw import build_acw_matrix
 
 
 # Universal threshold from IRHv16.md
@@ -416,6 +411,8 @@ def derive_epsilon_threshold(
                 if crn.is_connected():
                     connected_count += 1
             except Exception:
+                # Network creation may fail for edge cases (e.g., invalid parameters)
+                # Skip failed samples and continue with remaining trials
                 pass
         connectivity_rates.append(connected_count / N_samples)
     

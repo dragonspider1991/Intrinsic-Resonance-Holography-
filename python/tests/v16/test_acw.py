@@ -234,12 +234,14 @@ class TestBuildACWMatrix:
         W = build_acw_matrix(states, epsilon_threshold=0.1, sparse=False)
         
         # Find at least one non-real entry
-        has_complex = False
+        found_complex = False
         for i in range(10):
             for j in range(10):
                 if i != j and W[i, j] != 0 and np.imag(W[i, j]) != 0:
-                    has_complex = True
+                    found_complex = True
                     break
+            if found_complex:
+                break
         # Due to phase differences, there should be some complex entries
         # (unless all phases happen to align, which is unlikely with random seed)
 

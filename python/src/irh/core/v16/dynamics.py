@@ -22,15 +22,14 @@ References:
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Optional, List, Tuple, Callable
+from dataclasses import dataclass
+from typing import Optional, List, Tuple, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
-from numpy.linalg import eigh, norm
+from numpy.linalg import norm
 import scipy.sparse as sp
 from scipy.linalg import expm
 
-from .ahs import AlgorithmicHolonomicState
 from .crn import CymaticResonanceNetwork
 
 
@@ -463,7 +462,7 @@ class AdaptiveResonanceOptimization:
         
         return self.best_state if self.best_state else current
     
-    def get_convergence_metrics(self) -> dict:
+    def get_convergence_metrics(self) -> Dict[str, Any]:
         """
         Get metrics about the optimization convergence.
         

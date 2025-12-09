@@ -31,8 +31,8 @@ References:
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Optional, List, Tuple, Set, Dict
+from dataclasses import dataclass
+from typing import Optional, Tuple, Set, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
 import scipy.sparse as sp
@@ -47,6 +47,13 @@ from .crn import CymaticResonanceNetwork
 #             Current value is a placeholder for testing the implementation structure.
 HOLOGRAPHIC_CONSTANT_K = 1.0  # Placeholder, needs derivation from theory
 HOLOGRAPHIC_CONSTANT_K_ERROR = 0.1  # Placeholder uncertainty
+
+# Holographic entropy factor: S_holo = HOLOGRAPHIC_ENTROPY_FACTOR * A_boundary
+# Per Bekenstein-Hawking formula: S = (1/4) * A / l_p^2
+HOLOGRAPHIC_ENTROPY_FACTOR = 0.25
+
+# Linear scaling tolerance: β is considered linear if |β - 1| < LINEAR_SCALING_TOLERANCE
+LINEAR_SCALING_TOLERANCE = 0.2  # Within 20% of β=1
 
 
 @dataclass
@@ -109,7 +116,6 @@ class Subnetwork:
         
         Per IRHv16.md: Σ_{v ∈ ∂G_A} deg(v)
         """
-        A = self.parent_crn.get_adjacency_matrix()
         in_deg, out_deg = self.parent_crn.get_degree_distribution()
         
         total_degree = 0
@@ -263,7 +269,7 @@ class HolographicAnalyzer:
         n_samples: int = 20,
         size_range: Tuple[int, int] = None,
         seed: Optional[int] = None
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Test the holographic scaling relationship.
         
@@ -334,7 +340,7 @@ class HolographicAnalyzer:
             "log_a": float(log_a),
             "r_squared": float(r_squared),
             "n_samples": len(boundary_capacities),
-            "is_linear_scaling": abs(beta - 1.0) < 0.2,  # Within 20% of β=1
+            "is_linear_scaling": abs(beta - 1.0) < LINEAR_SCALING_TOLERANCE,
             "boundary_capacities": boundary_capacities,
             "information_contents": information_contents
         }
@@ -346,7 +352,7 @@ class HolographicAnalyzer:
         The holographic entropy is related to the boundary area
         in the emergent geometry.
         
-        S_holo = (1/4) * A_boundary
+        S_holo = HOLOGRAPHIC_ENTROPY_FACTOR * A_boundary
         
         For discrete networks, we use boundary degree sum as area proxy.
         
@@ -358,12 +364,12 @@ class HolographicAnalyzer:
         """
         # Using boundary degree sum as discrete analog of boundary area
         area = subnetwork.boundary_degree_sum
-        return 0.25 * area
+        return HOLOGRAPHIC_ENTROPY_FACTOR * area
     
     def analyze_all_sizes(
         self,
         seed: Optional[int] = None
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Comprehensive holographic analysis across all subnetwork sizes.
         
@@ -413,7 +419,7 @@ def verify_holographic_principle(
     crn: CymaticResonanceNetwork,
     n_tests: int = 100,
     seed: Optional[int] = None
-) -> Tuple[float, Dict[str, any]]:
+) -> Tuple[float, Dict[str, Any]]:
     """
     Verify the Combinatorial Holographic Principle on a CRN.
     
