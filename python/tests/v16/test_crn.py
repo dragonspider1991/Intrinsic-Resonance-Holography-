@@ -104,13 +104,15 @@ class TestCRNConnectivity:
     def test_small_connected_network(self):
         """Test small networks with low threshold are connected."""
         # Use very low threshold to ensure connectivity
-        crn = CymaticResonanceNetwork.create_random(
+        small_crn = CymaticResonanceNetwork.create_random(
             N=5, 
             epsilon_threshold=0.1,
             seed=42
         )
         # With low threshold, likely connected
         # (not guaranteed, but likely for small N)
+        # Verify the network was created successfully
+        assert small_crn.N == 5
 
 
 class TestCRNHolonomy:
