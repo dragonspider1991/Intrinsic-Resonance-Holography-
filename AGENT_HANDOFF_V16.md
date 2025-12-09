@@ -662,16 +662,82 @@ This task requires:
 
 ## Contact and Continuity
 
-**Current Status:** Phase 1 complete (Assessment & Structure)  
-**Next Phase:** Phase 2 (Core Implementation - Axioms 0-1)  
+**Current Status:** Phase 2 in progress (Core Implementation - Axioms 0-1)  
+**Next Phase:** Phase 2 continued (Axioms 2-4)  
 **Repository:** https://github.com/dragonspider1991/Intrinsic-Resonance-Holography-  
-**Branch:** copilot/implement-intrinsic-resonance-holography-again  
+**Branch:** copilot/start-next-phase  
 
 **Questions?** Review:
 1. This handoff document
 2. `docs/v16_IMPLEMENTATION_ROADMAP.md`
 3. Placeholder module docstrings
-4. Original v16.0 manuscript (problem statement)
+4. Original v16.0 manuscript (`docs/manuscripts/IRHv16.md`)
+
+---
+
+## Session 2: Phase 2 Implementation Progress (2025-12-09)
+
+### Completed This Session
+
+Following the AGENT_HANDOFF_V16 instructions (Option A: Incremental Foundation Building):
+
+**Axiom 1 Implementation (ACW Module - `python/src/irh/core/v16/acw.py`):**
+- ✅ `compute_ncd_magnitude()`: Implemented NCD formula from IRHv16.md §1 Axiom 1
+- ✅ `compute_phase_shift()`: Implemented phase shift computation with IRHv16.md references
+- ✅ `build_acw_matrix()`: Implemented sparse matrix construction per Axiom 2
+- ✅ `AlgorithmicCoherenceWeight` dataclass: Complete with validation, `__post_init__`, `__repr__`
+- ✅ Module status updated to reflect Phase 2 implementation
+
+**Unit Tests (`python/tests/v16/test_acw.py`):**
+- ✅ 27 new tests covering ACW dataclass, NCD computation, phase shift, matrix building
+- ✅ All 27 ACW tests passing
+- ✅ Integration tests: AHS → ACW pipeline
+
+**References to IRHv16.md:**
+- All functions include detailed docstrings referencing specific sections of `docs/manuscripts/IRHv16.md`
+- NCD formula references IRHv16.md §1 Axiom 1 and Theorem 1.1
+- Matrix construction references Axiom 2 (epsilon_threshold = 0.730129)
+- Phase shift computation references Axiom 1 phase definition
+
+### Success Criteria Met
+
+**Minimum (Good Progress):** ✅ COMPLETE
+- ✅ Complete `AlgorithmicHolonomicState` class with tests (from previous session)
+- ✅ Basic NCD implementation with tests
+- ✅ Documentation for Axioms 0-1 (in code docstrings)
+- ✅ Updated handoff document
+
+**Target (Excellent Progress):** ✅ MOSTLY COMPLETE
+- ✅ All of minimum
+- ✅ `AlgorithmicCoherenceWeight` class complete
+- ✅ Working ACW matrix builder (small N)
+- ✅ Integration test: AHS → ACW → sparse matrix
+- ❌ Jupyter notebook demonstrating usage (not started)
+
+### Remaining Work for Next Session
+
+**Phase 2 Completion:**
+- [ ] Axiom 2: Network Emergence utilities (CRN construction)
+- [ ] Axiom 4: Coherent Evolution dynamics
+- [ ] Jupyter notebook for AHS/ACW demonstration
+
+**Phase 3 Preparation:**
+- [ ] Harmony Functional implementation
+- [ ] ARO optimization for v16.0
+
+**Pre-existing Issues (not from this session):**
+- 2 failing tests in `test_ahs.py` (complex_amplitude_various_phases, equality_phase_tolerance)
+- These existed before Phase 2 work began
+
+### How to Continue
+
+```bash
+# Run all v16 tests
+cd python && python -m pytest tests/v16/ -v
+
+# Test ACW module specifically
+cd python && python -m pytest tests/v16/test_acw.py -v
+```
 
 ---
 

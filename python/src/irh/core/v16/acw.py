@@ -24,7 +24,7 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Union
 import zlib
 import numpy as np
 from numpy.typing import NDArray
@@ -194,69 +194,126 @@ def compute_ncd_magnitude(
 
 
 def compute_phase_shift(
-    state_i: 'AlgorithmicHolonomicState',  # type: ignore
-    state_j: 'AlgorithmicHolonomicState'   # type: ignore
+    state_i: AlgorithmicHolonomicState,
+    state_j: AlgorithmicHolonomicState
 ) -> float:
     """
     Compute minimal holonomic phase shift arg(W_ij).
     
-    This is the phase acquired in the most efficient transformation from
-    state_i to state_j, determined by AHS algebra composition rules.
+    Per IRHv16.md §1 Axiom 1:
+        "The phase arg(W_ij) quantifies the minimal holonomic phase shift 
+        required to coherently transform the holonomic phase of s_i to s_j.
+        This phase is determined by the compositional rules of AHS algebra
+        (Axiom 0), ensuring the most efficient, interference-minimized path
+        in abstract computational space."
     
-    TODO v16.0: Implement using [IRH-MATH-2025-01] Theorem 1.3
-    - Compute all possible transformation paths
-    - Find minimal interference path
-    - Account for non-commutativity
+    Current implementation: Simplified version using angular difference.
+    Full v16.0 requires non-commutative path integral from [IRH-MATH-2025-01].
     
     Args:
-        state_i: Source AHS
-        state_j: Target AHS
+        state_i: Source AHS with holonomic phase φ_i
+        state_j: Target AHS with holonomic phase φ_j
         
     Returns:
-        Phase shift in [0, 2π)
+        Phase shift in [0, 2π) representing minimal angular distance
         
     References:
-        [IRH-MATH-2025-01] Theorem 1.3: Minimal holonomic phase shifts
+        IRHv16.md §1 Axiom 1: Phase definition
+        [IRH-MATH-2025-01] Theorem 1.3: Full non-commutative derivation (future)
     """
-    raise NotImplementedError(
-        "v16.0: Requires phase shift computation from [IRH-MATH-2025-01]"
-    )
+    # Simple implementation: minimal angular distance (modular arithmetic)
+    # This is the "most efficient path" in the simplified case
+    delta = state_j.holonomic_phase - state_i.holonomic_phase
+    
+    # Normalize to [0, 2π) per manuscript definition
+    delta = delta % (2 * np.pi)
+    
+    return delta
 
 
 def build_acw_matrix(
-    states: list,  # list[AlgorithmicHolonomicState]
+    states: List[AlgorithmicHolonomicState],
     epsilon_threshold: float = 0.730129,
-    distributed: bool = False,
-    mpi_comm = None
-) -> NDArray[np.complex128]:
+    compression_level: int = 6,
+    sparse: bool = True
+) -> Union[NDArray[np.complex128], sp.csr_matrix]:
     """
     Build complex-valued ACW matrix W for network of AHS.
     
-    v16.0: This creates the Cymatic Resonance Network substrate.
-    W_ij exists (is non-zero) iff |W_ij| > epsilon_threshold.
+    Per IRHv16.md §1 Axiom 2 (Network Emergence Principle):
+        "Any system of Algorithmic Holonomic States satisfying Axiom 1 can be
+        represented uniquely and minimally as a complex-weighted, directed
+        Cymatic Resonance Network (CRN) G = (V, E, W) where:
+        - V = S (nodes are AHS)
+        - (s_i, s_j) ∈ E iff |W_ij| > ε_threshold
+        - W_ij ∈ ℂ as defined in Axiom 1."
     
-    TODO v16.0: Implement exascale-optimized version
-    - Distributed computation across MPI ranks
-    - GPU acceleration for NCD evaluation
-    - Sparse matrix storage for N ≥ 10^12
-    - Dynamic load balancing
+    Per IRHv16.md on epsilon_threshold:
+        "Computational Value: Exhaustive, multi-fidelity computational analysis
+        (N ≥ 10^12) confirms ε_threshold = 0.730129 ± 10^{-6}, a rigorously
+        derived constant. This is not chosen, but necessitated by the underlying
+        phase dynamics."
     
     Args:
-        states: List of AlgorithmicHolonomicState objects
-        epsilon_threshold: Edge inclusion threshold (from Axiom 2)
-        distributed: Whether to use MPI parallelization
-        mpi_comm: MPI communicator (required if distributed=True)
+        states: List of AlgorithmicHolonomicState objects (network nodes)
+        epsilon_threshold: Edge inclusion threshold (default from manuscript)
+        compression_level: zlib compression level for NCD computation
+        sparse: If True, return scipy sparse matrix (recommended for N > 1000)
         
     Returns:
-        N×N complex sparse matrix W_ij
+        N×N complex matrix W_ij where W_ij = 0 if |W_ij| <= epsilon_threshold
         
     References:
-        [IRH-COMP-2025-02] §3: Distributed ACW matrix construction
-        Main Manuscript: Axiom 2 (Network Emergence Principle)
+        IRHv16.md §1 Axiom 2: Network Emergence Principle
+        IRHv16.md §1 Axiom 1: ACW definition
+        [IRH-COMP-2025-02] §3: Distributed version (future)
     """
-    raise NotImplementedError(
-        "v16.0: Requires distributed matrix builder from [IRH-COMP-2025-02]"
-    )
+    N = len(states)
+    if N == 0:
+        raise ValueError("states list cannot be empty")
+    
+    # Build dense matrix first (for small N)
+    # TODO v16.0: Distributed computation for N >= 10^12
+    if N > 5000:
+        import warnings
+        warnings.warn(
+            f"Building ACW matrix for N={N} may be slow. "
+            "For N > 5000, consider distributed implementation from [IRH-COMP-2025-02]."
+        )
+    
+    # Initialize matrix
+    W = np.zeros((N, N), dtype=np.complex128)
+    
+    for i in range(N):
+        for j in range(N):
+            if i == j:
+                # Self-coherence is maximal by definition
+                W[i, j] = 1.0 + 0j
+                continue
+                
+            # Compute magnitude |W_ij| via NCD
+            ncd, _ = compute_ncd_magnitude(
+                states[i].binary_string,
+                states[j].binary_string,
+                compression_level=compression_level
+            )
+            
+            # Apply threshold (Axiom 2)
+            if ncd <= epsilon_threshold:
+                W[i, j] = 0.0 + 0j
+                continue
+            
+            # Compute phase arg(W_ij)
+            phase = compute_phase_shift(states[i], states[j])
+            
+            # Construct complex weight W_ij = |W_ij| * e^{i*arg(W_ij)}
+            W[i, j] = ncd * np.exp(1j * phase)
+    
+    # Convert to sparse if requested
+    if sparse:
+        return sp.csr_matrix(W)
+    
+    return W
 
 
 # Multi-fidelity strategies
@@ -298,7 +355,7 @@ class MultiFidelityNCDEvaluator:
 
 
 __version__ = "16.0.0-dev"
-__status__ = "PLACEHOLDER - Requires [IRH-COMP-2025-02] §2-3"
+__status__ = "Phase 2 Implementation - Core functions implemented, multi-fidelity pending"
 
 __all__ = [
     "AlgorithmicCoherenceWeight",
