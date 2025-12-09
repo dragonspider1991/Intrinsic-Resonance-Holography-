@@ -37,7 +37,6 @@ import numpy as np
 from numpy.typing import NDArray
 import scipy.sparse as sp
 
-from .ahs import AlgorithmicHolonomicState
 from .crn import CymaticResonanceNetwork
 
 
