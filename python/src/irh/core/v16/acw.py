@@ -4,27 +4,33 @@ Axiom 1: Algorithmic Relationality - Complex-Valued Coherence Weights
 This module implements the computation of Algorithmic Coherence Weights (ACW)
 W_ij ∈ ℂ between pairs of Algorithmic Holonomic States.
 
-Key Concepts:
+Key Concepts (from IRHv16.md §1):
     - |W_ij| = Normalized Compression Distance (NCD) from K_t
+      Formula: C_ij = [K_t(b_i) + K_t(b_j) - K_t(b_i ∘ b_j)] / max(K_t(b_i), K_t(b_j))
     - arg(W_ij) = Minimal holonomic phase shift from AHS algebra
     - Multi-fidelity evaluation for exascale (N ≥ 10^12)
     - Certified error bounds (Theorem 1.1)
 
-Implementation Status: PLACEHOLDER - Requires [IRH-COMP-2025-02]
+Implementation Status: Phase 2 Implementation
+    - Basic NCD computation: IMPLEMENTED
+    - Phase shift computation: IMPLEMENTED (simplified)
+    - Multi-fidelity evaluation: PLACEHOLDER
 
 References:
-    Main Manuscript §1: Axiom 1 precise definition
-    [IRH-COMP-2025-02] §2: Multi-fidelity NCD computation
+    IRHv16.md §1 (Axiom 1): Precise definition of ACW
+    IRHv16.md Theorem 1.1: Convergence of NCD to Algorithmic Correlation
+    [IRH-COMP-2025-02] §2: Multi-fidelity NCD computation (future)
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
-from typing import Optional, Tuple
+from dataclasses import dataclass, field
+from typing import Optional, Tuple, List
+import zlib
 import numpy as np
 from numpy.typing import NDArray
+import scipy.sparse as sp
 
-# TODO: Import AHS when implemented
-# from .ahs import AlgorithmicHolonomicState
+from .ahs import AlgorithmicHolonomicState
 
 
 @dataclass
@@ -32,25 +38,39 @@ class AlgorithmicCoherenceWeight:
     """
     Complex-valued coherence weight W_ij between two AHS.
     
-    v16.0: Fundamental relationship quantifying coherent transfer potential.
+    v16.0: Fundamental relationship quantifying coherent transfer potential
+    as defined in IRHv16.md §1 (Axiom 1).
+    
+    Per IRHv16.md:
+        "For any ordered pair (s_i, s_j), this potential is represented by a
+        complex-valued Algorithmic Coherence Weight W_ij ∈ ℂ."
     
     Attributes:
-        magnitude: |W_ij| from NCD (algorithmic compressibility)
-        phase: arg(W_ij) from holonomic phase shift
+        magnitude: |W_ij| from NCD (algorithmic compressibility) ∈ [0, 1]
+        phase: arg(W_ij) from holonomic phase shift ∈ [0, 2π)
         error_bound: Certified numerical error (from Theorem 1.1)
+        method: Computation method used ("lzw", "sampling", etc.)
         
     Properties:
         complex_value: W_ij as complex number
         
-    TODO v16.0:
-        - Add metadata for computation method (LZW vs sampling)
-        - Include convergence metrics
-        - Support distributed serialization
+    References:
+        IRHv16.md §1 Axiom 1: Definition of ACW
+        IRHv16.md Theorem 1.1: NCD convergence with error bounds
     """
     
     magnitude: float  # |W_ij| ∈ [0, 1] from NCD
     phase: float  # arg(W_ij) ∈ [0, 2π)
-    error_bound: float = 1e-12  # Certified error
+    error_bound: float = 1e-6  # Certified error (conservative default)
+    method: str = "lzw"  # Computation method
+    
+    def __post_init__(self):
+        """Validate and normalize ACW values."""
+        # Validate magnitude range
+        if not 0 <= self.magnitude <= 1:
+            raise ValueError(f"magnitude must be in [0, 1], got {self.magnitude}")
+        # Normalize phase to [0, 2π)
+        self.phase = float(self.phase) % (2 * np.pi)
     
     @property
     def complex_value(self) -> complex:
@@ -60,41 +80,117 @@ class AlgorithmicCoherenceWeight:
     def __complex__(self) -> complex:
         """Allow complex(w_ij) conversion."""
         return self.complex_value
+    
+    def __repr__(self) -> str:
+        """Developer representation."""
+        return (f"ACW(|W|={self.magnitude:.6f}, arg(W)={self.phase:.4f}, "
+                f"±{self.error_bound:.2e}, method='{self.method}')")
 
 
 def compute_ncd_magnitude(
     binary1: str,
     binary2: str,
     method: str = "lzw",
+    compression_level: int = 6,
     time_bound: Optional[int] = None
 ) -> Tuple[float, float]:
     """
     Compute Normalized Compression Distance magnitude |W_ij|.
     
-    NCD formula from Axiom 1:
-    |W_ij| = [K_t(b_i) + K_t(b_j) - K_t(b_i ∘ b_j)] / max(K_t(b_i), K_t(b_j))
+    NCD formula from IRHv16.md §1 Axiom 1:
+        C_ij^(t) := [K_t(b_i) + K_t(b_j) - K_t(b_i ∘ b_j)] / max(K_t(b_i), K_t(b_j))
     
-    TODO v16.0: Implement multi-fidelity evaluation
-    - LZW compression for short-range (L ~ 10^3-10^4)
-    - Statistical sampling for long-range
-    - Certified error bounds from [IRH-COMP-2025-02] §2.1
+    where K_t is the resource-bounded Kolmogorov complexity computed using
+    a universal Turing machine within time bound t = O(N log N).
+    
+    Per IRHv16.md Theorem 1.1 (Convergence of NCD to Algorithmic Correlation):
+        "Proven using Certified Numerical Analysis on randomized data streams
+        of increasing length (up to L=10^8 bits), demonstrating convergence of
+        statistical moments and error bounds for C_ij^(t) to within 10^{-12}
+        for typical CRN states."
+    
+    Current implementation uses zlib (LZ77-based) as proxy for LZW.
     
     Args:
-        binary1: First binary string
-        binary2: Second binary string
-        method: "lzw" or "sampling"
-        time_bound: Computational time limit for K_t
+        binary1: First binary string b_i
+        binary2: Second binary string b_j
+        method: Compression method - "lzw" (default) or "sampling"
+        compression_level: zlib compression level (1=low/fast, 9=high/slow)
+                          Per memory: level 1 ~5% error, 6 ~2% error, 9 ~1% error
+        time_bound: Computational time limit for K_t (unused in current impl)
         
     Returns:
-        (ncd_value, error_bound) tuple
+        (ncd_value, error_bound) tuple where:
+        - ncd_value ∈ [0, 1] is the normalized compression distance
+        - error_bound is the estimated numerical precision
+        
+    Raises:
+        ValueError: If inputs are invalid
+        NotImplementedError: If unsupported method requested
         
     References:
-        [IRH-COMP-2025-02] §2.1: Multi-fidelity NCD with certified errors
-        Main Manuscript: Theorem 1.1 (Convergence of NCD)
+        IRHv16.md §1 Axiom 1: NCD formula definition
+        IRHv16.md Theorem 1.1: Convergence proof
+        [IRH-COMP-2025-02] §2.1: Multi-fidelity NCD (future)
     """
-    raise NotImplementedError(
-        "v16.0: Requires multi-fidelity NCD from [IRH-COMP-2025-02]"
-    )
+    if method == "sampling":
+        raise NotImplementedError(
+            "v16.0: Statistical sampling method requires [IRH-COMP-2025-02]"
+        )
+    if method != "lzw":
+        raise ValueError(f"Unknown method '{method}', supported: 'lzw'")
+    
+    # Validate inputs
+    if not binary1 or not binary2:
+        raise ValueError("Binary strings cannot be empty")
+    if not all(c in '01' for c in binary1):
+        raise ValueError("binary1 must contain only '0' and '1'")
+    if not all(c in '01' for c in binary2):
+        raise ValueError("binary2 must contain only '0' and '1'")
+    
+    # Convert to bytes for compression
+    b1 = binary1.encode('ascii')
+    b2 = binary2.encode('ascii')
+    b_concat = (binary1 + binary2).encode('ascii')
+    
+    # Compute compressed sizes K_t approximations
+    # Using zlib as proxy for LZW (both are LZ-based)
+    c1 = len(zlib.compress(b1, level=compression_level))
+    c2 = len(zlib.compress(b2, level=compression_level))
+    c_concat = len(zlib.compress(b_concat, level=compression_level))
+    
+    # NCD formula: [K(x) + K(y) - K(xy)] / max(K(x), K(y))
+    # This measures how much joint compression saves vs independent
+    numerator = c1 + c2 - c_concat
+    denominator = max(c1, c2)
+    
+    if denominator == 0:
+        # Edge case: both strings compress to nothing
+        ncd = 0.0
+    else:
+        ncd = numerator / denominator
+        
+    # Clamp to [0, 1] - NCD should be in this range but numerical
+    # issues can cause slight excursions
+    ncd = max(0.0, min(1.0, ncd))
+    
+    # Error estimate based on compression level
+    # These are empirical estimates, not certified bounds
+    # Per repository memory: "level 1 ~5% error, 6 ~2% error, 9 ~1% error"
+    error_estimates = {
+        1: 0.05,  # Low fidelity, ~5% error
+        2: 0.04,
+        3: 0.035,
+        4: 0.03,
+        5: 0.025,
+        6: 0.02,  # Medium fidelity, ~2% error
+        7: 0.015,
+        8: 0.012,
+        9: 0.01,  # High fidelity, ~1% error
+    }
+    error_bound = error_estimates.get(compression_level, 0.02)
+    
+    return ncd, error_bound
 
 
 def compute_phase_shift(
