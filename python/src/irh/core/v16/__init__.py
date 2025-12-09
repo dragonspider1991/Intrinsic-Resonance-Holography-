@@ -11,10 +11,11 @@ Modules:
     ahs: Algorithmic Holonomic States (Axiom 0) - IRHv16.md §1
     acw: Algorithmic Coherence Weights (Axiom 1) - IRHv16.md §1  
     crn: Cymatic Resonance Network (Axiom 2) - IRHv16.md §1
+    harmony: Harmony Functional S_H[G] (Theorem 4.1) - IRHv16.md §4
     
 Coming in subsequent phases:
     evolution: Algorithmic Coherent Evolution (Axiom 4)
-    harmony: Universal Harmony Functional with C_H constant
+    aro: Adaptive Resonance Optimization (Definition 4.1)
 
 References:
     docs/manuscripts/IRHv16.md - Complete v16.0 theoretical framework (2763 lines)
@@ -30,6 +31,11 @@ from .acw import (
     compute_acw
 )
 from .crn import CymaticResonanceNetworkV16, create_crn_from_states
+from .harmony import (
+    compute_harmony_functional,
+    validate_harmony_functional_properties,
+    HarmonyFunctionalEvaluator
+)
 
 __version__ = "16.0.0-dev"
 __all__ = [
@@ -46,4 +52,9 @@ __all__ = [
     # Axiom 2: Network Emergence
     "CymaticResonanceNetworkV16",
     "create_crn_from_states",
+    
+    # Theorem 4.1: Harmony Functional
+    "compute_harmony_functional",
+    "validate_harmony_functional_properties",
+    "HarmonyFunctionalEvaluator",
 ]
