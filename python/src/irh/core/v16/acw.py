@@ -63,8 +63,8 @@ class AlgorithmicCoherenceWeight:
 
 
 def compute_ncd_magnitude(
-    binary1: str,
-    binary2: str,
+    binary1: bytes,
+    binary2: bytes,
     method: str = "lzw",
     time_bound: Optional[int] = None
 ) -> Tuple[float, float]:
@@ -80,11 +80,11 @@ def compute_ncd_magnitude(
     - Error bound estimated from compression ratio variance
     
     Args:
-        binary1: First binary string
-        binary2: Second binary string
+        binary1: First binary string (as bytes)
+        binary2: Second binary string (as bytes)
         method: "lzw" (only method currently implemented)
         time_bound: Computational time limit for K_t (not yet used)
-        
+    
     Returns:
         (ncd_value, error_bound) tuple
         
@@ -101,10 +101,10 @@ def compute_ncd_magnitude(
     if binary1 == binary2:
         return (0.0, 0.0)
     
-    # Convert binary strings to bytes for compression
-    bytes1 = binary1.encode('ascii')
-    bytes2 = binary2.encode('ascii')
-    bytes_concat = (binary1 + binary2).encode('ascii')
+    # binary1 and binary2 are already bytes, no need to encode
+    bytes1 = binary1
+    bytes2 = binary2
+    bytes_concat = binary1 + binary2
     
     # Compress using zlib (LZ77, similar to LZW)
     # Use compression level 9 for maximum compression (high fidelity)
