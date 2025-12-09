@@ -150,7 +150,7 @@ class AlgorithmicHolonomicState:
     def __repr__(self) -> str:
         """Developer-friendly representation."""
         info_bytes = self.binary_string[:8]
-        info_str = info_bytes.decode('ascii')
+        info_str = info_bytes.decode('ascii', errors='ignore')
         info = info_str + "..." if len(self.binary_string) > 8 else info_str
         return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
 
