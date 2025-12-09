@@ -127,7 +127,12 @@ class AlgorithmicHolonomicState:
             return NotImplemented
         return (
             self.binary_string == other.binary_string and
-            np.isclose(self.holonomic_phase, other.holonomic_phase, atol=1e-10)
+            np.isclose(
+                self.holonomic_phase,
+                other.holonomic_phase,
+                atol=1e-10,
+                rtol=0.0
+            )
         )
 
     def __hash__(self) -> int:
