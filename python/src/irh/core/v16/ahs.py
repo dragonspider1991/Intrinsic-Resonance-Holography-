@@ -61,24 +61,17 @@ class AlgorithmicHolonomicState:
     def __post_init__(self):
         """Validate and normalize AHS."""
         # Validate binary string (bytes)
+        allowed_bytes = {ord('0'), ord('1')}
         original_binary = self.binary_string
         if isinstance(original_binary, str):
-            if not original_binary:
-                raise ValueError("binary_string cannot be empty")
-            if not all(c in '01' for c in original_binary):
-                raise ValueError("binary_string must contain only '0' and '1'")
             object.__setattr__(self, "binary_string", original_binary.encode('ascii'))
         elif isinstance(original_binary, bytearray):
-            if not original_binary:
-                raise ValueError("binary_string cannot be empty")
-            if not all(b in (48, 49) for b in original_binary):
-                raise ValueError("binary_string must contain only '0' and '1'")
             object.__setattr__(self, "binary_string", bytes(original_binary))
         elif not isinstance(original_binary, bytes):
             raise TypeError("binary_string must be str, bytes, or bytearray")
         if not self.binary_string:  # Empty string (bytes path)
             raise ValueError("binary_string cannot be empty")
-        if not all(b in (48, 49) for b in self.binary_string):  # '0' or '1'
+        if not all(b in allowed_bytes for b in self.binary_string):  # '0' or '1'
             raise ValueError("binary_string must contain only '0' and '1'")
         
         # Validate and normalize phase
