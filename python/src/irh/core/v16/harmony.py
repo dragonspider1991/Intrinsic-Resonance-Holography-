@@ -137,11 +137,11 @@ def compute_harmony_functional(
     trace_L2_mag = np.abs(trace_L2)
     det_prime_mag = np.abs(det_prime)
     
-    if det_prime_mag < 1e-12:
+    if det_prime_mag < 1e-12 or trace_L2_mag < 1e-12:
         # Degenerate network - all eigenvalues zero or network disconnected
         raise ValueError(
-            f"Degenerate network: det'(ℒ) = {det_prime_mag:.4e} is too small. "
-            f"Network may be disconnected or have insufficient edges."
+            f"Degenerate network: trace_L2={trace_L2_mag:.4e}, det_prime(L)={det_prime_mag:.4e} is too small. "
+            "Network may be disconnected or have insufficient edges."
         )
     
     # S_H = Tr(ℒ²) / [det'(ℒ)]^{C_H}
