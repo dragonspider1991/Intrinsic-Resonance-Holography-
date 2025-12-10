@@ -9,11 +9,13 @@ This directory contains the in-progress implementation of **Intrinsic Resonance 
 - **Non-circular derivations** from axiomatic foundations
 - **Complete physics recovery** (QM, GR, SM) with unprecedented precision
 
-## Current Status: Phase 1 - Foundation & Structure
+## Current Status: Phase 2 - Exascale Infrastructure & Certified Scaling
 
 **Date:** December 2025  
 **Version:** 16.0.0-dev (early development)  
-**Completion:** ~5% (structural foundation only)
+**Completion:** ~10% (Phase 1 foundation complete; Phase 2 kickoff initiated)
+
+Phase 2 kickoff is tracked in `PHASE_2_STATUS.md` with milestones cross-referenced to the manuscripts in `docs/manuscripts/` (`IRHv16.md` and `IRHv16_Supplementary_Vol_1-5.md`).
 
 ### What Exists Now
 
@@ -67,12 +69,12 @@ from irh.numerics.certified_numerics import CertifiedValue
 
 See `docs/v16_IMPLEMENTATION_ROADMAP.md` for complete details.
 
-### Phase 1: Foundation ✅ (Current - Complete)
+### Phase 1: Foundation ✅ (Complete)
 - Repository structure
 - Documentation
 - Placeholder modules
 
-### Phase 2: Core Axioms (Next - 3-6 months)
+### Phase 2: Exascale Infrastructure & Certified Scaling (In Progress - Kickoff, 3-6 months)
 - Implement Axioms 0-4
 - Basic AHS and ACW classes
 - Network construction
