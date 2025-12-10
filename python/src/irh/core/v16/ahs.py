@@ -147,6 +147,17 @@ class AlgorithmicHolonomicState:
         compressed = zlib.compress(self._as_bytes())
         self.complexity_Kt = float(len(compressed) * 8)  # bits
         return self.complexity_Kt
+
+    @staticmethod
+    def _wrapped_phase_difference(phase_a: float, phase_b: float) -> float:
+        """
+        Compute minimal wrapped phase difference in [-π, π].
+
+        The sign follows (phase_a - phase_b); when the unwrapped difference is
+        exactly π, the wrapped value is reported as -π to keep the interval
+        closed at -π.
+        """
+        return (phase_a - phase_b + np.pi) % (2 * np.pi) - np.pi
     
     @staticmethod
     def _wrapped_phase_difference(phase_a: float, phase_b: float) -> float:
@@ -173,6 +184,9 @@ class AlgorithmicHolonomicState:
             self_bytes == other_bytes and
             abs(phase_diff) <= PHASE_TOLERANCE
         )
+        self_bytes = self._as_bytes()
+        other_bytes = other._as_bytes()
+        return self_bytes == other_bytes and abs(phase_diff) <= PHASE_TOLERANCE
 
     def __hash__(self) -> int:
         """Hash for use in sets/dicts."""
