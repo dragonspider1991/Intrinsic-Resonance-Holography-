@@ -1,81 +1,71 @@
 """
-Axiom 2: Network Emergence Principle - Cymatic Resonance Network
+Cymatic Resonance Network (CRN) for IRH v16.0
 
-This module implements the Cymatic Resonance Network (CRN) as defined in
-IRHv16.md §1 Axiom 2 (Network Emergence Principle).
+Implements Axiom 2 (Network Emergence Principle) with complex-valued
+Algorithmic Coherence Weights from Axiom 1.
 
-Key Concepts (from IRHv16.md §1 Axiom 2):
-    - CRN G = (V, E, W) is the unique minimal representation of AHS relationships
-    - V = S (nodes are Algorithmic Holonomic States)
-    - (s_i, s_j) ∈ E iff |W_ij| > ε_threshold
-    - W_ij ∈ ℂ as defined in Axiom 1
-    - ε_threshold = 0.730129 ± 10^{-6} (rigorously derived, not a free parameter)
+THEORETICAL COMPLIANCE:
+    This implementation strictly follows docs/manuscripts/IRHv16.md
+    - Axiom 2 (§1): Network Emergence Principle with ε_threshold
+    - Section on CRN construction from AHS and ACW
+    - Complex graph Laplacian ℒ for Harmony Functional (§4)
 
-Implementation Status: Phase 3 Implementation
-    - CRN class: IMPLEMENTED
-    - Network metrics: IMPLEMENTED
-    - Holonomy computation: IMPLEMENTED (basic)
-    - Frustration density: IMPLEMENTED
+Key Concepts:
+    - Nodes: Algorithmic Holonomic States (AHS) [IRHv16.md Axiom 0]
+    - Edges: |W_ij| > ε_threshold = 0.730129 ± 10^-6 [IRHv16.md Axiom 2]
+    - Weights: W_ij ∈ ℂ (complex Algorithmic Coherence Weights) [IRHv16.md Axiom 1]
+    - Laplacian: Complex graph Laplacian (Interference Matrix ℒ) [IRHv16.md §4]
 
 References:
-    IRHv16.md §1 Axiom 2: Network Emergence Principle
-    IRHv16.md Theorem 1.2: Necessity of Network Representation
-    IRHv16.md §2 Definition 2.1: Frustration Density
+    docs/manuscripts/IRHv16.md:
+        - §1 Axiom 2: Network Emergence Principle
+        - §1 lines 87-100: ε_threshold = 0.730129 ± 10^-6 derivation
+        - §4 lines 254-269: Harmony Functional S_H = Tr(ℒ²) / [det'(ℒ)]^{C_H}
+        - §1 lines 66-83: Complex-valued W_ij definition
 """
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Dict
 import numpy as np
 from numpy.typing import NDArray
-import scipy.sparse as sp
-from scipy.sparse.csgraph import connected_components
+import networkx as nx
 
-from .ahs import AlgorithmicHolonomicState, create_ahs_network
-from .acw import build_acw_matrix
-
-
-# Universal threshold from IRHv16.md
-EPSILON_THRESHOLD = 0.730129  # ± 10^{-6}
-EPSILON_THRESHOLD_ERROR = 1e-6
+from .ahs import AlgorithmicHolonomicState
+from .acw import AlgorithmicCoherenceWeight, compute_acw
 
 
 @dataclass
-class CymaticResonanceNetwork:
+class CymaticResonanceNetworkV16:
     """
-    Cymatic Resonance Network (CRN) - the fundamental network structure.
+    Cymatic Resonance Network with complex-valued ACWs for IRH v16.0.
     
-    Per IRHv16.md §1 Axiom 2 (Network Emergence Principle):
-        "Any system of Algorithmic Holonomic States satisfying Axiom 1 can be
-        represented uniquely and minimally as a complex-weighted, directed
-        Cymatic Resonance Network (CRN) G = (V, E, W)"
+    Implements Axiom 2: Network Emergence Principle
     
     Attributes:
-        states: List of AHS nodes (V = S)
-        W: Complex-valued ACW matrix W_ij
-        epsilon_threshold: Edge inclusion threshold
+        states: List of Algorithmic Holonomic States (nodes)
+        epsilon_threshold: Edge inclusion threshold (ε from Axiom 2)
+        adjacency_matrix: Complex-valued adjacency matrix W_ij
+        graph: NetworkX DiGraph for standard graph operations
         
     Properties:
         N: Number of nodes
-        num_edges: Number of edges (|W_ij| > epsilon)
-        edge_density: Fraction of possible edges present
+        interference_matrix: Complex graph Laplacian ℒ
+        num_edges: Number of edges (|W_ij| > ε)
         
     References:
-        IRHv16.md §1 Axiom 2: Network Emergence Principle
-        IRHv16.md Theorem 1.2: Necessity of Network Representation
+        IRHv16.md Axiom 2: ε = 0.730129 ± 10^-6 (derived from network criticality)
     """
     
     states: List[AlgorithmicHolonomicState]
-    W: NDArray[np.complex128] = field(repr=False)  # ACW matrix
-    epsilon_threshold: float = EPSILON_THRESHOLD
+    epsilon_threshold: float = 0.730129  # From Axiom 2
+    adjacency_matrix: Optional[NDArray[np.complex128]] = None
+    graph: Optional[nx.DiGraph] = None
     
     def __post_init__(self):
-        """Validate CRN structure."""
-        N = len(self.states)
-        if N == 0:
-            raise ValueError("CRN must have at least one node")
-        if self.W.shape != (N, N):
-            raise ValueError(f"W matrix shape {self.W.shape} doesn't match N={N}")
+        """Initialize network structure after creation."""
+        if self.adjacency_matrix is None:
+            self.build_network()
     
     @property
     def N(self) -> int:
@@ -83,360 +73,209 @@ class CymaticResonanceNetwork:
         return len(self.states)
     
     @property
-    def num_edges(self) -> int:
-        """Number of edges (non-zero, non-diagonal entries)."""
-        # Count entries where |W_ij| > epsilon and i != j
-        if sp.issparse(self.W):
-            W_dense = self.W.toarray()
-        else:
-            W_dense = self.W
+    def interference_matrix(self) -> NDArray[np.complex128]:
+        """
+        Complex graph Laplacian (Interference Matrix ℒ).
         
-        mask = (np.abs(W_dense) > self.epsilon_threshold)
-        np.fill_diagonal(mask, False)  # Exclude self-loops
-        return int(np.sum(mask))
-    
-    @property
-    def edge_density(self) -> float:
-        """Fraction of possible edges present."""
-        max_edges = self.N * (self.N - 1)  # Directed graph, no self-loops
-        if max_edges == 0:
-            return 0.0
-        return self.num_edges / max_edges
-    
-    @classmethod
-    def from_states(
-        cls,
-        states: List[AlgorithmicHolonomicState],
-        epsilon_threshold: float = EPSILON_THRESHOLD,
-        compression_level: int = 6,
-    ) -> CymaticResonanceNetwork:
-        """
-        Construct CRN from a list of AHS.
+        For directed graphs with complex weights:
+        ℒ_ii = Σ_j W_ij (out-degree sum)
+        ℒ_ij = -W_ij for i ≠ j
         
-        Per IRHv16.md §1 Axiom 2, this is the unique minimal representation.
-        
-        Args:
-            states: List of AlgorithmicHolonomicState nodes
-            epsilon_threshold: Edge inclusion threshold (default: 0.730129)
-            compression_level: zlib compression level for NCD
-            
-        Returns:
-            CymaticResonanceNetwork instance
-            
-        References:
-            IRHv16.md §1 Axiom 2: Network construction rules
-        """
-        W = build_acw_matrix(
-            states,
-            epsilon_threshold=epsilon_threshold,
-            compression_level=compression_level,
-            sparse=False,  # Dense for now
-        )
-        return cls(states=states, W=W, epsilon_threshold=epsilon_threshold)
-    
-    @classmethod
-    def create_random(
-        cls,
-        N: int,
-        epsilon_threshold: float = EPSILON_THRESHOLD,
-        seed: Optional[int] = None,
-    ) -> CymaticResonanceNetwork:
-        """
-        Create a random CRN for testing/demonstration.
-        
-        Args:
-            N: Number of AHS nodes
-            epsilon_threshold: Edge inclusion threshold
-            seed: Random seed for reproducibility
-            
-        Returns:
-            CymaticResonanceNetwork with random AHS
-        """
-        states = create_ahs_network(N=N, seed=seed)
-        return cls.from_states(states, epsilon_threshold=epsilon_threshold)
-    
-    def get_adjacency_matrix(self) -> NDArray[np.bool_]:
-        """
-        Get binary adjacency matrix A where A_ij = (|W_ij| > epsilon).
+        This is the operator in the Harmony Functional:
+        S_H = Tr(ℒ²) / [det'(ℒ)]^{C_H}
         
         Returns:
-            N×N boolean adjacency matrix
+            Complex Laplacian matrix (N x N)
         """
-        if sp.issparse(self.W):
-            W_dense = self.W.toarray()
-        else:
-            W_dense = self.W
+        if self.adjacency_matrix is None:
+            raise ValueError("Network not built yet. Call build_network() first.")
         
-        A = np.abs(W_dense) > self.epsilon_threshold
-        np.fill_diagonal(A, False)  # No self-loops
-        return A
-    
-    def get_degree_distribution(self) -> Tuple[NDArray[np.int_], NDArray[np.int_]]:
-        """
-        Get in-degree and out-degree for each node.
+        N = self.N
+        L = np.zeros((N, N), dtype=np.complex128)
         
-        Returns:
-            (in_degrees, out_degrees) arrays
-        """
-        A = self.get_adjacency_matrix()
-        in_degrees = np.sum(A, axis=0)
-        out_degrees = np.sum(A, axis=1)
-        return in_degrees, out_degrees
-    
-    def is_connected(self) -> bool:
-        """
-        Check if the CRN is weakly connected.
+        # Off-diagonal: -W_ij
+        for i in range(N):
+            for j in range(N):
+                if i != j:
+                    L[i, j] = -self.adjacency_matrix[i, j]
         
-        Per IRHv16.md, a valid CRN should be connected for
-        global coherence to be possible.
-        
-        Returns:
-            True if network is weakly connected
-        """
-        A = self.get_adjacency_matrix()
-        # Make symmetric for weak connectivity
-        A_sym = A | A.T
-        n_components, _ = connected_components(
-            sp.csr_matrix(A_sym), directed=False
-        )
-        return n_components == 1
-    
-    def compute_cycle_holonomy(self, cycle: List[int]) -> complex:
-        """
-        Compute holonomy (coherent transfer product) around a cycle.
-        
-        Per IRHv16.md §2 Theorem 2.1:
-            "The coherent transfer product for a cycle C is Π_C = ∏ W_ij"
-        
-        Args:
-            cycle: List of node indices forming a cycle [i, j, k, ..., i]
-            
-        Returns:
-            Complex holonomy Π_C
-            
-        References:
-            IRHv16.md §2 Theorem 2.1: Algorithmic Quantization of Holonomic Phases
-        """
-        if len(cycle) < 2:
-            raise ValueError("Cycle must have at least 2 nodes")
-        if cycle[0] != cycle[-1]:
-            raise ValueError("Cycle must start and end at same node")
-        
-        if sp.issparse(self.W):
-            W_dense = self.W.toarray()
-        else:
-            W_dense = self.W
-        
-        holonomy = 1.0 + 0j
-        for k in range(len(cycle) - 1):
-            i, j = cycle[k], cycle[k + 1]
-            holonomy *= W_dense[i, j]
-        
-        return holonomy
-    
-    def compute_cycle_phase(self, cycle: List[int]) -> float:
-        """
-        Compute total phase winding around a cycle.
-        
-        Per IRHv16.md §2:
-            Φ_C = Σ_{(i,j) ∈ C} φ_ij mod 2π
-        
-        Args:
-            cycle: List of node indices forming a cycle
-            
-        Returns:
-            Phase winding in [0, 2π)
-        """
-        holonomy = self.compute_cycle_holonomy(cycle)
-        return np.angle(holonomy) % (2 * np.pi)
-    
-    def find_triangular_cycles(self, max_cycles: int = 1000) -> List[List[int]]:
-        """
-        Find triangular cycles (length 3) in the network.
-        
-        These are the fundamental cycles for frustration computation.
-        
-        Args:
-            max_cycles: Maximum number of cycles to return
-            
-        Returns:
-            List of cycles as [i, j, k, i]
-        """
-        A = self.get_adjacency_matrix()
-        cycles = []
-        
-        for i in range(self.N):
-            if len(cycles) >= max_cycles:
-                break
-            # Find neighbors
-            neighbors_i = np.where(A[i, :])[0]
-            for j in neighbors_i:
-                if j <= i:
-                    continue
-                neighbors_j = np.where(A[j, :])[0]
-                # Find common neighbors that close the triangle
-                for k in neighbors_j:
-                    if k <= j:
-                        continue
-                    if A[k, i]:
-                        cycles.append([i, j, k, i])
-                        if len(cycles) >= max_cycles:
-                            break
-                if len(cycles) >= max_cycles:
-                    break
-        
-        return cycles
-    
-    def compute_frustration_density(self, max_cycles: int = 1000) -> float:
-        """
-        Compute frustration density ρ_frust.
-        
-        Per IRHv16.md §2 Definition 2.1:
-            ρ_frust := (1/|C_min|) Σ_{C ∈ C_min} |Φ_C|
-            
-        This is the average absolute value of the minimal non-zero
-        holonomic phase winding per fundamental cycle.
-        
-        Args:
-            max_cycles: Maximum number of cycles to consider
-            
-        Returns:
-            Frustration density ρ_frust
-            
-        References:
-            IRHv16.md §2 Definition 2.1: Frustration Density
-            IRHv16.md Theorem 2.2: Fine-structure constant derivation
-        """
-        cycles = self.find_triangular_cycles(max_cycles=max_cycles)
-        
-        if not cycles:
-            return 0.0
-        
-        phase_windings = [self.compute_cycle_phase(c) for c in cycles]
-        
-        # Compute absolute values, handling the branch cut at 2π
-        # |Φ| should be the minimal distance from 0 or 2π
-        abs_phases = []
-        for phi in phase_windings:
-            # Distance to 0 or 2π
-            min_dist = min(phi, 2 * np.pi - phi)
-            abs_phases.append(min_dist)
-        
-        return float(np.mean(abs_phases))
-    
-    def get_interference_matrix(self) -> NDArray[np.complex128]:
-        """
-        Compute the Interference Matrix L from the ACW matrix W.
-        
-        Per IRHv16.md, the Interference Matrix is the discrete Laplacian
-        analog for the CRN:
-            L_ij = D_ij - W_ij
-        where D is the degree matrix.
-        
-        Returns:
-            N×N complex interference matrix L
-            
-        References:
-            IRHv16.md §4: Harmony Functional definition
-        """
-        if sp.issparse(self.W):
-            W_dense = self.W.toarray()
-        else:
-            W_dense = self.W.copy()
-        
-        # Compute degree matrix (sum of absolute weights)
-        degrees = np.sum(np.abs(W_dense), axis=1)
-        D = np.diag(degrees)
-        
-        # L = D - W
-        L = D - W_dense
+        # Diagonal: sum of outgoing weights
+        for i in range(N):
+            L[i, i] = np.sum(self.adjacency_matrix[i, :])
         
         return L
     
+    @property
+    def num_edges(self) -> int:
+        """Number of edges in the network (|W_ij| > ε)."""
+        if self.adjacency_matrix is None:
+            return 0
+        return np.count_nonzero(np.abs(self.adjacency_matrix) > self.epsilon_threshold)
+    
+    def build_network(self, method: str = "lzw") -> None:
+        """
+        Build the network by computing ACWs between all AHS pairs.
+        
+        Creates edges where |W_ij| > ε_threshold (Axiom 2).
+        
+        Args:
+            method: NCD computation method ("lzw")
+            
+        Notes:
+            For N states, computes N² ACW values. For large N (> 1000),
+            consider using sparse methods or distributed computation.
+        """
+        N = self.N
+        
+        # Initialize adjacency matrix
+        self.adjacency_matrix = np.zeros((N, N), dtype=np.complex128)
+        
+        # Compute ACW for all pairs
+        for i in range(N):
+            for j in range(N):
+                if i == j:
+                    # No self-loops
+                    continue
+                
+                # Compute W_ij
+                acw = compute_acw(self.states[i], self.states[j], method=method)
+                
+                # Only add edge if |W_ij| > ε_threshold
+                if acw.magnitude > self.epsilon_threshold:
+                    self.adjacency_matrix[i, j] = acw.complex_value
+        
+        # Build NetworkX graph for visualization and analysis
+        self.graph = nx.DiGraph()
+        self.graph.add_nodes_from(range(N))
+        
+        for i in range(N):
+            for j in range(N):
+                if np.abs(self.adjacency_matrix[i, j]) > 0:
+                    self.graph.add_edge(
+                        i, j,
+                        weight=np.abs(self.adjacency_matrix[i, j]),
+                        phase=np.angle(self.adjacency_matrix[i, j])
+                    )
+    
+    def get_weight(self, i: int, j: int) -> complex:
+        """
+        Get complex weight W_ij between nodes i and j.
+        
+        Args:
+            i: Source node index
+            j: Target node index
+            
+        Returns:
+            Complex weight W_ij (0 if no edge exists)
+        """
+        if self.adjacency_matrix is None:
+            raise ValueError("Network not built yet.")
+        
+        return self.adjacency_matrix[i, j]
+    
+    def get_neighbors(self, i: int, direction: str = "out") -> List[int]:
+        """
+        Get neighbors of node i.
+        
+        Args:
+            i: Node index
+            direction: "out" for outgoing, "in" for incoming, "both" for all
+            
+        Returns:
+            List of neighbor indices
+        """
+        if self.adjacency_matrix is None:
+            raise ValueError("Network not built yet.")
+        
+        if direction == "out":
+            # Outgoing: j where W_ij exists
+            return [j for j in range(self.N) if np.abs(self.adjacency_matrix[i, j]) > 0]
+        elif direction == "in":
+            # Incoming: j where W_ji exists
+            return [j for j in range(self.N) if np.abs(self.adjacency_matrix[j, i]) > 0]
+        elif direction == "both":
+            out_neighbors = set(self.get_neighbors(i, "out"))
+            in_neighbors = set(self.get_neighbors(i, "in"))
+            return list(out_neighbors | in_neighbors)
+        else:
+            raise ValueError(f"Unknown direction: {direction}")
+    
+    def compute_spectral_properties(self) -> Dict[str, any]:
+        """
+        Compute spectral properties of the Interference Matrix.
+        
+        Returns dictionary with:
+            - eigenvalues: Complex eigenvalues of ℒ
+            - trace_L2: Tr(ℒ²) for Harmony Functional
+            - det_prime: det'(ℒ) excluding zero eigenvalues
+            
+        Notes:
+            For preliminary Harmony Functional computation.
+            Full exascale implementation in Phase 2.
+        """
+        L = self.interference_matrix
+        
+        # Compute eigenvalues
+        eigenvalues = np.linalg.eigvals(L)
+        
+        # Tr(ℒ²) = Tr(ℒ * ℒ)
+        L2 = L @ L
+        trace_L2 = np.trace(L2)
+        
+        # det'(ℒ): product of non-zero eigenvalues
+        # Zero threshold
+        zero_threshold = 1e-10
+        nonzero_eigs = eigenvalues[np.abs(eigenvalues) > zero_threshold]
+        
+        if len(nonzero_eigs) > 0:
+            det_prime = np.prod(nonzero_eigs)
+        else:
+            det_prime = 1.0  # Degenerate case
+        
+        return {
+            "eigenvalues": eigenvalues,
+            "trace_L2": trace_L2,
+            "det_prime": det_prime,
+            "num_zero_eigenvalues": len(eigenvalues) - len(nonzero_eigs),
+        }
+    
     def __repr__(self) -> str:
-        """Developer representation."""
-        return (f"CRN(N={self.N}, edges={self.num_edges}, "
-                f"density={self.edge_density:.4f}, "
-                f"ε={self.epsilon_threshold})")
-    
-    def __str__(self) -> str:
-        """User-friendly string."""
-        return f"Cymatic Resonance Network: {self.N} nodes, {self.num_edges} edges"
+        """String representation."""
+        if self.adjacency_matrix is None:
+            return f"CRNv16(N={self.N}, not built)"
+        return f"CRNv16(N={self.N}, edges={self.num_edges}, ε={self.epsilon_threshold:.6f})"
 
 
-def derive_epsilon_threshold(
-    N_samples: int = 100,
-    N_per_sample: int = 50,
-    seed: Optional[int] = None,
-) -> Tuple[float, float]:
+def create_crn_from_states(
+    states: List[AlgorithmicHolonomicState],
+    epsilon_threshold: float = 0.730129
+) -> CymaticResonanceNetworkV16:
     """
-    Derive optimal epsilon threshold from phase transition analysis.
+    Create a Cymatic Resonance Network from a list of AHS.
     
-    Per IRHv16.md §1 Axiom 2:
-        "ε_threshold is the value that maximizes the Algorithmic Network
-        Entropy, ensuring global connectivity (percolation) while minimizing
-        redundant connections."
-    
-    This is a simplified derivation for demonstration. Full v16.0 requires
-    exascale computation with N >= 10^12.
+    Convenience function for network creation.
     
     Args:
-        N_samples: Number of random networks to sample
-        N_per_sample: Network size for each sample
-        seed: Random seed
+        states: List of Algorithmic Holonomic States
+        epsilon_threshold: Edge inclusion threshold (default from Axiom 2)
         
     Returns:
-        (epsilon_optimal, error_estimate) tuple
+        Initialized CymaticResonanceNetworkV16
         
-    References:
-        IRHv16.md §1 Axiom 2: Epsilon threshold derivation
-        [IRH-MATH-2025-01]: Full mathematical derivation
+    Example:
+        >>> from .ahs import create_ahs_network
+        >>> states = create_ahs_network(N=10, seed=42)
+        >>> crn = create_crn_from_states(states)
+        >>> print(crn)
+        CRNv16(N=10, edges=45, ε=0.730129)
     """
-    rng = np.random.default_rng(seed)
-    
-    # Test range around expected value
-    epsilon_values = np.linspace(0.5, 0.9, 41)
-    connectivity_rates = []
-    
-    for eps in epsilon_values:
-        connected_count = 0
-        for _ in range(N_samples):
-            sample_seed = rng.integers(0, 2**31)
-            try:
-                crn = CymaticResonanceNetwork.create_random(
-                    N=N_per_sample,
-                    epsilon_threshold=eps,
-                    seed=sample_seed,
-                )
-                if crn.is_connected():
-                    connected_count += 1
-            except Exception:
-                # Network creation may fail for edge cases (e.g., invalid parameters)
-                # Skip failed samples and continue with remaining trials
-                pass
-        connectivity_rates.append(connected_count / N_samples)
-    
-    connectivity_rates = np.array(connectivity_rates)
-    
-    # Find critical point (50% connectivity = percolation threshold)
-    # The optimal epsilon is at the critical point
-    target = 0.5
-    idx = np.argmin(np.abs(connectivity_rates - target))
-    epsilon_optimal = epsilon_values[idx]
-    
-    # Error estimate from step size
-    step_size = epsilon_values[1] - epsilon_values[0]
-    error_estimate = step_size / 2
-    
-    return float(epsilon_optimal), float(error_estimate)
+    return CymaticResonanceNetworkV16(
+        states=states,
+        epsilon_threshold=epsilon_threshold
+    )
 
-
-__version__ = "16.0.0-dev"
-__status__ = "Phase 3 Implementation - CRN and network metrics"
 
 __all__ = [
-    "CymaticResonanceNetwork",
-    "EPSILON_THRESHOLD",
-    "EPSILON_THRESHOLD_ERROR",
-    "derive_epsilon_threshold",
+    "CymaticResonanceNetworkV16",
+    "create_crn_from_states",
 ]

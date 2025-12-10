@@ -62,40 +62,29 @@ class AlgorithmicHolonomicState:
     
     def __post_init__(self):
         """Validate and normalize AHS."""
-        # Validate binary string and normalize to consistent type
-        allowed_chars = {"0", "1"}
+        # Validate binary string and normalize to str
+        allowed_chars = {'0', '1'}
         original_binary = self.binary_string
         if isinstance(original_binary, bytes):
-            try:
-                normalized_bytes = original_binary
-                normalized_str = normalized_bytes.decode("ascii")
-            except UnicodeDecodeError as exc:
-                raise ValueError("binary_string must be ASCII-encodable") from exc
+            normalized_bytes = original_binary
+            normalized_str = normalized_bytes.decode('ascii')
         elif isinstance(original_binary, bytearray):
-            try:
-                normalized_bytes = bytes(original_binary)
-                normalized_str = normalized_bytes.decode("ascii")
-            except UnicodeDecodeError as exc:
-                raise ValueError("binary_string must be ASCII-encodable") from exc
+            normalized_bytes = bytes(original_binary)
+            normalized_str = normalized_bytes.decode('ascii')
         elif isinstance(original_binary, str):
-            try:
-                normalized_str = original_binary
-                normalized_bytes = original_binary.encode("ascii")
-            except UnicodeEncodeError as exc:
-                raise ValueError("binary_string must be ASCII-encodable") from exc
+            normalized_str = original_binary
+            normalized_bytes = original_binary.encode('ascii')
         else:
             raise TypeError("binary_string must be str, bytes, or bytearray")
-
-        if not normalized_str:  # Empty string
+        if not normalized_str:
             raise ValueError("binary_string cannot be empty")
-        if not all(c in allowed_chars for c in normalized_str):
+        if not all(ch in allowed_chars for ch in normalized_str):
             raise ValueError("binary_string must contain only '0' and '1'")
-
         # Preserve original type (str stays str, bytes/bytearray stay bytes)
         if isinstance(original_binary, str):
-            self.binary_string = normalized_str
+            object.__setattr__(self, "binary_string", normalized_str)
         else:
-            self.binary_string = normalized_bytes
+            object.__setattr__(self, "binary_string", normalized_bytes)
         
         # Validate and normalize phase
         if not isinstance(self.holonomic_phase, (int, float)):
@@ -106,15 +95,16 @@ class AlgorithmicHolonomicState:
         if self.complexity_Kt is None:
             # For now, use simple estimate (length)
             # TODO v16.0: Replace with proper K_t computation
-            self.complexity_Kt = float(len(self._as_bytes()))
-
+            data_len = len(self._as_bytes())
+            self.complexity_Kt = float(data_len)
+    
     def _as_bytes(self) -> bytes:
-        """Return binary_string normalized to ASCII bytes."""
+        """Return binary_string as ASCII bytes."""
         if isinstance(self.binary_string, bytes):
             return self.binary_string
         if isinstance(self.binary_string, bytearray):
             return bytes(self.binary_string)
-        return self.binary_string.encode("ascii")
+        return self.binary_string.encode('ascii')
         
     @property
     def complex_amplitude(self) -> complex:
@@ -169,12 +159,30 @@ class AlgorithmicHolonomicState:
         """
         return (phase_a - phase_b + np.pi) % (2 * np.pi) - np.pi
     
+    @staticmethod
+    def _wrapped_phase_difference(phase_a: float, phase_b: float) -> float:
+        """
+        Compute minimal wrapped phase difference in [-π, π].
+        
+        The sign follows (phase_a - phase_b); for example:
+            diff(3π/2, 0) -> -π/2 instead of 3π/2
+        
+        Note: When the unwrapped difference is exactly π, the wrapped value is
+        reported as -π to keep the interval closed at -π.
+        """
+        # Shift by π to center the interval, apply modulus, then shift back
+        return (phase_a - phase_b + np.pi) % (2 * np.pi) - np.pi
+    
     def __eq__(self, other: object) -> bool:
         """Two AHS are equal if info and phase match."""
         if not isinstance(other, AlgorithmicHolonomicState):
             return NotImplemented
-        phase_diff = self._wrapped_phase_difference(
-            self.holonomic_phase, other.holonomic_phase
+        phase_diff = self._wrapped_phase_difference(self.holonomic_phase, other.holonomic_phase)
+        self_bytes = self._as_bytes()
+        other_bytes = other._as_bytes()
+        return (
+            self_bytes == other_bytes and
+            abs(phase_diff) <= PHASE_TOLERANCE
         )
         self_bytes = self._as_bytes()
         other_bytes = other._as_bytes()
@@ -189,15 +197,17 @@ class AlgorithmicHolonomicState:
     def __repr__(self) -> str:
         """Developer-friendly representation."""
         if isinstance(self.binary_string, bytes):
-            info_source = self.binary_string.decode("ascii")
+            info_source = self.binary_string.decode('ascii')
         else:
             info_source = self.binary_string
-        info = info_source[:8] + "..." if len(info_source) > 8 else info_source
+        info = info_source[:8]
+        if len(info_source) > 8:
+            info = info + "..."
         return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
 
     def __str__(self) -> str:
         """User-friendly representation."""
-        return f"AHS[{len(self.binary_string)}bits, φ={self.holonomic_phase:.3f}rad]"
+        return f"AHS[{len(self._as_bytes())}bits, φ={self.holonomic_phase:.3f}rad]"
 
 
 class AHSAlgebra:
@@ -301,7 +311,7 @@ def create_ahs_network(
     for i in range(N):
         # Generate random binary string (10-20 bits for demonstration)
         bit_length = rng.integers(10, 21)
-        binary_str = ''.join(str(rng.integers(0, 2)) for _ in range(bit_length))
+        binary_str = "".join(str(rng.integers(0, 2)) for _ in range(bit_length))
         
         # Initialize phase
         if phase_distribution == "uniform":

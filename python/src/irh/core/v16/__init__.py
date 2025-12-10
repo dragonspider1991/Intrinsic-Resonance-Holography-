@@ -2,8 +2,11 @@
 IRH v16.0 Core Axiomatic Layer
 
 This module implements the foundational axioms of Intrinsic Resonance Holography v16.0
-as specified in the companion volumes and main manuscript (docs/manuscripts/IRHv16.md).
+as specified in docs/manuscripts/IRHv16.md and companion volumes.
 
+THEORETICAL COMPLIANCE:
+    All implementations reference and validate against docs/manuscripts/IRHv16.md
+    
 Modules:
     ahs: Algorithmic Holonomic States (Axiom 0)
     acw: Algorithmic Coherence Weights (Axiom 1)
@@ -34,6 +37,7 @@ from .ahs import (
 )
 
 # Axiom 1: Algorithmic Coherence Weights
+from .ahs import AlgorithmicHolonomicState, create_ahs_network
 from .acw import (
     AlgorithmicCoherenceWeight,
     compute_ncd_magnitude,
@@ -92,4 +96,38 @@ __all__ = [
     "EvolutionState",
     "CoherentEvolution",
     "AdaptiveResonanceOptimization",
+    compute_acw
+)
+from .crn import CymaticResonanceNetworkV16, create_crn_from_states
+from .harmony import (
+    compute_harmony_functional,
+    validate_harmony_functional_properties,
+    HarmonyFunctionalEvaluator
+)
+from .aro import AROConfiguration, AROOptimizerV16
+
+__version__ = "16.0.0-dev"
+__all__ = [
+    # Axiom 0: Algorithmic Holonomic States
+    "AlgorithmicHolonomicState",
+    "create_ahs_network",
+    
+    # Axiom 1: Algorithmic Coherence Weights
+    "AlgorithmicCoherenceWeight",
+    "compute_ncd_magnitude",
+    "compute_phase_shift",
+    "compute_acw",
+    
+    # Axiom 2: Network Emergence
+    "CymaticResonanceNetworkV16",
+    "create_crn_from_states",
+    
+    # Theorem 4.1: Harmony Functional
+    "compute_harmony_functional",
+    "validate_harmony_functional_properties",
+    "HarmonyFunctionalEvaluator",
+    
+    # Definition 4.1: ARO
+    "AROConfiguration",
+    "AROOptimizerV16",
 ]

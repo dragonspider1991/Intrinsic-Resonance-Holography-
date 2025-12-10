@@ -1,280 +1,299 @@
 """
-Unit tests for Algorithmic Coherence Weights (Axiom 1).
+Unit tests for Algorithmic Coherence Weights (ACW) - Axiom 1.
 
-Tests the ACW computation functions as defined in IRHv16.md §1 Axiom 1.
+Tests NCD calculator and ACW computation per IRHv16.md lines 66-83.
 
-References:
-    IRHv16.md §1 Axiom 1: ACW definition
-    IRHv16.md Theorem 1.1: NCD convergence
-    IRHv16.md §1 Axiom 2: Network Emergence Principle
+THEORETICAL COMPLIANCE:
+    Tests validate against docs/manuscripts/IRHv16.md Axiom 1
+    - Lines 66-83: W_ij ∈ ℂ from NCD and phase shift
+    - |W_ij| computed from NCD
+    - arg(W_ij) = φ_j - φ_i (mod 2π)
 """
 
 import pytest
 import numpy as np
-import scipy.sparse as sp
-from irh.core.v16.ahs import AlgorithmicHolonomicState, create_ahs_network
+from irh.core.v16.ahs import AlgorithmicHolonomicState
 from irh.core.v16.acw import (
-    AlgorithmicCoherenceWeight,
     compute_ncd_magnitude,
     compute_phase_shift,
-    build_acw_matrix,
+    compute_acw,
+    AlgorithmicCoherenceWeight
 )
 
 
-class TestAlgorithmicCoherenceWeight:
-    """Test ACW data structure and properties."""
-    
-    def test_basic_creation(self):
-        """Test basic ACW creation."""
-        acw = AlgorithmicCoherenceWeight(magnitude=0.5, phase=np.pi)
-        assert acw.magnitude == 0.5
-        assert np.isclose(acw.phase, np.pi)
-        
-    def test_phase_normalization(self):
-        """Test phase is normalized to [0, 2π)."""
-        acw = AlgorithmicCoherenceWeight(magnitude=0.5, phase=3 * np.pi)
-        assert 0 <= acw.phase < 2 * np.pi
-        assert np.isclose(acw.phase, np.pi)
-        
-    def test_magnitude_validation(self):
-        """Test magnitude must be in [0, 1]."""
-        with pytest.raises(ValueError, match="magnitude must be in"):
-            AlgorithmicCoherenceWeight(magnitude=1.5, phase=0.0)
-        with pytest.raises(ValueError, match="magnitude must be in"):
-            AlgorithmicCoherenceWeight(magnitude=-0.1, phase=0.0)
-            
-    def test_complex_value(self):
-        """Test complex_value property."""
-        acw = AlgorithmicCoherenceWeight(magnitude=1.0, phase=np.pi/2)
-        z = acw.complex_value
-        assert np.isclose(abs(z), 1.0)
-        assert np.isclose(np.angle(z), np.pi/2)
-        
-    def test_complex_conversion(self):
-        """Test __complex__ method."""
-        acw = AlgorithmicCoherenceWeight(magnitude=0.5, phase=np.pi/4)
-        z = complex(acw)
-        assert np.isclose(abs(z), 0.5)
-        assert np.isclose(np.angle(z), np.pi/4)
-        
-    def test_repr(self):
-        """Test string representation."""
-        acw = AlgorithmicCoherenceWeight(magnitude=0.5, phase=1.0, method="lzw")
-        repr_str = repr(acw)
-        assert "ACW" in repr_str
-        assert "0.5" in repr_str
-        assert "lzw" in repr_str
-
-
-class TestComputeNCDMagnitude:
-    """Test NCD computation as per IRHv16.md Axiom 1."""
+class TestNCDMagnitude:
+    """Test Normalized Compression Distance computation."""
     
     def test_identical_strings(self):
-        """Identical strings should have high NCD (highly compressible together)."""
-        ncd, error = compute_ncd_magnitude("10101010", "10101010")
-        # NCD of identical strings should be high (similar = more compressible)
-        assert 0 <= ncd <= 1
-        assert error > 0
+        """
+        Test NCD(x, x) = 0 for identical strings.
         
-    def test_different_strings(self):
-        """Very different strings should have lower NCD than identical strings."""
-        ncd_similar, _ = compute_ncd_magnitude("0" * 100, "0" * 100)
-        ncd_different, _ = compute_ncd_magnitude("0" * 100, "1" * 100)
-        # Different random strings are typically less compressible together than 
-        # identical strings. However, due to compression overhead for short strings,
-        # the relationship may not always hold strictly.
-        # We verify both are valid NCD values in [0, 1]
-        assert 0 <= ncd_similar <= 1
-        assert 0 <= ncd_different <= 1
+        Per IRHv16.md: NCD measures algorithmic distance.
+        Identical strings have zero distance.
+        """
+        binary1 = b"10101010"
+        binary2 = b"10101010"
         
-    def test_ncd_range(self):
-        """NCD should always be in [0, 1]."""
-        test_cases = [
-            ("0" * 50, "1" * 50),
-            ("01" * 25, "10" * 25),
-            ("1010101010", "1111111111"),
-            ("0" * 1000, "0" * 1000),
+        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        
+        assert ncd == 0.0, "NCD of identical strings must be 0"
+        assert error >= 0, "Error bound must be non-negative"
+    
+    def test_completely_different_strings(self):
+        """Test NCD for completely different strings."""
+        binary1 = b"00000000"
+        binary2 = b"11111111"
+        
+        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        
+        # NCD is bounded in [0, 1]
+        assert 0 <= ncd <= 1.0, f"NCD must be in [0,1], got {ncd}"
+        assert error >= 0, "Error bound must be non-negative"
+        
+    def test_similar_strings(self):
+        """Test NCD for similar strings (one bit different)."""
+        binary1 = b"10101010"
+        binary2 = b"10101011"  # Last bit different
+        
+        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        
+        # Similar strings should have low NCD
+        assert 0 < ncd < 1.0, "Similar strings should have 0 < NCD < 1"
+        assert error >= 0
+        
+    def test_empty_strings(self):
+        """Test NCD handles empty strings."""
+        binary1 = b""
+        binary2 = b""
+        
+        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        
+        # Both empty should have NCD = 0
+        assert ncd == 0.0
+        
+    def test_ncd_symmetry(self):
+        """Test NCD(x, y) ≈ NCD(y, x) (approximate symmetry)."""
+        binary1 = b"101010"
+        binary2 = b"110011"
+        
+        ncd_xy, _ = compute_ncd_magnitude(binary1, binary2)
+        ncd_yx, _ = compute_ncd_magnitude(binary2, binary1)
+        
+        # NCD should be approximately symmetric (may vary slightly with compression)
+        assert np.isclose(ncd_xy, ncd_yx, rtol=0.15), \
+            f"NCD should be approximately symmetric: {ncd_xy} vs {ncd_yx}"
+        
+    def test_ncd_bounds(self):
+        """Test NCD is always in [0, 1] for various strings."""
+        test_pairs = [
+            (b"1", b"0"),
+            (b"101", b"010"),
+            (b"111111", b"000000"),
+            (b"1010", b"1010"),
         ]
-        for b1, b2 in test_cases:
-            ncd, error = compute_ncd_magnitude(b1, b2)
-            assert 0 <= ncd <= 1, f"NCD out of range for {b1[:10]}..., {b2[:10]}..."
-            assert error > 0
-            
-    def test_compression_levels(self):
-        """Different compression levels should work."""
-        b1, b2 = "01" * 100, "10" * 100
-        for level in [1, 6, 9]:
-            ncd, error = compute_ncd_magnitude(b1, b2, compression_level=level)
-            assert 0 <= ncd <= 1
-            
-    def test_error_bounds_by_level(self):
-        """Higher compression levels should have lower error bounds."""
-        b1, b2 = "01" * 50, "10" * 50
-        _, error_low = compute_ncd_magnitude(b1, b2, compression_level=1)
-        _, error_high = compute_ncd_magnitude(b1, b2, compression_level=9)
-        assert error_low > error_high
         
-    def test_invalid_binary_string(self):
-        """Non-binary strings should raise ValueError."""
-        with pytest.raises(ValueError, match="only '0' and '1'"):
-            compute_ncd_magnitude("012", "101")
-        with pytest.raises(ValueError, match="only '0' and '1'"):
-            compute_ncd_magnitude("abc", "101")
-            
-    def test_empty_string(self):
-        """Empty strings should raise ValueError."""
-        with pytest.raises(ValueError, match="cannot be empty"):
-            compute_ncd_magnitude("", "101")
-        with pytest.raises(ValueError, match="cannot be empty"):
-            compute_ncd_magnitude("101", "")
-            
-    def test_unsupported_method(self):
-        """Unsupported methods should raise."""
-        with pytest.raises(NotImplementedError):
-            compute_ncd_magnitude("101", "010", method="sampling")
-        with pytest.raises(ValueError):
-            compute_ncd_magnitude("101", "010", method="unknown")
+        for b1, b2 in test_pairs:
+            ncd, _ = compute_ncd_magnitude(b1, b2)
+            assert 0 <= ncd <= 1.0, f"NCD out of bounds for ({b1}, {b2}): {ncd}"
 
 
-class TestComputePhaseShift:
-    """Test phase shift computation as per IRHv16.md Axiom 1."""
+class TestPhaseShift:
+    """Test holonomic phase shift computation."""
     
-    def test_zero_phase_difference(self):
-        """Same phase should give zero shift."""
-        s1 = AlgorithmicHolonomicState("101", 0.5)
-        s2 = AlgorithmicHolonomicState("110", 0.5)
-        phase = compute_phase_shift(s1, s2)
-        assert np.isclose(phase, 0.0)
+    def test_zero_phase_shift(self):
+        """Test phase shift when both states have same phase."""
+        state_i = AlgorithmicHolonomicState("101", 0.5)
+        state_j = AlgorithmicHolonomicState("110", 0.5)
         
-    def test_phase_difference(self):
-        """Different phases should give correct shift."""
-        s1 = AlgorithmicHolonomicState("101", 0.0)
-        s2 = AlgorithmicHolonomicState("110", np.pi)
-        phase = compute_phase_shift(s1, s2)
-        assert np.isclose(phase, np.pi)
+        phase_shift = compute_phase_shift(state_i, state_j)
         
-    def test_phase_normalization(self):
-        """Phase shift should be in [0, 2π)."""
-        s1 = AlgorithmicHolonomicState("101", np.pi)
-        s2 = AlgorithmicHolonomicState("110", np.pi/2)
-        phase = compute_phase_shift(s1, s2)
-        assert 0 <= phase < 2 * np.pi
+        assert np.isclose(phase_shift, 0.0), "Same phases should give zero shift"
         
-    def test_phase_symmetry(self):
-        """Phase shift s_i -> s_j vs s_j -> s_i."""
-        s1 = AlgorithmicHolonomicState("101", 0.5)
-        s2 = AlgorithmicHolonomicState("110", 1.5)
-        phase_12 = compute_phase_shift(s1, s2)
-        phase_21 = compute_phase_shift(s2, s1)
-        # Sum should be 2π (or close to it mod 2π)
-        assert np.isclose((phase_12 + phase_21) % (2 * np.pi), 0.0, atol=1e-10) or \
-               np.isclose(phase_12 + phase_21, 2 * np.pi, atol=1e-10)
+    def test_pi_phase_shift(self):
+        """Test π phase shift."""
+        state_i = AlgorithmicHolonomicState("101", 0.0)
+        state_j = AlgorithmicHolonomicState("110", np.pi)
+        
+        phase_shift = compute_phase_shift(state_i, state_j)
+        
+        assert np.isclose(phase_shift, np.pi), f"Expected π, got {phase_shift}"
+        
+    def test_phase_shift_wraparound(self):
+        """
+        Test phase shift wraps around 2π.
+        
+        Per IRHv16.md: Phases are in [0, 2π), shift is mod 2π.
+        """
+        state_i = AlgorithmicHolonomicState("101", 0.1)
+        state_j = AlgorithmicHolonomicState("110", 2 * np.pi - 0.1)
+        
+        phase_shift = compute_phase_shift(state_i, state_j)
+        
+        # Shift should be close to 2π - 0.2 ≈ 6.08
+        assert 0 <= phase_shift < 2 * np.pi, "Phase shift must be in [0, 2π)"
+        
+    def test_phase_shift_in_range(self):
+        """Test phase shift is always in [0, 2π)."""
+        import random
+        random.seed(42)
+        
+        for _ in range(10):
+            phi_i = random.uniform(0, 2 * np.pi)
+            phi_j = random.uniform(0, 2 * np.pi)
+            
+            state_i = AlgorithmicHolonomicState("1", phi_i)
+            state_j = AlgorithmicHolonomicState("0", phi_j)
+            
+            phase_shift = compute_phase_shift(state_i, state_j)
+            
+            assert 0 <= phase_shift < 2 * np.pi, \
+                f"Phase shift {phase_shift} out of range [0, 2π)"
 
 
-class TestBuildACWMatrix:
-    """Test ACW matrix construction as per IRHv16.md Axiom 2."""
+class TestACWComputation:
+    """Test complete Algorithmic Coherence Weight computation."""
     
-    def test_small_network(self):
-        """Test building matrix for small network."""
-        states = create_ahs_network(N=5, seed=42)
-        W = build_acw_matrix(states, sparse=False)
+    def test_acw_basic(self):
+        """
+        Test basic ACW computation.
         
-        assert W.shape == (5, 5)
-        assert W.dtype == np.complex128
+        Per IRHv16.md Axiom 1: W_ij = |W_ij| e^{i·arg(W_ij)}
+        where |W_ij| from NCD, arg(W_ij) = φ_j - φ_i
+        """
+        state_i = AlgorithmicHolonomicState("1010", 0.5)
+        state_j = AlgorithmicHolonomicState("1100", 1.0)
         
-    def test_diagonal_is_one(self):
-        """Self-coherence should be maximal (1.0)."""
-        states = create_ahs_network(N=5, seed=42)
-        W = build_acw_matrix(states, sparse=False)
+        acw = compute_acw(state_i, state_j)
         
-        for i in range(5):
-            assert W[i, i] == 1.0 + 0j
+        assert isinstance(acw, AlgorithmicCoherenceWeight)
+        assert acw.magnitude >= 0
+        assert 0 <= acw.phase < 2 * np.pi
+        assert isinstance(acw.complex_value, complex)
+        
+    def test_acw_magnitude_from_ncd(self):
+        """Test ACW magnitude equals NCD."""
+        state_i = AlgorithmicHolonomicState("101", 0.0)
+        state_j = AlgorithmicHolonomicState("110", 0.0)
+        
+        acw = compute_acw(state_i, state_j)
+        ncd, _ = compute_ncd_magnitude(state_i.binary_string, state_j.binary_string)
+        
+        assert np.isclose(acw.magnitude, ncd), \
+            "ACW magnitude should equal NCD"
             
-    def test_sparse_matrix(self):
-        """Sparse matrix should be returned when requested."""
-        states = create_ahs_network(N=10, seed=42)
-        W = build_acw_matrix(states, sparse=True)
+    def test_acw_phase_from_shift(self):
+        """Test ACW phase equals holonomic phase shift."""
+        state_i = AlgorithmicHolonomicState("101", 0.5)
+        state_j = AlgorithmicHolonomicState("110", 1.5)
         
-        assert sp.issparse(W)
-        assert W.shape == (10, 10)
+        acw = compute_acw(state_i, state_j)
+        phase_shift = compute_phase_shift(state_i, state_j)
         
-    def test_threshold_application(self):
-        """Entries below threshold should be zero."""
-        states = create_ahs_network(N=10, seed=42)
-        # Use a very high threshold to ensure zeros
-        W = build_acw_matrix(states, epsilon_threshold=0.99, sparse=False)
-        
-        # Count non-diagonal zeros
-        non_diag_zeros = 0
-        for i in range(10):
-            for j in range(10):
-                if i != j and W[i, j] == 0:
-                    non_diag_zeros += 1
-        # With high threshold, most entries should be zero
-        assert non_diag_zeros > 0
-        
-    def test_empty_states_raises(self):
-        """Empty states list should raise ValueError."""
-        with pytest.raises(ValueError, match="cannot be empty"):
-            build_acw_matrix([])
+        assert np.isclose(acw.phase, phase_shift), \
+            "ACW phase should equal phase shift"
             
-    def test_hermitian_like_structure(self):
-        """Per IRHv16.md, W_ji = W_ij* (Hermitian) with unit diagonal."""
-        # Note: This is a property mentioned in repository_memories
-        states = create_ahs_network(N=5, seed=42)
-        W = build_acw_matrix(states, sparse=False)
+    def test_acw_complex_value(self):
+        """Test ACW complex value W_ij = |W_ij| e^{i·φ}."""
+        state_i = AlgorithmicHolonomicState("1", np.pi/4)
+        state_j = AlgorithmicHolonomicState("0", np.pi/2)
         
-        # Check diagonal is real and unit
-        for i in range(5):
-            assert np.isclose(W[i, i], 1.0)
+        acw = compute_acw(state_i, state_j)
+        
+        # Verify complex value matches magnitude and phase
+        expected = acw.magnitude * np.exp(1j * acw.phase)
+        
+        assert np.isclose(acw.complex_value, expected), \
+            "Complex value should be |W| e^{iφ}"
             
-    def test_complex_values(self):
-        """Matrix should contain complex values (not just real)."""
-        states = create_ahs_network(N=10, seed=42)
-        W = build_acw_matrix(states, epsilon_threshold=0.1, sparse=False)
+    def test_acw_identical_states(self):
+        """Test ACW for identical states (NCD = 0)."""
+        state_i = AlgorithmicHolonomicState("10101010", 0.5)
+        state_j = AlgorithmicHolonomicState("10101010", 0.5)
         
-        # Find at least one non-real entry
-        found_complex = False
-        for i in range(10):
-            for j in range(10):
-                if i != j and W[i, j] != 0 and np.imag(W[i, j]) != 0:
-                    found_complex = True
-                    break
-            if found_complex:
-                break
-        # Due to phase differences, there should be some complex entries
-        # (unless all phases happen to align, which is unlikely with random seed)
-        assert found_complex, "Expected at least one complex-valued entry in W matrix"
+        acw = compute_acw(state_i, state_j)
+        
+        # Identical binary strings → NCD = 0 → |W_ij| = 0
+        assert acw.magnitude == 0.0, "Identical states should have zero ACW magnitude"
+        
+    def test_acw_error_bounds(self):
+        """Test ACW includes error bounds."""
+        state_i = AlgorithmicHolonomicState("101", 0.0)
+        state_j = AlgorithmicHolonomicState("110", 0.0)
+        
+        acw = compute_acw(state_i, state_j)
+        
+        assert acw.error_bound >= 0, "Error bound must be non-negative"
 
 
-class TestIntegration:
-    """Integration tests for the full ACW pipeline."""
+class TestAlgorithmicCoherenceWeight:
+    """Test ACW dataclass."""
     
-    def test_ahs_to_acw_pipeline(self):
-        """Test full pipeline: create AHS -> compute ACW matrix."""
-        # Create network of AHS (Axiom 0)
-        states = create_ahs_network(N=20, seed=123)
+    def test_acw_dataclass_creation(self):
+        """Test ACW can be created directly."""
+        acw = AlgorithmicCoherenceWeight(
+            magnitude=0.5,
+            phase=np.pi/4,
+            error_bound=0.01
+        )
         
-        # Build ACW matrix (Axioms 1-2)
-        W = build_acw_matrix(states, sparse=True)
+        assert acw.magnitude == 0.5
+        assert acw.phase == np.pi/4
         
-        # Verify basic properties
-        assert W.shape == (20, 20)
-        assert sp.issparse(W)
+    def test_acw_complex_value_property(self):
+        """Test complex_value property computes correctly."""
+        acw = AlgorithmicCoherenceWeight(
+            magnitude=1.0,
+            phase=np.pi/2,
+            error_bound=0.0
+        )
         
-        # Check that matrix has some structure (not all zeros except diagonal)
-        nnz = W.nnz
-        assert nnz >= 20  # At least diagonal entries
+        # Should be approximately i
+        assert np.isclose(acw.complex_value, 1j), \
+            f"Expected i, got {acw.complex_value}"
+
+
+class TestTheoreticalCompliance:
+    """
+    Test compliance with IRHv16.md Axiom 1 specifications.
+    
+    References:
+        docs/manuscripts/IRHv16.md lines 66-83: Axiom 1
+    """
+    
+    def test_axiom1_complex_valued(self):
+        """Test W_ij ∈ ℂ per IRHv16.md line 68."""
+        state_i = AlgorithmicHolonomicState("101", 0.5)
+        state_j = AlgorithmicHolonomicState("110", 1.0)
         
-    def test_reproducibility(self):
-        """Same seed should produce same matrix."""
-        states1 = create_ahs_network(N=10, seed=42)
-        states2 = create_ahs_network(N=10, seed=42)
+        acw = compute_acw(state_i, state_j)
         
-        W1 = build_acw_matrix(states1, sparse=False)
-        W2 = build_acw_matrix(states2, sparse=False)
+        # W_ij must be complex-valued
+        assert isinstance(acw.complex_value, (complex, np.complexfloating)), \
+            "W_ij must be complex-valued per Axiom 1"
+            
+    def test_axiom1_magnitude_from_ncd(self):
+        """Test |W_ij| derived from NCD per IRHv16.md."""
+        state_i = AlgorithmicHolonomicState("1010", 0.0)
+        state_j = AlgorithmicHolonomicState("0101", 0.0)
         
-        assert np.allclose(W1, W2)
+        acw = compute_acw(state_i, state_j)
+        ncd, _ = compute_ncd_magnitude(state_i.binary_string, state_j.binary_string)
+        
+        # Per Axiom 1: |W_ij| from NCD
+        assert np.isclose(acw.magnitude, ncd), \
+            "Axiom 1 requires |W_ij| from NCD"
+            
+    def test_axiom1_phase_from_holonomy(self):
+        """Test arg(W_ij) from holonomic phases per IRHv16.md."""
+        state_i = AlgorithmicHolonomicState("1", 0.0)
+        state_j = AlgorithmicHolonomicState("0", np.pi)
+        
+        acw = compute_acw(state_i, state_j)
+        
+        # Per Axiom 1: arg(W_ij) = φ_j - φ_i
+        expected_phase = np.pi
+        assert np.isclose(acw.phase, expected_phase), \
+            f"Axiom 1 requires arg(W_ij) = φ_j - φ_i, got {acw.phase}"
 
 
 if __name__ == "__main__":

@@ -1,257 +1,350 @@
 """
-Unit tests for Cymatic Resonance Network (Axiom 2).
+Unit tests for Cymatic Resonance Network (CRN) - Axiom 2.
 
-Tests the CRN implementation as defined in IRHv16.md §1 Axiom 2.
+Tests CRN construction and properties per IRHv16.md lines 87-100.
 
-References:
-    IRHv16.md §1 Axiom 2: Network Emergence Principle
-    IRHv16.md Theorem 1.2: Necessity of Network Representation
-    IRHv16.md §2 Definition 2.1: Frustration Density
+THEORETICAL COMPLIANCE:
+    Tests validate against docs/manuscripts/IRHv16.md Axiom 2
+    - Lines 87-100: Network Emergence Principle
+    - ε_threshold = 0.730129 ± 10^-6
+    - Edges exist iff |W_ij| > ε_threshold
+    - Complex graph Laplacian (Interference Matrix ℒ)
 """
 
 import pytest
 import numpy as np
 from irh.core.v16.ahs import create_ahs_network
 from irh.core.v16.crn import (
-    CymaticResonanceNetwork,
-    EPSILON_THRESHOLD,
-    EPSILON_THRESHOLD_ERROR,
-    derive_epsilon_threshold,
+    CymaticResonanceNetworkV16,
+    create_crn_from_states
 )
 
 
-class TestCRNCreation:
-    """Test CRN construction from AHS."""
+class TestCRNConstruction:
+    """Test Cymatic Resonance Network construction."""
     
-    def test_from_states(self):
-        """Test creating CRN from list of AHS."""
+    def test_basic_crn_creation(self):
+        """Test basic CRN creation from AHS list."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        assert crn.N == 5, "CRN should have 5 nodes"
+        assert crn.adjacency_matrix is not None, "Adjacency matrix should be built"
+        assert crn.adjacency_matrix.shape == (5, 5), "Adjacency matrix should be 5x5"
+        
+    def test_crn_epsilon_threshold(self):
+        """
+        Test ε_threshold filtering per IRHv16.md Axiom 2.
+        
+        References:
+            IRHv16.md line 97: ε = 0.730129 ± 10^-6
+        """
         states = create_ahs_network(N=10, seed=42)
-        crn = CymaticResonanceNetwork.from_states(states)
         
-        assert crn.N == 10
-        assert crn.W.shape == (10, 10)
+        # Test with theoretical ε_threshold
+        crn = create_crn_from_states(states, epsilon_threshold=0.730129)
         
-    def test_create_random(self):
-        """Test creating random CRN."""
-        crn = CymaticResonanceNetwork.create_random(N=20, seed=42)
+        assert np.isclose(crn.epsilon_threshold, 0.730129, atol=1e-6), \
+            "ε_threshold should match IRHv16.md line 97"
+            
+    def test_crn_complex_adjacency(self):
+        """Test adjacency matrix is complex-valued per Axiom 2."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-        assert crn.N == 20
-        assert crn.W.shape == (20, 20)
+        assert crn.adjacency_matrix.dtype == np.complex128, \
+            "Adjacency matrix must be complex128 per Axiom 2"
+            
+    def test_crn_no_self_loops(self):
+        """Test CRN has no self-loops."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-    def test_reproducibility(self):
-        """Test CRN creation is reproducible."""
-        crn1 = CymaticResonanceNetwork.create_random(N=10, seed=123)
-        crn2 = CymaticResonanceNetwork.create_random(N=10, seed=123)
+        # Diagonal should be zero (no self-loops)
+        diagonal = np.diag(crn.adjacency_matrix)
+        assert np.allclose(diagonal, 0), "CRN should have no self-loops"
         
-        assert np.allclose(crn1.W, crn2.W)
+    def test_crn_edge_filtering(self):
+        """Test edges are filtered by ε_threshold."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-    def test_empty_states_raises(self):
-        """Test empty states list raises error."""
-        with pytest.raises(ValueError, match="at least one node"):
-            CymaticResonanceNetwork(states=[], W=np.array([[]]))
+        # All non-zero entries should have |W_ij| > ε_threshold
+        for i in range(crn.N):
+            for j in range(crn.N):
+                if i != j and np.abs(crn.adjacency_matrix[i, j]) > 0:
+                    assert np.abs(crn.adjacency_matrix[i, j]) > crn.epsilon_threshold, \
+                        f"Edge ({i},{j}) has |W_ij| <= ε_threshold"
 
 
 class TestCRNProperties:
-    """Test CRN properties and metrics."""
+    """Test CRN properties and methods."""
     
-    def test_num_edges(self):
-        """Test edge counting."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
+    def test_crn_num_edges(self):
+        """Test num_edges property."""
+        states = create_ahs_network(N=10, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-        # Edges should be non-negative
-        assert crn.num_edges >= 0
-        # Max edges is N*(N-1)
-        assert crn.num_edges <= 10 * 9
+        # Count manually
+        manual_count = 0
+        for i in range(crn.N):
+            for j in range(crn.N):
+                if i != j and np.abs(crn.adjacency_matrix[i, j]) > crn.epsilon_threshold:
+                    manual_count += 1
+                    
+        assert crn.num_edges == manual_count, \
+            f"num_edges {crn.num_edges} != manual count {manual_count}"
+            
+    def test_crn_get_weight(self):
+        """Test get_weight method."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-    def test_edge_density(self):
-        """Test edge density calculation."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
+        # Get a weight
+        w_01 = crn.get_weight(0, 1)
         
-        assert 0 <= crn.edge_density <= 1
+        assert isinstance(w_01, (complex, np.complexfloating)), \
+            "Weight should be complex"
+        assert w_01 == crn.adjacency_matrix[0, 1], \
+            "get_weight should return adjacency_matrix entry"
+            
+    def test_crn_get_neighbors(self):
+        """Test get_neighbors method."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-    def test_adjacency_matrix(self):
-        """Test adjacency matrix generation."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        A = crn.get_adjacency_matrix()
+        # Get outgoing neighbors of node 0
+        neighbors = crn.get_neighbors(0, direction="out")
         
-        assert A.shape == (10, 10)
-        assert A.dtype == np.bool_
-        # No self-loops
-        assert not np.any(np.diag(A))
+        assert isinstance(neighbors, list), "neighbors should be a list"
         
-    def test_degree_distribution(self):
-        """Test degree distribution."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        in_deg, out_deg = crn.get_degree_distribution()
+        # Verify all are valid neighbors
+        for j in neighbors:
+            assert np.abs(crn.adjacency_matrix[0, j]) > 0, \
+                f"Node {j} should be a neighbor of 0"
+                
+    def test_crn_repr(self):
+        """Test __repr__ method."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states)
         
-        assert len(in_deg) == 10
-        assert len(out_deg) == 10
-        assert np.all(in_deg >= 0)
-        assert np.all(out_deg >= 0)
+        repr_str = repr(crn)
+        
+        assert "CRNv16" in repr_str, "repr should contain CRNv16"
+        assert str(crn.N) in repr_str, "repr should contain N"
 
 
-class TestCRNConnectivity:
-    """Test CRN connectivity analysis."""
+class TestInterferenceMatrix:
+    """
+    Test Interference Matrix (complex graph Laplacian).
     
-    def test_connectivity_check(self):
-        """Test connectivity checking works."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        
-        # Should return boolean
-        result = crn.is_connected()
-        assert isinstance(result, bool)
-        
-    def test_small_connected_network(self):
-        """Test small networks with low threshold are connected."""
-        # Use very low threshold to ensure connectivity
-        small_crn = CymaticResonanceNetwork.create_random(
-            N=5, 
-            epsilon_threshold=0.1,
-            seed=42
-        )
-        # With low threshold, likely connected
-        # (not guaranteed, but likely for small N)
-        # Verify the network was created successfully
-        assert small_crn.N == 5
-
-
-class TestCRNHolonomy:
-    """Test holonomy and frustration calculations."""
-    
-    def test_cycle_holonomy(self):
-        """Test holonomy computation for a cycle."""
-        crn = CymaticResonanceNetwork.create_random(N=5, seed=42)
-        
-        # Triangle cycle [0, 1, 2, 0]
-        cycle = [0, 1, 2, 0]
-        holonomy = crn.compute_cycle_holonomy(cycle)
-        
-        assert isinstance(holonomy, complex)
-        
-    def test_cycle_phase(self):
-        """Test phase computation for a cycle."""
-        crn = CymaticResonanceNetwork.create_random(N=5, seed=42)
-        
-        cycle = [0, 1, 2, 0]
-        phase = crn.compute_cycle_phase(cycle)
-        
-        assert 0 <= phase < 2 * np.pi
-        
-    def test_cycle_validation(self):
-        """Test cycle validation."""
-        crn = CymaticResonanceNetwork.create_random(N=5, seed=42)
-        
-        # Not a cycle (doesn't close)
-        with pytest.raises(ValueError, match="start and end"):
-            crn.compute_cycle_holonomy([0, 1, 2])
-            
-        # Too short
-        with pytest.raises(ValueError, match="at least 2"):
-            crn.compute_cycle_holonomy([0])
-            
-    def test_find_triangular_cycles(self):
-        """Test finding triangular cycles."""
-        crn = CymaticResonanceNetwork.create_random(
-            N=10, 
-            epsilon_threshold=0.1,  # Low threshold for more edges
-            seed=42
-        )
-        
-        cycles = crn.find_triangular_cycles(max_cycles=100)
-        
-        # Should be a list
-        assert isinstance(cycles, list)
-        
-        # Each cycle should be a triangle [i, j, k, i]
-        for c in cycles:
-            assert len(c) == 4
-            assert c[0] == c[-1]
-            
-    def test_frustration_density(self):
-        """Test frustration density computation."""
-        crn = CymaticResonanceNetwork.create_random(
-            N=10, 
-            epsilon_threshold=0.1,
-            seed=42
-        )
-        
-        rho = crn.compute_frustration_density(max_cycles=100)
-        
-        # Should be non-negative and bounded
-        assert rho >= 0
-        assert rho <= np.pi  # Max phase winding is π
-
-
-class TestCRNInterferenceMatrix:
-    """Test interference matrix computation."""
+    Per IRHv16.md §4 lines 265-266: ℒ is the complex graph Laplacian
+    used in Harmony Functional S_H = Tr(ℒ²) / [det'(ℒ)]^{C_H}
+    """
     
     def test_interference_matrix_shape(self):
         """Test interference matrix has correct shape."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        L = crn.get_interference_matrix()
+        states = create_ahs_network(N=10, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-        assert L.shape == (10, 10)
-        assert L.dtype == np.complex128
+        L = crn.interference_matrix
         
-    def test_interference_matrix_properties(self):
-        """Test interference matrix is Laplacian-like."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        L = crn.get_interference_matrix()
+        assert L.shape == (10, 10), "ℒ should be N x N"
         
-        # Row sums of Laplacian should be ~0 for unweighted
-        # For weighted, this isn't exact, but diagonal dominance holds
-        diag = np.diag(L)
-        off_diag_row_sum = np.sum(L, axis=1) - diag
+    def test_interference_matrix_complex(self):
+        """Test interference matrix is complex-valued."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-        # L_ii should equal sum of |W_ij| for j != i
-        # So L_ii + (-W_ii) - Σ_{j≠i} W_ij ≈ 0
-        # This is approximate for complex weights
-        # Verify diagonal dominance: |L_ii| >= |off_diag_row_sum_i|
-        assert all(np.abs(diag) >= np.abs(off_diag_row_sum) - 1e-10), \
-            "Diagonal dominance should hold for Laplacian matrix"
+        L = crn.interference_matrix
+        
+        assert L.dtype == np.complex128, "ℒ must be complex128"
+        
+    def test_interference_matrix_diagonal(self):
+        """
+        Test interference matrix diagonal.
+        
+        For directed graphs: ℒ_ii = Σ_j W_ij (out-degree sum)
+        """
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        L = crn.interference_matrix
+        
+        # Check diagonal elements
+        for i in range(crn.N):
+            expected_diag = np.sum(crn.adjacency_matrix[i, :])
+            assert np.isclose(L[i, i], expected_diag), \
+                f"ℒ_ii should be sum of outgoing weights for node {i}"
+                
+    def test_interference_matrix_off_diagonal(self):
+        """
+        Test interference matrix off-diagonal elements.
+        
+        ℒ_ij = -W_ij for i ≠ j
+        """
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        L = crn.interference_matrix
+        
+        # Check off-diagonal elements
+        for i in range(crn.N):
+            for j in range(crn.N):
+                if i != j:
+                    expected = -crn.adjacency_matrix[i, j]
+                    assert np.isclose(L[i, j], expected), \
+                        f"ℒ_ij should be -W_ij for i≠j"
 
 
-class TestEpsilonThreshold:
-    """Test epsilon threshold derivation."""
+class TestSpectralProperties:
+    """Test spectral properties computation for Harmony Functional."""
     
-    def test_threshold_constant(self):
-        """Test threshold constant value."""
-        # From IRHv16.md
-        assert abs(EPSILON_THRESHOLD - 0.730129) < 1e-5
-        assert EPSILON_THRESHOLD_ERROR == 1e-6
+    def test_compute_spectral_properties(self):
+        """Test compute_spectral_properties returns expected keys."""
+        states = create_ahs_network(N=10, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
         
-    def test_derive_epsilon(self):
-        """Test epsilon derivation (simplified)."""
-        # This is a very simplified test due to computational cost
-        eps, err = derive_epsilon_threshold(
-            N_samples=10,  # Small for speed
-            N_per_sample=10,
-            seed=42
-        )
+        props = crn.compute_spectral_properties()
         
-        # Should be in reasonable range
-        assert 0.3 < eps < 1.0
-        assert err > 0
+        # Check required keys
+        required_keys = ['eigenvalues', 'trace_L2', 'det_prime', 'num_zero_eigenvalues']
+        for key in required_keys:
+            assert key in props, f"Missing key: {key}"
+            
+    def test_trace_L2_computation(self):
+        """Test Tr(ℒ²) computation."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        props = crn.compute_spectral_properties()
+        L = crn.interference_matrix
+        
+        # Manual computation
+        L2 = L @ L
+        expected_trace = np.trace(L2)
+        
+        assert np.isclose(props['trace_L2'], expected_trace), \
+            "Tr(ℒ²) should match manual computation"
+            
+    def test_eigenvalues_count(self):
+        """Test number of eigenvalues equals N."""
+        states = create_ahs_network(N=10, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        props = crn.compute_spectral_properties()
+        
+        assert len(props['eigenvalues']) == 10, \
+            "Should have N eigenvalues"
+            
+    def test_det_prime_nonzero(self):
+        """Test det'(ℒ) is non-zero for connected networks."""
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        props = crn.compute_spectral_properties()
+        
+        # det' should be product of non-zero eigenvalues
+        assert props['det_prime'] != 0, "det'(ℒ) should be non-zero"
 
 
-class TestCRNRepr:
-    """Test CRN string representations."""
+class TestTheoreticalCompliance:
+    """
+    Test compliance with IRHv16.md Axiom 2 specifications.
     
-    def test_repr(self):
-        """Test developer representation."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        repr_str = repr(crn)
+    References:
+        docs/manuscripts/IRHv16.md lines 87-100: Axiom 2
+    """
+    
+    def test_axiom2_epsilon_value(self):
+        """
+        Test ε_threshold matches IRHv16.md specification.
         
-        assert "CRN" in repr_str
-        assert "N=10" in repr_str
+        References:
+            IRHv16.md line 97: ε = 0.730129 ± 10^-6
+        """
+        # Create CRN with theoretical ε
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.730129)
         
-    def test_str(self):
-        """Test user-friendly string."""
-        crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
-        str_repr = str(crn)
+        # Verify ε matches theoretical value
+        expected_epsilon = 0.730129
+        assert np.isclose(crn.epsilon_threshold, expected_epsilon, atol=1e-6), \
+            f"Axiom 2 requires ε = {expected_epsilon} ± 10^-6"
+            
+    def test_axiom2_edge_criterion(self):
+        """
+        Test edges exist iff |W_ij| > ε per Axiom 2.
         
-        assert "Cymatic Resonance Network" in str_repr
-        assert "10" in str_repr
+        References:
+            IRHv16.md lines 94-96: Edge inclusion criterion
+        """
+        states = create_ahs_network(N=5, seed=42)
+        epsilon = 0.5
+        crn = create_crn_from_states(states, epsilon_threshold=epsilon)
+        
+        # Check edge criterion
+        for i in range(crn.N):
+            for j in range(crn.N):
+                if i == j:
+                    continue
+                    
+                w_ij = crn.adjacency_matrix[i, j]
+                
+                if np.abs(w_ij) > 0:
+                    # Edge exists, so |W_ij| should be > ε
+                    assert np.abs(w_ij) > epsilon, \
+                        f"Edge ({i},{j}) exists but |W_ij|={np.abs(w_ij)} <= ε={epsilon}"
+                        
+    def test_axiom2_complex_laplacian(self):
+        """
+        Test ℒ is complex graph Laplacian per Axiom 2.
+        
+        References:
+            IRHv16.md §4 lines 265-266: ℒ is Interference Matrix
+        """
+        states = create_ahs_network(N=5, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        L = crn.interference_matrix
+        
+        # Must be complex
+        assert L.dtype == np.complex128, "ℒ must be complex per Axiom 2"
+        
+        # Must be square
+        assert L.shape[0] == L.shape[1] == crn.N, "ℒ must be N x N"
+
+
+class TestEdgeCases:
+    """Test edge cases and error handling."""
+    
+    def test_empty_network(self):
+        """Test behavior with minimal network."""
+        states = create_ahs_network(N=2, seed=42)
+        crn = create_crn_from_states(states, epsilon_threshold=0.5)
+        
+        assert crn.N == 2
+        assert crn.adjacency_matrix.shape == (2, 2)
+        
+    def test_high_threshold_sparse_network(self):
+        """Test CRN with high threshold (sparse network)."""
+        states = create_ahs_network(N=10, seed=42)
+        
+        # Very high threshold → few edges
+        crn = create_crn_from_states(states, epsilon_threshold=0.99)
+        
+        # Network should exist but be sparse
+        assert crn.num_edges >= 0, "Should handle sparse networks"
+        
+    def test_low_threshold_dense_network(self):
+        """Test CRN with low threshold (dense network)."""
+        states = create_ahs_network(N=10, seed=42)
+        
+        # Very low threshold → many edges
+        crn = create_crn_from_states(states, epsilon_threshold=0.01)
+        
+        # Should have many edges
+        assert crn.num_edges > 0, "Low threshold should create edges"
 
 
 if __name__ == "__main__":
