@@ -9,7 +9,7 @@
 
 ## Summary
 
-Phase 1 focuses on establishing the foundational data structures and implementing Axioms 0-4 from the IRH v16.0 theoretical framework as detailed in `docs/manuscripts/IRHv16.md`.
+Phase 1 focuses on establishing the foundational data structures and implementing Axioms 0-4 from the IRH v16.0 theoretical framework as detailed in `docs/manuscripts/IRHv16.md` and the companion `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md`.
 
 ## Implementation Progress
 
@@ -280,6 +280,7 @@ All implementations strictly follow the specifications in `docs/manuscripts/IRHv
 ## References
 
 - **Theoretical Framework**: `docs/manuscripts/IRHv16.md`
+- **Supplementary Volumes**: `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md`
 - **Implementation Roadmap**: `docs/v16_IMPLEMENTATION_ROADMAP.md`
 - **Architecture Overview**: `docs/v16_ARCHITECTURE.md`
 - **Entry Point**: `project_irh_v16.py`
