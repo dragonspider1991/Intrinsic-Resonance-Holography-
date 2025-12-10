@@ -96,7 +96,8 @@ class AlgorithmicCoherenceWeight:
     @property
     def complex_value(self) -> complex:
         """Return W_ij as complex number."""
-        return self.magnitude * np.exp(1j * self.phase)
+        # Cast to built-in complex to avoid returning numpy subclasses
+        return complex(self.magnitude * np.exp(1j * self.phase))
         
     def __complex__(self) -> complex:
         """Allow complex(w_ij) conversion."""
