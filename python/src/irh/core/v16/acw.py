@@ -19,12 +19,23 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 import numpy as np
 from numpy.typing import NDArray
 
 # TODO: Import AHS when implemented
 # from .ahs import AlgorithmicHolonomicState
+
+
+def _to_bytes(value: Union[str, bytes, bytearray]) -> bytes:
+    """Normalize binary inputs to ASCII bytes."""
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, bytearray):
+        return bytes(value)
+    if isinstance(value, str):
+        return value.encode('ascii')
+    raise TypeError("binary inputs must be str, bytes, or bytearray")
 
 
 @dataclass
@@ -63,8 +74,8 @@ class AlgorithmicCoherenceWeight:
 
 
 def compute_ncd_magnitude(
-    binary1: bytes,
-    binary2: bytes,
+    binary1: Union[str, bytes, bytearray],
+    binary2: Union[str, bytes, bytearray],
     method: str = "lzw",
     time_bound: Optional[int] = None
 ) -> Tuple[float, float]:
@@ -97,14 +108,13 @@ def compute_ncd_magnitude(
     if method != "lzw":
         raise NotImplementedError(f"Method '{method}' not yet implemented. Use 'lzw'.")
     
+    bytes1 = _to_bytes(binary1)
+    bytes2 = _to_bytes(binary2)
     # Special case: identical strings
-    if binary1 == binary2:
+    if bytes1 == bytes2:
         return (0.0, 0.0)
     
-    # binary1 and binary2 are already bytes, no need to encode
-    bytes1 = binary1
-    bytes2 = binary2
-    bytes_concat = binary1 + binary2
+    bytes_concat = bytes1 + bytes2
     
     # Compress using zlib (LZ77, similar to LZW)
     # Use compression level 9 for maximum compression (high fidelity)
@@ -132,7 +142,7 @@ def compute_ncd_magnitude(
         # Error estimate: compression is deterministic, but we account for
         # finite-size effects and overhead. Conservative estimate.
         # For strings > 100 chars, error ~ 1/sqrt(length)
-        min_len = min(len(binary1), len(binary2))
+        min_len = min(len(bytes1), len(bytes2))
         if min_len > 100:
             error = 1.0 / np.sqrt(min_len)
         else:
