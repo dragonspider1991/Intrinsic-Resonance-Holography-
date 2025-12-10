@@ -43,6 +43,7 @@ import logging
 from .ahs import AlgorithmicHolonomicState, create_ahs_network
 from .crn import CymaticResonanceNetworkV16, create_crn_from_states
 from .harmony import compute_harmony_functional, HarmonyFunctionalEvaluator
+from .acw import _to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -249,14 +250,12 @@ class AROOptimizerV16:
             # Mutate binary strings of AHS
             idx = self.rng.integers(0, len(new_states))
             # Flip a random bit (more efficient than list conversion)
-            binary_str = new_states[idx].binary_string
-            if len(binary_str) > 0:
-                flip_idx = self.rng.integers(0, len(binary_str))
-                new_binary = (
-                    binary_str[:flip_idx] + 
-                    ('1' if binary_str[flip_idx] == '0' else '0') + 
-                    binary_str[flip_idx+1:]
-                )
+            binary_bytes = _to_bytes(new_states[idx].binary_string)
+            if len(binary_bytes) > 0:
+                flip_idx = self.rng.integers(0, len(binary_bytes))
+                flipped = bytearray(binary_bytes)
+                flipped[flip_idx] = ord('1') if binary_bytes[flip_idx] == ord('0') else ord('0')
+                new_binary = bytes(flipped)
                 new_states[idx] = AlgorithmicHolonomicState(
                     new_binary,
                     new_states[idx].holonomic_phase
