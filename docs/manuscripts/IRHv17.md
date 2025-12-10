@@ -59,9 +59,9 @@ be the compact Lie group of **primordial informational degrees of freedom**:
 
 The fundamental complex scalar field is a function of **four** group elements (four strands of a 4-valent vertex):
 
-$$
+
 \phi(g_1,g_2,g_3,g_4) \in \mathbb{C}, \qquad g_i \in G_{\text{inf}}
-$$
+
 
 with Hermitian conjugate $\bar{\phi}(g_1,g_2,g_3,g_4)$. The invariant Haar measure on $G_{\text{inf}}$ is denoted $dg$.
 
