@@ -20,9 +20,11 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 import numpy as np
 from numpy.typing import NDArray
+
+PHASE_TOLERANCE = 1e-10  # Absolute tolerance for phase equality
 
 
 @dataclass
@@ -54,19 +56,37 @@ class AlgorithmicHolonomicState:
         - Add serialization for distributed computing
     """
     
-    binary_string: str  # Binary informational content
+    binary_string: Union[str, bytes, bytearray]  # Binary informational content
     holonomic_phase: float  # φ ∈ [0, 2π)
     complexity_Kt: Optional[float] = None  # Computed on demand
     
     def __post_init__(self):
         """Validate and normalize AHS."""
-        # Validate binary string
-        if not isinstance(self.binary_string, str):
-            raise TypeError("binary_string must be str")
-        if not self.binary_string:  # Empty string
+        # Validate binary string and normalize to consistent type
+        allowed_chars = {"0", "1"}
+        original_binary = self.binary_string
+        if isinstance(original_binary, bytes):
+            normalized_bytes = original_binary
+            normalized_str = normalized_bytes.decode("ascii")
+        elif isinstance(original_binary, bytearray):
+            normalized_bytes = bytes(original_binary)
+            normalized_str = normalized_bytes.decode("ascii")
+        elif isinstance(original_binary, str):
+            normalized_str = original_binary
+            normalized_bytes = original_binary.encode("ascii")
+        else:
+            raise TypeError("binary_string must be str, bytes, or bytearray")
+
+        if not normalized_str:  # Empty string
             raise ValueError("binary_string cannot be empty")
-        if not all(c in '01' for c in self.binary_string):
+        if not all(c in allowed_chars for c in normalized_str):
             raise ValueError("binary_string must contain only '0' and '1'")
+
+        # Preserve original type (str stays str, bytes/bytearray stay bytes)
+        if isinstance(original_binary, str):
+            self.binary_string = normalized_str
+        else:
+            self.binary_string = normalized_bytes
         
         # Validate and normalize phase
         if not isinstance(self.holonomic_phase, (int, float)):
@@ -77,7 +97,15 @@ class AlgorithmicHolonomicState:
         if self.complexity_Kt is None:
             # For now, use simple estimate (length)
             # TODO v16.0: Replace with proper K_t computation
-            self.complexity_Kt = float(len(self.binary_string))
+            self.complexity_Kt = float(len(self._as_bytes()))
+
+    def _as_bytes(self) -> bytes:
+        """Return binary_string normalized to ASCII bytes."""
+        if isinstance(self.binary_string, bytes):
+            return self.binary_string
+        if isinstance(self.binary_string, bytearray):
+            return bytes(self.binary_string)
+        return self.binary_string.encode("ascii")
         
     @property
     def complex_amplitude(self) -> complex:
@@ -97,7 +125,7 @@ class AlgorithmicHolonomicState:
         Returns:
             Length of binary_string
         """
-        return len(self.binary_string)
+        return len(self._as_bytes())
         
     def compute_complexity(self, time_bound: int = 1000) -> float:
         """
@@ -117,28 +145,45 @@ class AlgorithmicHolonomicState:
         """
         import zlib
         # Use zlib (LZ77-based) as proxy for LZW
-        compressed = zlib.compress(self.binary_string.encode('ascii'))
+        compressed = zlib.compress(self._as_bytes())
         self.complexity_Kt = float(len(compressed) * 8)  # bits
         return self.complexity_Kt
+
+    @staticmethod
+    def _wrapped_phase_difference(phase_a: float, phase_b: float) -> float:
+        """
+        Compute minimal wrapped phase difference in [-π, π].
+
+        The sign follows (phase_a - phase_b); when the unwrapped difference is
+        exactly π, the wrapped value is reported as -π to keep the interval
+        closed at -π.
+        """
+        return (phase_a - phase_b + np.pi) % (2 * np.pi) - np.pi
     
     def __eq__(self, other: object) -> bool:
         """Two AHS are equal if info and phase match."""
         if not isinstance(other, AlgorithmicHolonomicState):
             return NotImplemented
-        return (
-            self.binary_string == other.binary_string and
-            np.isclose(self.holonomic_phase, other.holonomic_phase, atol=1e-10, rtol=0)
+        phase_diff = self._wrapped_phase_difference(
+            self.holonomic_phase, other.holonomic_phase
         )
+        self_bytes = self._as_bytes()
+        other_bytes = other._as_bytes()
+        return self_bytes == other_bytes and abs(phase_diff) <= PHASE_TOLERANCE
 
     def __hash__(self) -> int:
         """Hash for use in sets/dicts."""
         # Hash binary string and quantized phase
         phase_quant = int(self.holonomic_phase * 1e10)  # 10 decimal places
-        return hash((self.binary_string, phase_quant))
+        return hash((self._as_bytes(), phase_quant))
     
     def __repr__(self) -> str:
         """Developer-friendly representation."""
-        info = self.binary_string[:8] + "..." if len(self.binary_string) > 8 else self.binary_string
+        if isinstance(self.binary_string, bytes):
+            info_source = self.binary_string.decode("ascii")
+        else:
+            info_source = self.binary_string
+        info = info_source[:8] + "..." if len(info_source) > 8 else info_source
         return f"AHS(info={info}, φ={self.holonomic_phase:.4f}, K_t={self.complexity_Kt:.1f})"
 
     def __str__(self) -> str:
