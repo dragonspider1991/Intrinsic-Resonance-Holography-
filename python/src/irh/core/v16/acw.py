@@ -33,6 +33,17 @@ import scipy.sparse as sp
 from .ahs import AlgorithmicHolonomicState
 
 
+def _to_bytes(value: Union[str, bytes, bytearray]) -> bytes:
+    """Normalize binary inputs to ASCII bytes."""
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, bytearray):
+        return bytes(value)
+    if isinstance(value, str):
+        return value.encode("ascii")
+    raise TypeError("binary_string must be str, bytes, or bytearray")
+
+
 @dataclass
 class AlgorithmicCoherenceWeight:
     """
@@ -88,8 +99,8 @@ class AlgorithmicCoherenceWeight:
 
 
 def compute_ncd_magnitude(
-    binary1: str,
-    binary2: str,
+    binary1: Union[str, bytes, bytearray],
+    binary2: Union[str, bytes, bytearray],
     method: str = "lzw",
     compression_level: int = 6,
     time_bound: Optional[int] = None
@@ -141,17 +152,22 @@ def compute_ncd_magnitude(
         raise ValueError(f"Unknown method '{method}', supported: 'lzw'")
     
     # Validate inputs
-    if not binary1 or not binary2:
+    b1 = _to_bytes(binary1)
+    b2 = _to_bytes(binary2)
+    if not b1 or not b2:
         raise ValueError("Binary strings cannot be empty")
-    if not all(c in '01' for c in binary1):
+    try:
+        decoded1 = b1.decode("ascii")
+        decoded2 = b2.decode("ascii")
+    except UnicodeDecodeError as exc:
+        raise ValueError("binary strings must be ASCII-encodable") from exc
+    if not all(c in '01' for c in decoded1):
         raise ValueError("binary1 must contain only '0' and '1'")
-    if not all(c in '01' for c in binary2):
+    if not all(c in '01' for c in decoded2):
         raise ValueError("binary2 must contain only '0' and '1'")
     
     # Convert to bytes for compression
-    b1 = binary1.encode('ascii')
-    b2 = binary2.encode('ascii')
-    b_concat = (binary1 + binary2).encode('ascii')
+    b_concat = b1 + b2
     
     # Compute compressed sizes K_t approximations
     # Using zlib as proxy for LZW (both are LZ-based)
