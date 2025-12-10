@@ -24,6 +24,8 @@ from typing import Optional
 import numpy as np
 from numpy.typing import NDArray
 
+PHASE_TOLERANCE = 1e-10  # Absolute tolerance for phase equality
+
 
 @dataclass
 class AlgorithmicHolonomicState:
@@ -127,18 +129,28 @@ class AlgorithmicHolonomicState:
         self.complexity_Kt = float(len(compressed) * 8)  # bits
         return self.complexity_Kt
     
+    @staticmethod
+    def _wrapped_phase_difference(phase_a: float, phase_b: float) -> float:
+        """
+        Compute minimal wrapped phase difference in [-π, π].
+        
+        The sign follows (phase_a - phase_b); for example:
+            diff(3π/2, 0) -> -π/2 instead of 3π/2
+        
+        Note: When the unwrapped difference is exactly π, the wrapped value is
+        reported as -π to keep the interval closed at -π.
+        """
+        # Shift by π to center the interval, apply modulus, then shift back
+        return (phase_a - phase_b + np.pi) % (2 * np.pi) - np.pi
+    
     def __eq__(self, other: object) -> bool:
         """Two AHS are equal if info and phase match."""
         if not isinstance(other, AlgorithmicHolonomicState):
             return NotImplemented
+        phase_diff = self._wrapped_phase_difference(self.holonomic_phase, other.holonomic_phase)
         return (
             self.binary_string == other.binary_string and
-            np.isclose(
-                self.holonomic_phase,
-                other.holonomic_phase,
-                atol=1e-10,
-                rtol=0.0
-            )
+            abs(phase_diff) <= PHASE_TOLERANCE
         )
 
     def __hash__(self) -> int:
