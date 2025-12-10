@@ -22,6 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Union, Tuple, Optional
 from enum import Enum
+import time
 import numpy as np
 import zlib
 
@@ -227,8 +228,6 @@ def compute_ncd_adaptive(
         >>> print(f"NCD = {result.ncd_value:.4f} ± {result.error_bound:.4f}")
         >>> print(f"Fidelity: {result.fidelity.value}")
     """
-    import time
-    
     bytes1 = _to_bytes(binary1)
     bytes2 = _to_bytes(binary2)
     
