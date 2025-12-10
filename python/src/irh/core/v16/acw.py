@@ -41,7 +41,7 @@ def _to_bytes(value: Union[str, bytes, bytearray]) -> bytes:
         return bytes(value)
     if isinstance(value, str):
         return value.encode("ascii")
-    raise TypeError("binary inputs must be str, bytes, or bytearray")
+    raise TypeError("binary_string must be str, bytes, or bytearray")
 
 
 @dataclass
@@ -156,8 +156,11 @@ def compute_ncd_magnitude(
     b2 = _to_bytes(binary2)
     if not b1 or not b2:
         raise ValueError("Binary strings cannot be empty")
-    decoded1 = b1.decode("ascii")
-    decoded2 = b2.decode("ascii")
+    try:
+        decoded1 = b1.decode("ascii")
+        decoded2 = b2.decode("ascii")
+    except UnicodeDecodeError as exc:
+        raise ValueError("binary strings must be ASCII-encodable") from exc
     if not all(c in '01' for c in decoded1):
         raise ValueError("binary1 must contain only '0' and '1'")
     if not all(c in '01' for c in decoded2):

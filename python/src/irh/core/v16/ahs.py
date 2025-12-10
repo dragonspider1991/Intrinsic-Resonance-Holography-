@@ -66,14 +66,23 @@ class AlgorithmicHolonomicState:
         allowed_chars = {"0", "1"}
         original_binary = self.binary_string
         if isinstance(original_binary, bytes):
-            normalized_bytes = original_binary
-            normalized_str = normalized_bytes.decode("ascii")
+            try:
+                normalized_bytes = original_binary
+                normalized_str = normalized_bytes.decode("ascii")
+            except UnicodeDecodeError as exc:
+                raise ValueError("binary_string must be ASCII-encodable") from exc
         elif isinstance(original_binary, bytearray):
-            normalized_bytes = bytes(original_binary)
-            normalized_str = normalized_bytes.decode("ascii")
+            try:
+                normalized_bytes = bytes(original_binary)
+                normalized_str = normalized_bytes.decode("ascii")
+            except UnicodeDecodeError as exc:
+                raise ValueError("binary_string must be ASCII-encodable") from exc
         elif isinstance(original_binary, str):
-            normalized_str = original_binary
-            normalized_bytes = original_binary.encode("ascii")
+            try:
+                normalized_str = original_binary
+                normalized_bytes = original_binary.encode("ascii")
+            except UnicodeEncodeError as exc:
+                raise ValueError("binary_string must be ASCII-encodable") from exc
         else:
             raise TypeError("binary_string must be str, bytes, or bytearray")
 
