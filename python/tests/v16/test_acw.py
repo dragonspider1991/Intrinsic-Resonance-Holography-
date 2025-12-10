@@ -244,6 +244,7 @@ class TestBuildACWMatrix:
                 break
         # Due to phase differences, there should be some complex entries
         # (unless all phases happen to align, which is unlikely with random seed)
+        assert found_complex, "Expected at least one complex-valued entry in W matrix"
 
 
 class TestIntegration:
