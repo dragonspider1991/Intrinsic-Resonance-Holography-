@@ -2,9 +2,45 @@
 
 This directory contains Jupyter notebooks that demonstrate and validate Intrinsic Resonance Holography (IRH) computations.
 
-## 🚀 Quick Start
+## 🚀 v18.0 Colab Notebooks (Recommended)
 
-All notebooks can be run directly in Google Colab - no installation required! Just click the "Open in Colab" badge at the top of each notebook.
+The following notebooks provide complete, ready-to-run experiences for IRH v18.0:
+
+### [IRH_v18_Quickstart_Colab.ipynb](IRH_v18_Quickstart_Colab.ipynb) ⭐ **Start Here**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Quickstart_Colab.ipynb)
+
+**Quick Introduction to IRH v18.0**
+- Runtime: ~2 minutes
+- Standard Model derivation from topology
+- Cosmic Fixed Point computation
+- Key predictions preview
+
+### [IRH_v18_Full_Install_Colab.ipynb](IRH_v18_Full_Install_Colab.ipynb) 🔬 **Comprehensive Testing**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Full_Install_Colab.ipynb)
+
+**Complete Installation with Interactive Menu**
+- Complete v18 project installation
+- Interactive test level selection (Quick/Standard/Comprehensive/Full pytest)
+- 11 physics modules to validate
+- Visualization of predictions vs experiments
+- Runtime: 30 seconds to 10 minutes (user selectable)
+
+### [IRH_v18_Development_Colab.ipynb](IRH_v18_Development_Colab.ipynb) 🛠️ **For Developers**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Development_Colab.ipynb)
+
+**Development Environment for Contributors**
+- Full development setup
+- API reference and documentation
+- Testing utilities (pytest, coverage)
+- Code quality tools (ruff, black, mypy)
+- Contributing workflow examples
+
+---
+
+## 📓 Legacy Notebooks (v16 and earlier)
+
+> **Note:** These notebooks use v16 or earlier implementations which are now deprecated.
+> For the current implementation, use the v18 notebooks above.
 
 ### For Local Execution
 
@@ -22,7 +58,7 @@ All notebooks can be run directly in Google Colab - no installation required! Ju
 
 ## 📓 Available Notebooks
 
-### [01_ARO_Demo.ipynb](01_ARO_Demo.ipynb)
+### [01_ARO_Demo.ipynb](01_ARO_Demo.ipynb) *(Legacy - v16)*
 **Adaptive Resonance Optimization Demo**
 - Runtime: ~5 minutes
 - Demonstrates how random networks evolve toward 4D spacetime

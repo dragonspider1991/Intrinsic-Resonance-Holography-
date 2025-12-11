@@ -1,8 +1,18 @@
 """
-IRH v16.0 Core Axiomatic Layer
+IRH v16.0 Core Axiomatic Layer (DEPRECATED)
+
+.. deprecated:: 18.0.0
+   v16 is deprecated in favor of v18. The v18 implementation provides complete
+   Standard Model emergence from cGFT with full analytical derivations.
+   Use ``from irh.core.v18 import ...`` instead.
 
 This module implements the foundational axioms of Intrinsic Resonance Holography v16.0
 as specified in docs/manuscripts/IRHv16.md and companion volumes.
+
+DEPRECATION NOTICE:
+    v16 is maintained for backward compatibility only.
+    New development should use v18.0 (irh.core.v18).
+    See docs/manuscripts/IRHv18.md for the current theoretical framework.
 
 THEORETICAL COMPLIANCE:
     All implementations reference and validate against docs/manuscripts/IRHv16.md
@@ -22,12 +32,22 @@ Implementation Status:
     - Axiom 4 (Evolution): COMPLETE (basic version)
 
 References:
-    IRHv16.md: Main manuscript
+    IRHv16.md: Main manuscript (deprecated)
+    IRHv18.md: Current manuscript
     [IRH-MATH-2025-01] - The Algebra of Algorithmic Holonomic States
     [IRH-COMP-2025-02] - Exascale HarmonyOptimizer Architecture
 """
 
-__version__ = "16.0.0-dev"
+import warnings
+
+warnings.warn(
+    "irh.core.v16 is deprecated since v18.0.0. "
+    "Use irh.core.v18 for the current implementation with complete "
+    "Standard Model emergence from cGFT. "
+    "See docs/manuscripts/IRHv18.md for the current theoretical framework.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 # Axiom 0: Algorithmic Holonomic States
 from .ahs import (
@@ -153,7 +173,7 @@ from .harmony import (
 )
 from .aro import AROConfiguration, AROOptimizerV16
 
-__version__ = "16.0.0-dev"
+__version__ = "16.0.0-deprecated"
 __all__ = [
     # Axiom 0: Algorithmic Holonomic States
     "AlgorithmicHolonomicState",

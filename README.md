@@ -174,25 +174,59 @@ print(f"All SM features: {all(verified.values())}")  # True
 Intrinsic-Resonance-Holography-/
 ├── python/                     # Main Python package
 │   ├── src/irh/
-│   │   ├── core/v16/          # v16 implementation (production)
-│   │   └── core/v18/          # v18 cGFT implementation (15 modules)
+│   │   ├── core/v18/          # v18 cGFT implementation (CURRENT - 15 modules)
+│   │   └── core/v16/          # v16 implementation (DEPRECATED)
 │   └── tests/
-│       ├── v16/               # v16 tests
-│       └── v18/               # v18 tests (143 passing)
+│       ├── v18/               # v18 tests (143 passing)
+│       └── v16/               # v16 tests (deprecated)
 ├── docs/
 │   ├── manuscripts/           # Theory manuscripts
-│   │   ├── IRHv18.md         # v18 definitive formulation
-│   │   └── IRHv16.md         # v16 theoretical framework
+│   │   ├── IRHv18.md         # v18 definitive formulation (CURRENT)
+│   │   └── IRHv16.md         # v16 theoretical framework (deprecated)
 │   ├── status/               # Phase status documents
 │   └── handoff/              # Agent handoff documents
+├── notebooks/                 # Interactive notebooks
+│   ├── IRH_v18_Quickstart_Colab.ipynb    # Quick start (2 min)
+│   ├── IRH_v18_Full_Install_Colab.ipynb  # Full install with menu
+│   └── IRH_v18_Development_Colab.ipynb   # For developers
 ├── webapp/                    # Web interface
 │   ├── backend/              # FastAPI backend
 │   └── frontend/             # React visualization
-├── notebooks/                 # Jupyter demos
 ├── examples/                  # Usage examples
 ├── benchmarks/               # Performance benchmarks
 └── archive/                  # Legacy documentation
 ```
+
+---
+
+## 📓 Interactive Notebooks
+
+Run IRH v18.0 instantly in Google Colab - no installation required!
+
+| Notebook | Description | Runtime |
+|----------|-------------|---------|
+| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Quickstart_Colab.ipynb) **Quickstart** | Quick introduction to v18 features | ~2 min |
+| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Full_Install_Colab.ipynb) **Full Install** | Complete setup with testing menu | 30s-10min |
+| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dragonspider1991/Intrinsic-Resonance-Holography-/blob/main/notebooks/IRH_v18_Development_Colab.ipynb) **Development** | For contributors and developers | Variable |
+
+### Notebook Features
+
+**Quickstart Notebook:**
+- Standard Model derivation from topology
+- Cosmic Fixed Point computation
+- Key predictions preview
+
+**Full Installation Notebook:**
+- Interactive menu for test level selection
+- Quick (~30s), Standard (~2min), Comprehensive (~5min), Full pytest (~10min)
+- 11 physics modules to validate
+- Visualization of predictions vs experiments
+
+**Development Notebook:**
+- Complete development environment
+- API reference and examples
+- Testing utilities (pytest, coverage)
+- Code quality tools (ruff, black, mypy)
 
 ---
 
@@ -245,10 +279,10 @@ Open http://localhost:5173 for interactive visualization.
 
 | Document | Description |
 |----------|-------------|
-| [IRHv18.md](docs/manuscripts/IRHv18.md) | Definitive theoretical formulation |
-| [IRHv16.md](docs/manuscripts/IRHv16.md) | Production implementation basis |
+| [IRHv18.md](docs/manuscripts/IRHv18.md) | Definitive theoretical formulation (CURRENT) |
+| [IRHv16.md](docs/manuscripts/IRHv16.md) | Legacy implementation basis (DEPRECATED) |
 | [v18 Implementation Plan](docs/v18_IMPLEMENTATION_PLAN.md) | Development roadmap |
-| [Architecture](docs/v16_ARCHITECTURE.md) | System architecture |
+| [Notebooks README](notebooks/README.md) | Interactive notebook documentation |
 | [CONTRIBUTING](CONTRIBUTING.md) | Contribution guidelines |
 
 ---

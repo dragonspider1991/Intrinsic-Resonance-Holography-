@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "irh"
-version = "17.0.0"
-description = "Intrinsic Resonance Holography v17.0: The Unified Theory of Emergent Reality - Analytically derived constants from cGFT"
+version = "18.0.0"
+description = "Intrinsic Resonance Holography v18.0: The Unified Theory of Emergent Reality - Complete cGFT implementation with full Standard Model emergence"
 readme = "README.md"
 authors = [
     {name = "Brandon D. McCrary", email = "brandonmccrary.research@gmail.com"},
