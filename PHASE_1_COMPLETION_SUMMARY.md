@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Phase 1 (Foundations & Core Axioms) implementation is nearly complete, with all major components functional and validated against `docs/manuscripts/IRHv16.md`.
+Phase 1 (Foundations & Core Axioms) implementation is nearly complete, with all major components functional and validated against `docs/manuscripts/IRHv16.md` and the companion `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md`.
 
 ### ✅ Major Achievements
 
@@ -333,6 +333,13 @@ for IRH v16.0, all validated against `docs/manuscripts/IRHv16.md`:
 All components are **working, tested, and theoretically compliant**.
 
 **Phase 1 Status**: 90% Complete → Ready for unit test creation → 100% Complete
+
+---
+
+## Manuscript References
+
+- `docs/manuscripts/IRHv16.md`
+- `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md`
 
 ---
 

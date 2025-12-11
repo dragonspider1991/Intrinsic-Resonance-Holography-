@@ -39,9 +39,11 @@ IRH v16.0 represents the **complete actualization** of the theoretical framework
 
 ---
 
-## Implementation Status: Phase 1 (Foundations)
+## Implementation Status: Phase 2 Kickoff (Exascale Infrastructure & Certified Scaling)
 
-**Current Version**: v16.0.0-alpha (Phase 1 in progress)
+**Current Version**: v16.0.0-alpha (Phase 2 kickoff; Phase 1 foundation complete)
+
+Phase 2 was initiated on December 10, 2025 — see `PHASE_2_STATUS.md` for milestone tracking aligned to the manuscripts in `docs/manuscripts/` (`IRHv16.md` and `IRHv16_Supplementary_Vol_1-5.md`).
 
 IRH v16.0 is being implemented in 5 phases as detailed in `docs/v16_IMPLEMENTATION_ROADMAP.md`:
 
@@ -56,7 +58,7 @@ IRH v16.0 is being implemented in 5 phases as detailed in `docs/v16_IMPLEMENTATI
   - 🔄 Preliminary Harmony Functional with complex Laplacian
   - 🔄 ARO optimizer with genetic algorithm structure
 
-- 📋 **Phase 2**: Exascale Infrastructure & Certified Numerics (PLANNED)
+- 🚀 **Phase 2**: Exascale Infrastructure & Certified Scaling (INITIATED — see `PHASE_2_STATUS.md`)
 - 📋 **Phase 3**: Emergent Quantum Mechanics & General Relativity (PLANNED)
 - 📋 **Phase 4**: Emergent Standard Model & Refinements (PLANNED)
 - 📋 **Phase 5**: Comprehensive Validation & Benchmarking (PLANNED)

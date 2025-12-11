@@ -67,10 +67,48 @@ class CymaticResonanceNetworkV16:
         if self.adjacency_matrix is None:
             self.build_network()
     
+    @classmethod
+    def create_random(cls, N: int, seed: Optional[int] = None, epsilon_threshold: float = 0.730129) -> 'CymaticResonanceNetworkV16':
+        """
+        Create a random Cymatic Resonance Network.
+        
+        Creates N random Algorithmic Holonomic States and builds a CRN from them.
+        
+        Args:
+            N: Number of nodes (AHS) in the network
+            seed: Random seed for reproducibility
+            epsilon_threshold: Edge inclusion threshold (default from Axiom 2)
+            
+        Returns:
+            Initialized CymaticResonanceNetworkV16
+            
+        Example:
+            >>> crn = CymaticResonanceNetwork.create_random(N=10, seed=42)
+            >>> print(crn)
+            CRNv16(N=10, edges=45, ε=0.730129)
+        """
+        from .ahs import create_ahs_network
+        
+        # Create random AHS
+        states = create_ahs_network(N=N, seed=seed)
+        
+        # Create CRN from states
+        return cls(states=states, epsilon_threshold=epsilon_threshold)
+    
     @property
     def N(self) -> int:
         """Number of nodes in the network."""
         return len(self.states)
+    
+    @property
+    def W(self) -> NDArray[np.complex128]:
+        """
+        Adjacency matrix (backward compatibility alias).
+        
+        Returns:
+            Complex-valued adjacency matrix W_ij
+        """
+        return self.adjacency_matrix
     
     @property
     def interference_matrix(self) -> NDArray[np.complex128]:
@@ -239,6 +277,43 @@ class CymaticResonanceNetworkV16:
             "num_zero_eigenvalues": len(eigenvalues) - len(nonzero_eigs),
         }
     
+    def get_adjacency_matrix(self, return_sparse: bool = False) -> NDArray[np.complex128]:
+        """
+        Get the adjacency matrix (backward compatibility method).
+        
+        Args:
+            return_sparse: If True, return sparse matrix (not implemented)
+            
+        Returns:
+            Complex-valued adjacency matrix W_ij
+        """
+        if self.adjacency_matrix is None:
+            raise ValueError("Network not built yet.")
+        return self.adjacency_matrix
+    
+    def get_degree_distribution(self) -> Tuple[NDArray, NDArray]:
+        """
+        Get degree distribution of the network.
+        
+        Returns:
+            Tuple of (in_degree, out_degree) arrays
+        """
+        if self.adjacency_matrix is None:
+            raise ValueError("Network not built yet.")
+        
+        N = self.N
+        in_degree = np.zeros(N)
+        out_degree = np.zeros(N)
+        
+        # Count edges where |W_ij| > 0
+        for i in range(N):
+            for j in range(N):
+                if np.abs(self.adjacency_matrix[i, j]) > 0:
+                    out_degree[i] += 1
+                    in_degree[j] += 1
+        
+        return (in_degree, out_degree)
+    
     def __repr__(self) -> str:
         """String representation."""
         if self.adjacency_matrix is None:
@@ -275,7 +350,11 @@ def create_crn_from_states(
     )
 
 
+# Backward compatibility alias
+CymaticResonanceNetwork = CymaticResonanceNetworkV16
+
 __all__ = [
     "CymaticResonanceNetworkV16",
+    "CymaticResonanceNetwork",
     "create_crn_from_states",
 ]
