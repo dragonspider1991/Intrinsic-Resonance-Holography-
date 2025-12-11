@@ -461,7 +461,6 @@ class LorentzInvarianceViolation:
         
         return {
             "xi": xi,
-            "xi_value": 1.933355051e-4,  # ≈ C_H/(24π²)
             "C_H": self.C_H,
             "current_bounds": "|ξ| < 10⁻²",
             "testable": True,

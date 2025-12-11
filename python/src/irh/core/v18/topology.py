@@ -86,7 +86,9 @@ class BettiNumberFlow:
         Returns:
             Dictionary with β₁ and gauge group decomposition
         """
-        fp = self.fixed_point  # noqa: F841  # Reserved for future use
+        # Reserved for future use: fp will contain fixed-point couplings
+        # that determine β₁ through the condensate topology
+        fp = self.fixed_point  # noqa: F841
         
         # The fixed-point couplings uniquely determine the topology
         # Through the cGFT condensate structure, the emergent M³
@@ -167,7 +169,9 @@ class InstantonNumberFlow:
         Returns:
             Dictionary with n_inst and generation properties
         """
-        fp = self.fixed_point  # noqa: F841  # Reserved for future use
+        # Reserved for future use: fp will contain fixed-point couplings
+        # that determine n_inst through the instanton moduli space
+        fp = self.fixed_point  # noqa: F841
         
         # The fixed-point dynamics allow exactly 3 stable instanton classes
         n_inst_star = 3
