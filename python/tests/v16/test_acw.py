@@ -31,8 +31,8 @@ class TestNCDMagnitude:
         Per IRHv16.md: NCD measures algorithmic distance.
         Identical strings have zero distance.
         """
-        binary1 = b"10101010"
-        binary2 = b"10101010"
+        binary1 = "10101010"
+        binary2 = "10101010"
         
         ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
@@ -41,8 +41,8 @@ class TestNCDMagnitude:
     
     def test_completely_different_strings(self):
         """Test NCD for completely different strings."""
-        binary1 = b"00000000"
-        binary2 = b"11111111"
+        binary1 = "00000000"
+        binary2 = "11111111"
         
         ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
@@ -52,8 +52,8 @@ class TestNCDMagnitude:
         
     def test_similar_strings(self):
         """Test NCD for similar strings (one bit different)."""
-        binary1 = b"10101010"
-        binary2 = b"10101011"  # Last bit different
+        binary1 = "10101010"
+        binary2 = "10101011"  # Last bit different
         
         ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
@@ -63,8 +63,8 @@ class TestNCDMagnitude:
         
     def test_empty_strings(self):
         """Test NCD handles empty strings."""
-        binary1 = b""
-        binary2 = b""
+        binary1 = ""
+        binary2 = ""
         
         ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
@@ -73,8 +73,8 @@ class TestNCDMagnitude:
         
     def test_ncd_symmetry(self):
         """Test NCD(x, y) ≈ NCD(y, x) (approximate symmetry)."""
-        binary1 = b"101010"
-        binary2 = b"110011"
+        binary1 = "101010"
+        binary2 = "110011"
         
         ncd_xy, _ = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         ncd_yx, _ = compute_ncd_magnitude(binary2.encode(), binary1.encode())
@@ -86,10 +86,10 @@ class TestNCDMagnitude:
     def test_ncd_bounds(self):
         """Test NCD is always in [0, 1] for various strings."""
         test_pairs = [
-            (b"1", b"0"),
-            (b"101", b"010"),
-            (b"111111", b"000000"),
-            (b"1010", b"1010"),
+            ("1", "0"),
+            ("101", "010"),
+            ("111111", "000000"),
+            ("1010", "1010"),
         ]
         
         for b1, b2 in test_pairs:
