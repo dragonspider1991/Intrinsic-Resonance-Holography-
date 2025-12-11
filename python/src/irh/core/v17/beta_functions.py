@@ -348,7 +348,7 @@ def compute_stability_matrix(
 
 def verify_fixed_point(tol: float = 1e-10) -> bool:
     """
-    Verify that the analytic fixed-point values satisfy β = 0.
+    Verify that the analytic fixed-point values satisfy β_λ = 0.
     
     Parameters
     ----------
@@ -358,19 +358,22 @@ def verify_fixed_point(tol: float = 1e-10) -> bool:
     Returns
     -------
     bool
-        True if fixed point is verified.
+        True if fixed point for β_λ is verified.
+    
+    Notes
+    -----
+    At the Cosmic Fixed Point:
+    - β_λ = 0 determines λ̃* uniquely
+    - β_γ and β_μ do not independently vanish at this λ̃* value
+    
+    The full fixed-point system requires additional constraints from the
+    effective action and closure conditions, which determine γ̃* and μ̃*.
+    The one-loop β-functions here capture only the leading behavior.
     """
     bl = beta_lambda(FIXED_POINT_LAMBDA)
-    bg = beta_gamma(FIXED_POINT_LAMBDA, FIXED_POINT_GAMMA)
-    bm = beta_mu(FIXED_POINT_LAMBDA, FIXED_POINT_GAMMA, FIXED_POINT_MU)
     
-    # For the manuscript equations, at the fixed point:
-    # β_λ should be 0
-    # β_γ involves the product λ*γ which doesn't vanish
-    # 
-    # Re-examining the manuscript: the fixed point condition
-    # requires the full RG to balance. Let's verify numerically.
-    return (abs(bl) < tol)
+    # β_λ should vanish at the fixed point
+    return abs(bl) < tol
 
 
 if __name__ == "__main__":

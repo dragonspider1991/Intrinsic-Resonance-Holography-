@@ -4,6 +4,10 @@ IRH v17.0 Streamlit Dashboard
 Interactive web interface for exploring IRH v17.0 predictions.
 
 Run with: streamlit run streamlit_v17.py
+
+Note: For production deployment, install the IRH package properly:
+    pip install -e /path/to/Intrinsic-Resonance-Holography-/python
+Then remove the sys.path manipulation below.
 """
 
 import streamlit as st
@@ -14,7 +18,11 @@ import sys
 import os
 
 # Add path for IRH modules
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../python/src'))
+# NOTE: This sys.path manipulation is for development convenience only.
+# For production, install the package properly: pip install -e .
+_irh_path = os.path.join(os.path.dirname(__file__), '../python/src')
+if _irh_path not in sys.path:
+    sys.path.insert(0, _irh_path)
 
 # Import v17 modules
 from irh.core.v17.beta_functions import (

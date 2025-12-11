@@ -2,6 +2,10 @@
 IRH v17.0 API Routes
 
 FastAPI routes for IRH v17.0 cGFT simulation and analysis.
+
+Note: For production deployment, install the IRH package properly:
+    pip install -e /path/to/Intrinsic-Resonance-Holography-/python
+Then remove the sys.path manipulation below.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -10,9 +14,13 @@ from typing import Optional
 import numpy as np
 
 # Import v17 modules
+# NOTE: This sys.path manipulation is for development convenience only.
+# For production, install the package properly: pip install -e .
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../python/src'))
+_irh_path = os.path.join(os.path.dirname(__file__), '../../python/src')
+if _irh_path not in sys.path:
+    sys.path.insert(0, _irh_path)
 
 from irh.core.v17.beta_functions import (
     beta_lambda,

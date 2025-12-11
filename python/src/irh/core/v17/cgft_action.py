@@ -358,9 +358,18 @@ class CGFTAction:
         
         Notes
         -----
-        This is computed via Monte Carlo sampling over the group manifold.
+        **Implementation Status: Placeholder**
+        
+        Full computation requires Monte Carlo integration over G_inf⁸.
+        This is computationally expensive and is implemented as a
+        placeholder for the API structure. For actual calculations,
+        use the symbolic or spherical harmonic mode expansion approach.
+        
+        The interaction term couples field modes through the NCD-weighted
+        kernel K(g₁,g₂,g₃,g₄), enforcing phase coherence.
         """
-        # Simplified: return zero for now (requires full integration)
+        # Placeholder: Full integration requires extensive Monte Carlo sampling
+        # over the 8-dimensional group manifold (G_inf)⁴ × (G_inf)⁴
         return 0.0j
     
     def holographic_measure(
@@ -428,8 +437,20 @@ class CGFTAction:
         -------
         complex
             Value of holographic action.
+        
+        Notes
+        -----
+        **Implementation Status: Placeholder**
+        
+        The holographic term implements the Combinatorial Holographic
+        Principle (Axiom 3) at the level of individual 4-simplices.
+        Full computation requires Monte Carlo integration with the
+        step function constraint Θ(Tr_SU(2)(gᵢgᵢ₊₁⁻¹)).
+        
+        This term is crucial for generating the graviton tensor modes
+        that drive d_spec → 4 in the IR through Δ_grav(k).
         """
-        # Simplified: return zero for now
+        # Placeholder: Requires Monte Carlo integration with constraint
         return 0.0j
     
     def total_action(
