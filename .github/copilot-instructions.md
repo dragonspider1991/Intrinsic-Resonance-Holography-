@@ -168,6 +168,9 @@ def create_ahs_network(
   - `electroweak.py`: Higgs boson, W/Z masses, Weinberg angle
   - `strong_cp.py`: θ = 0, algorithmic axion, PQ symmetry
   - `quantum_mechanics.py`: Born rule, decoherence, Lindblad equation
+  - `dark_energy.py`: Holographic Hum, w₀ equation of state, vacuum energy
+  - `emergent_spacetime.py`: Lorentzian signature, time emergence, diffeomorphisms
+  - `emergent_qft.py`: Particle spectrum, effective Lagrangian, SM emergence
 - **Approach**: Analytical over stochastic - constants derived, not fitted
 - **Fixed point values** (Eq. 1.14): λ̃* = 48π²/9 ≈ 52.64, γ̃* = 32π²/3 ≈ 105.28, μ̃* = 16π² ≈ 157.91
 - **Key classes**:
@@ -178,6 +181,9 @@ def create_ahs_network(
   - `ElectroweakSector`: Higgs VEV, W/Z masses, Weinberg angle
   - `StrongCPResolution`: θ = 0, algorithmic axion predictions
   - `EmergentQuantumMechanics`: Born rule and measurement emergence
+  - `DarkEnergyModule`: w₀ ≈ -0.9998, Holographic Hum
+  - `EmergentSpacetime`: Lorentzian signature, time emergence
+  - `EmergentQFT`: Full particle spectrum and effective Lagrangian
 
 #### v18 Code Patterns
 ```python
@@ -186,7 +192,8 @@ from irh.core.v18 import (
     CosmicFixedPoint, find_fixed_point, BetaFunctions,
     StandardModelTopology, compute_emergent_gravity_summary,
     CKMMatrix, PMNSMatrix, NeutrinoSector,
-    ElectroweakSector, StrongCPResolution, EmergentQuantumMechanics
+    ElectroweakSector, StrongCPResolution, EmergentQuantumMechanics,
+    DarkEnergyModule, EmergentSpacetime, EmergentQFT
 )
 
 # Get fixed point and verify
@@ -216,6 +223,18 @@ print(cp.verify_resolution())  # θ = 0, resolved = True
 # Emergent QM
 qm = EmergentQuantumMechanics()
 print(qm.get_summary()["born_rule"])  # Derived, not postulated
+
+# Dark energy predictions
+de = DarkEnergyModule()
+print(de.compute_full_analysis()["equation_of_state"])  # w₀ ≈ -0.9998
+
+# Emergent spacetime
+st = EmergentSpacetime()
+print(st.verify_all_properties())  # Lorentzian, 4D, etc.
+
+# Complete QFT emergence
+qft = EmergentQFT()
+print(qft.verify_standard_model())  # All SM features verified
 ```
 
 ## Testing Guidelines
@@ -556,7 +575,7 @@ class AlgorithmicHolonomicState:
 - **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
 - **Bootstrap (validated)**: `python -m pip install -e .[dev]` (Python 3.11/3.12). Set PYTHONPATH: in `python/` use `export PYTHONPATH=$(pwd)/src`; in repo root use `export PYTHONPATH=$PWD` for legacy/tests.
 - **Tests**:  
-  - **v18 (72 tests)**: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v18/ -v` (passes ~0.6s)
+  - **v18 (143 tests)**: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v18/ -v` (passes ~0.7s)
   - v16: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v16/ -v`
   - Legacy: `cd /home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography- && export PYTHONPATH=$PWD && pytest tests/test_v16_core.py`
 - **Lint/type/build**:  
@@ -568,17 +587,19 @@ class AlgorithmicHolonomicState:
 - **Run/demo**: `python project_irh_v16.py` (root; set PYTHONPATH); web backend `cd webapp/backend && pip install -r requirements.txt && python app.py`; frontend `cd webapp/frontend && npm install && npm run dev` (Vite :5173).
 - **v18 quick verification**:
   ```python
-  from irh.core.v18 import StandardModelTopology, NeutrinoSector
+  from irh.core.v18 import StandardModelTopology, NeutrinoSector, EmergentQFT
   sm = StandardModelTopology()
   assert sm.verify_standard_model()  # β₁=12, n_inst=3
   neutrino = NeutrinoSector()
   assert neutrino.compute_mass_hierarchy()["hierarchy"] == "normal"
+  qft = EmergentQFT()
+  assert all(qft.verify_standard_model().values())  # Complete SM from cGFT
   ```
 - **Conventions**: PEP 8, line length 100, NumPy docstrings with equation refs; phase wrapping via `np.mod(angle, 2*np.pi)` and `_wrapped_phase_difference` with `PHASE_TOLERANCE=1e-10`; input normalization via `_to_bytes`; wrap `np.exp(...)` in `complex(...)`.
 - **CI signals**: `.github/workflows/ci.yml` (pytest on `tests/`, ruff on `src/`, mypy on `src/irh_v10`) and `ci-cd.yml` (black/mypy, v16 legacy tests, python package tests/coverage, docs check, benchmarks, Wolfram notice, release stub). Prefer Python 3.12 and correct PYTHONPATH to mirror CI.
 - **Agent reminders**: keep changes minimal, place new code in `python/src/irh/...` with matching tests in `python/tests/...`, avoid new deps unless required, and trust these instructions before searching.
 
-## v18 Module Summary (12 modules)
+## v18 Module Summary (15 modules)
 
 | Module | Purpose | Key Classes/Functions |
 |--------|---------|----------------------|
@@ -594,3 +615,6 @@ class AlgorithmicHolonomicState:
 | `electroweak.py` | Higgs, W/Z, θ_W | `HiggsBoson`, `ElectroweakSector`, `WeinbergAngle` |
 | `strong_cp.py` | θ=0, axion | `AlgorithmicAxion`, `StrongCPResolution` |
 | `quantum_mechanics.py` | Born rule, Lindblad | `BornRule`, `EmergentQuantumMechanics` |
+| `dark_energy.py` | Holographic Hum, w₀ | `DarkEnergyModule`, `HolographicHum` |
+| `emergent_spacetime.py` | Lorentzian, time | `EmergentSpacetime`, `TimeEmergence` |
+| `emergent_qft.py` | Particle spectrum | `EmergentQFT`, `EffectiveLagrangian` |

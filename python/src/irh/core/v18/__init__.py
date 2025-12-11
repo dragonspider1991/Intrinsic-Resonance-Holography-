@@ -141,6 +141,36 @@ from .quantum_mechanics import (
     EmergentQuantumMechanics,
 )
 
+from .dark_energy import (
+    HolographicHum,
+    DarkEnergyEquationOfState,
+    VacuumEnergyDensity,
+    CosmologicalEvolution,
+    DarkEnergyModule,
+    compute_dark_energy_summary,
+    DARK_ENERGY_OBSERVATIONS,
+)
+
+from .emergent_spacetime import (
+    LorentzianSignatureEmergence,
+    TimeEmergence,
+    DiffeomorphismInvariance,
+    EmergentSpacetime,
+    compute_spacetime_summary,
+)
+
+from .emergent_qft import (
+    ParticleType,
+    GaugeGroup,
+    EmergentParticle,
+    GravitonIdentification,
+    GaugeBosonIdentification,
+    FermionIdentification,
+    EffectiveLagrangian,
+    EmergentQFT,
+    compute_qft_summary,
+)
+
 # Universal constant from Cosmic Fixed Point
 C_H_V18 = 0.045935703598
 
@@ -249,6 +279,33 @@ __all__ = [
     'Decoherence',
     'LindbladEquation',
     'EmergentQuantumMechanics',
+    
+    # Dark energy and Holographic Hum
+    'HolographicHum',
+    'DarkEnergyEquationOfState',
+    'VacuumEnergyDensity',
+    'CosmologicalEvolution',
+    'DarkEnergyModule',
+    'compute_dark_energy_summary',
+    'DARK_ENERGY_OBSERVATIONS',
+    
+    # Emergent spacetime
+    'LorentzianSignatureEmergence',
+    'TimeEmergence',
+    'DiffeomorphismInvariance',
+    'EmergentSpacetime',
+    'compute_spacetime_summary',
+    
+    # Emergent QFT
+    'ParticleType',
+    'GaugeGroup',
+    'EmergentParticle',
+    'GravitonIdentification',
+    'GaugeBosonIdentification',
+    'FermionIdentification',
+    'EffectiveLagrangian',
+    'EmergentQFT',
+    'compute_qft_summary',
     
     # Constants
     'C_H_V18',
