@@ -234,6 +234,8 @@ class HarmonyFunctionalEvaluator:
         try:
             result = compute_harmony_functional(crn)
             S_H = result['S_H']
+            if np.isclose(S_H, 0.0):
+                S_H = -np.inf
             
             # Track history
             if iteration is not None:
