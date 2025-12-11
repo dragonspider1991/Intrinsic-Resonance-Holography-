@@ -521,6 +521,24 @@ class AlgorithmicHolonomicState:
 - Lindblad equation for open systems
 - Unitarity preserved at substrate level
 
+#### Dark Energy and Holographic Hum
+- w₀ ≈ -0.9998 near phantom threshold (testable prediction)
+- Holographic Hum: vacuum fluctuations from boundary-bulk resonance
+- Λ* ≈ 1.1 × 10⁻⁵² m⁻² from fixed point
+- Dynamical dark energy Ω_DE(z) evolution
+
+#### Emergent Spacetime
+- Lorentzian signature (-,+,+,+) from SSB mechanism
+- Time emerges from entropy production in EAT dynamics
+- Diffeomorphism invariance from background independence
+- 4D macroscopic spacetime from spectral dimension flow
+
+#### Emergent QFT
+- Complete particle spectrum: graviton + gauge bosons + fermions
+- Effective Lagrangian reproduces Standard Model
+- Mass generation via Higgs mechanism from μ̃*/λ̃*
+- All particle masses derived analytically
+
 ## Key Principles
 
 1. **Reproducibility**: Use fixed random seeds, well-defined precision
@@ -572,10 +590,10 @@ class AlgorithmicHolonomicState:
 
 ## Addendum: Fast operational checklist (v18-first)
 
-- **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
+- **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18 complete), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
 - **Bootstrap (validated)**: `python -m pip install -e .[dev]` (Python 3.11/3.12). Set PYTHONPATH: in `python/` use `export PYTHONPATH=$(pwd)/src`; in repo root use `export PYTHONPATH=$PWD` for legacy/tests.
 - **Tests**:  
-  - **v18 (143 tests)**: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v18/ -v` (passes ~0.7s)
+  - **v18 (143 tests)**: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v18/ -v` (passes ~0.8s)
   - v16: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v16/ -v`
   - Legacy: `cd /home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography- && export PYTHONPATH=$PWD && pytest tests/test_v16_core.py`
 - **Lint/type/build**:  
@@ -598,6 +616,7 @@ class AlgorithmicHolonomicState:
 - **Conventions**: PEP 8, line length 100, NumPy docstrings with equation refs; phase wrapping via `np.mod(angle, 2*np.pi)` and `_wrapped_phase_difference` with `PHASE_TOLERANCE=1e-10`; input normalization via `_to_bytes`; wrap `np.exp(...)` in `complex(...)`.
 - **CI signals**: `.github/workflows/ci.yml` (pytest on `tests/`, ruff on `src/`, mypy on `src/irh_v10`) and `ci-cd.yml` (black/mypy, v16 legacy tests, python package tests/coverage, docs check, benchmarks, Wolfram notice, release stub). Prefer Python 3.12 and correct PYTHONPATH to mirror CI.
 - **Agent reminders**: keep changes minimal, place new code in `python/src/irh/...` with matching tests in `python/tests/...`, avoid new deps unless required, and trust these instructions before searching.
+- **Repository organization**: Status documents in `docs/status/`, handoff docs in `docs/handoff/`, legacy files in `archive/`.
 
 ## v18 Module Summary (15 modules)
 
