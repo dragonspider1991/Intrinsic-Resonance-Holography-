@@ -165,6 +165,9 @@ def create_ahs_network(
   - `topology.py`: β₁ = 12 (gauge group), n_inst = 3 (fermion generations)
   - `emergent_gravity.py`: Einstein equations, graviton propagator, LIV
   - `flavor_mixing.py`: CKM, PMNS matrices, neutrino sector
+  - `electroweak.py`: Higgs boson, W/Z masses, Weinberg angle
+  - `strong_cp.py`: θ = 0, algorithmic axion, PQ symmetry
+  - `quantum_mechanics.py`: Born rule, decoherence, Lindblad equation
 - **Approach**: Analytical over stochastic - constants derived, not fitted
 - **Fixed point values** (Eq. 1.14): λ̃* = 48π²/9 ≈ 52.64, γ̃* = 32π²/3 ≈ 105.28, μ̃* = 16π² ≈ 157.91
 - **Key classes**:
@@ -172,6 +175,9 @@ def create_ahs_network(
   - `BetaFunctions`: One-loop β-functions, evaluate with `.evaluate(λ, γ, μ)`
   - `StandardModelTopology`: Complete SM derivation from β₁ and n_inst
   - `NeutrinoSector`: Normal hierarchy, Majorana nature, 12-digit masses
+  - `ElectroweakSector`: Higgs VEV, W/Z masses, Weinberg angle
+  - `StrongCPResolution`: θ = 0, algorithmic axion predictions
+  - `EmergentQuantumMechanics`: Born rule and measurement emergence
 
 #### v18 Code Patterns
 ```python
@@ -179,7 +185,8 @@ def create_ahs_network(
 from irh.core.v18 import (
     CosmicFixedPoint, find_fixed_point, BetaFunctions,
     StandardModelTopology, compute_emergent_gravity_summary,
-    CKMMatrix, PMNSMatrix, NeutrinoSector
+    CKMMatrix, PMNSMatrix, NeutrinoSector,
+    ElectroweakSector, StrongCPResolution, EmergentQuantumMechanics
 )
 
 # Get fixed point and verify
@@ -197,6 +204,18 @@ neutrino = NeutrinoSector()
 assert neutrino.compute_mass_hierarchy()["hierarchy"] == "normal"
 masses = neutrino.compute_absolute_masses()
 print(f"Σmν = {masses['sum_masses_eV']:.6f} eV")  # ≈ 0.058 eV
+
+# Electroweak sector
+ew = ElectroweakSector()
+print(ew.compute_full_sector()["higgs"]["mass"])  # m_H ≈ 125 GeV
+
+# Strong CP resolution
+cp = StrongCPResolution()
+print(cp.verify_resolution())  # θ = 0, resolved = True
+
+# Emergent QM
+qm = EmergentQuantumMechanics()
+print(qm.get_summary()["born_rule"])  # Derived, not postulated
 ```
 
 ## Testing Guidelines
@@ -467,6 +486,22 @@ class AlgorithmicHolonomicState:
 - Modified dispersion: E² = p²c² + ξ × E³/(E_Planck × c²)
 - Detectable via high-energy gamma-ray astronomy
 
+#### Electroweak Sector
+- Higgs VEV v = 246.22 GeV emerges from μ̃*/λ̃*
+- W mass (80.4 GeV), Z mass (91.2 GeV) from Higgs mechanism
+- Weinberg angle sin²θ_W = 0.231 from gauge coupling unification
+
+#### Strong CP Problem
+- θ_QCD = 0 via emergent algorithmic axion
+- Peccei-Quinn symmetry emerges from cGFT
+- Axion mass m_a ≈ 5.7 μeV, decay constant f_a ≈ 10¹² GeV
+
+#### Emergent Quantum Mechanics
+- Born rule (P = |ψ|²) derived from EAT collective dynamics
+- Measurement = decoherence in environment
+- Lindblad equation for open systems
+- Unitarity preserved at substrate level
+
 ## Key Principles
 
 1. **Reproducibility**: Use fixed random seeds, well-defined precision
@@ -543,7 +578,7 @@ class AlgorithmicHolonomicState:
 - **CI signals**: `.github/workflows/ci.yml` (pytest on `tests/`, ruff on `src/`, mypy on `src/irh_v10`) and `ci-cd.yml` (black/mypy, v16 legacy tests, python package tests/coverage, docs check, benchmarks, Wolfram notice, release stub). Prefer Python 3.12 and correct PYTHONPATH to mirror CI.
 - **Agent reminders**: keep changes minimal, place new code in `python/src/irh/...` with matching tests in `python/tests/...`, avoid new deps unless required, and trust these instructions before searching.
 
-## v18 Module Summary (9 modules)
+## v18 Module Summary (12 modules)
 
 | Module | Purpose | Key Classes/Functions |
 |--------|---------|----------------------|
@@ -556,3 +591,6 @@ class AlgorithmicHolonomicState:
 | `topology.py` | β₁=12, n_inst=3 | `StandardModelTopology`, `VortexWavePattern` |
 | `emergent_gravity.py` | Einstein, graviton, LIV | `EinsteinEquations`, `LorentzInvarianceViolation` |
 | `flavor_mixing.py` | CKM, PMNS, neutrinos | `CKMMatrix`, `PMNSMatrix`, `NeutrinoSector` |
+| `electroweak.py` | Higgs, W/Z, θ_W | `HiggsBoson`, `ElectroweakSector`, `WeinbergAngle` |
+| `strong_cp.py` | θ=0, axion | `AlgorithmicAxion`, `StrongCPResolution` |
+| `quantum_mechanics.py` | Born rule, Lindblad | `BornRule`, `EmergentQuantumMechanics` |

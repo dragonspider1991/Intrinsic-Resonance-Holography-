@@ -114,6 +114,33 @@ from .flavor_mixing import (
     NEUTRINO_MASS_SPLITTINGS,
 )
 
+from .electroweak import (
+    HiggsBoson,
+    GaugeBosonMasses,
+    WeinbergAngle,
+    FermiConstant,
+    ElectroweakSector,
+    EW_EXPERIMENTAL,
+)
+
+from .strong_cp import (
+    ThetaAngle,
+    PecceiQuinnSymmetry,
+    AlgorithmicAxion,
+    StrongCPResolution,
+    STRONG_CP_CONSTANTS,
+    QCD_PARAMETERS,
+)
+
+from .quantum_mechanics import (
+    ElementaryAlgorithmicTransformation,
+    QuantumAmplitudeEmergence,
+    BornRule,
+    Decoherence,
+    LindbladEquation,
+    EmergentQuantumMechanics,
+)
+
 # Universal constant from Cosmic Fixed Point
 C_H_V18 = 0.045935703598
 
@@ -198,6 +225,30 @@ __all__ = [
     'CKM_EXPERIMENTAL',
     'PMNS_ANGLES_EXP',
     'NEUTRINO_MASS_SPLITTINGS',
+    
+    # Electroweak sector
+    'HiggsBoson',
+    'GaugeBosonMasses',
+    'WeinbergAngle',
+    'FermiConstant',
+    'ElectroweakSector',
+    'EW_EXPERIMENTAL',
+    
+    # Strong CP problem
+    'ThetaAngle',
+    'PecceiQuinnSymmetry',
+    'AlgorithmicAxion',
+    'StrongCPResolution',
+    'STRONG_CP_CONSTANTS',
+    'QCD_PARAMETERS',
+    
+    # Emergent quantum mechanics
+    'ElementaryAlgorithmicTransformation',
+    'QuantumAmplitudeEmergence',
+    'BornRule',
+    'Decoherence',
+    'LindbladEquation',
+    'EmergentQuantumMechanics',
     
     # Constants
     'C_H_V18',
