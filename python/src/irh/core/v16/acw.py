@@ -19,7 +19,7 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 import numpy as np
 from numpy.typing import NDArray
 
@@ -62,9 +62,20 @@ class AlgorithmicCoherenceWeight:
         return self.complex_value
 
 
+def _to_bytes(value: Union[str, bytes, bytearray]) -> bytes:
+    """Normalize binary inputs to bytes."""
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, bytearray):
+        return bytes(value)
+    if isinstance(value, str):
+        return value.encode("ascii")
+    raise TypeError("Value must be str, bytes, or bytearray")
+
+
 def compute_ncd_magnitude(
-    binary1: bytes,
-    binary2: bytes,
+    binary1: Union[str, bytes, bytearray],
+    binary2: Union[str, bytes, bytearray],
     method: str = "lzw",
     time_bound: Optional[int] = None
 ) -> Tuple[float, float]:
@@ -97,14 +108,15 @@ def compute_ncd_magnitude(
     if method != "lzw":
         raise NotImplementedError(f"Method '{method}' not yet implemented. Use 'lzw'.")
     
+    # Normalize to bytes
+    bytes1 = _to_bytes(binary1)
+    bytes2 = _to_bytes(binary2)
+    
     # Special case: identical strings
-    if binary1 == binary2:
+    if bytes1 == bytes2:
         return (0.0, 0.0)
     
-    # binary1 and binary2 are already bytes, no need to encode
-    bytes1 = binary1
-    bytes2 = binary2
-    bytes_concat = binary1 + binary2
+    bytes_concat = bytes1 + bytes2
     
     # Compress using zlib (LZ77, similar to LZW)
     # Use compression level 9 for maximum compression (high fidelity)
