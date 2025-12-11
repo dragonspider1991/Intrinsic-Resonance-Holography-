@@ -34,7 +34,7 @@ class TestNCDMagnitude:
         binary1 = "10101010"
         binary2 = "10101010"
         
-        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
         assert ncd == 0.0, "NCD of identical strings must be 0"
         assert error >= 0, "Error bound must be non-negative"
@@ -44,7 +44,7 @@ class TestNCDMagnitude:
         binary1 = "00000000"
         binary2 = "11111111"
         
-        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
         # NCD is bounded in [0, 1]
         assert 0 <= ncd <= 1.0, f"NCD must be in [0,1], got {ncd}"
@@ -55,7 +55,7 @@ class TestNCDMagnitude:
         binary1 = "10101010"
         binary2 = "10101011"  # Last bit different
         
-        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
         # Similar strings should have low NCD
         assert 0 < ncd < 1.0, "Similar strings should have 0 < NCD < 1"
@@ -66,7 +66,7 @@ class TestNCDMagnitude:
         binary1 = ""
         binary2 = ""
         
-        ncd, error = compute_ncd_magnitude(binary1, binary2)
+        ncd, error = compute_ncd_magnitude(binary1.encode(), binary2.encode())
         
         # Both empty should have NCD = 0
         assert ncd == 0.0
@@ -76,8 +76,8 @@ class TestNCDMagnitude:
         binary1 = "101010"
         binary2 = "110011"
         
-        ncd_xy, _ = compute_ncd_magnitude(binary1, binary2)
-        ncd_yx, _ = compute_ncd_magnitude(binary2, binary1)
+        ncd_xy, _ = compute_ncd_magnitude(binary1.encode(), binary2.encode())
+        ncd_yx, _ = compute_ncd_magnitude(binary2.encode(), binary1.encode())
         
         # NCD should be approximately symmetric (may vary slightly with compression)
         assert np.isclose(ncd_xy, ncd_yx, rtol=0.15), \
@@ -94,7 +94,7 @@ class TestNCDMagnitude:
         ]
         
         for b1, b2 in test_pairs:
-            ncd, _ = compute_ncd_magnitude(b1, b2)
+            ncd, _ = compute_ncd_magnitude(b1.encode(), b2.encode())
             assert 0 <= ncd <= 1.0, f"NCD out of bounds for ({b1}, {b2}): {ncd}"
 
 
