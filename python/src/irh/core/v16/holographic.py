@@ -98,7 +98,10 @@ class Subnetwork:
         
         for i in self.node_indices:
             # Check if node i has neighbors outside subnetwork
-            neighbors = set(np.where(A[i, :] | A[:, i])[0])
+            # For complex matrices, check |W| > 0
+            out_neighbors = set(np.where(np.abs(A[i, :]) > 0)[0])
+            in_neighbors = set(np.where(np.abs(A[:, i]) > 0)[0])
+            neighbors = out_neighbors | in_neighbors
             if neighbors - self.node_indices:
                 boundary.add(i)
         

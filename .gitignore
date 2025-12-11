@@ -104,6 +104,10 @@ experiments/*.h5
 experiments/*.png
 experiments/*.pdf
 
+# Checkpoints (Phase 2+)
+checkpoints/
+*.pkl
+
 # Frontend Node.js
 webapp/frontend/node_modules/
 webapp/frontend/dist/
