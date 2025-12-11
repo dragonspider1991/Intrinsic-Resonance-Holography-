@@ -24,14 +24,13 @@ References:
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Optional, Tuple, List, Dict
+from dataclasses import dataclass
+from typing import Optional, List, Dict
 import numpy as np
 from numpy.typing import NDArray
 
 from .group_manifold import (
-    GInfElement, SU2Element, U1Element,
-    compute_ncd_distance, haar_integrate_ginf
+    GInfElement, compute_ncd_distance
 )
 from .cgft_field import cGFTFieldDiscrete, BiLocalField
 

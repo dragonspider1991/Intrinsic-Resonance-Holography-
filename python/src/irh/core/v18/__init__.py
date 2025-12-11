@@ -79,6 +79,98 @@ from .physical_constants import (
     TOPOLOGICAL_COMPLEXITY,
 )
 
+from .topology import (
+    BettiNumberFlow,
+    InstantonNumberFlow,
+    VortexWavePattern,
+    EmergentSpatialManifold,
+    StandardModelTopology,
+    SM_GAUGE_GENERATORS,
+    TOTAL_SM_GENERATORS,
+    NUM_FERMION_GENERATIONS,
+)
+
+from .emergent_gravity import (
+    EmergentMetric,
+    EinsteinEquations,
+    GravitonPropagator,
+    HigherCurvatureSuppression,
+    LorentzInvarianceViolation,
+    compute_emergent_gravity_summary,
+    PLANCK_LENGTH,
+    PLANCK_MASS,
+    PLANCK_ENERGY,
+    LAMBDA_OBSERVED,
+    G_NEWTON,
+)
+
+from .flavor_mixing import (
+    CKMMatrix,
+    PMNSMatrix,
+    NeutrinoSector,
+    compute_flavor_mixing_summary,
+    CKM_EXPERIMENTAL,
+    PMNS_ANGLES_EXP,
+    NEUTRINO_MASS_SPLITTINGS,
+)
+
+from .electroweak import (
+    HiggsBoson,
+    GaugeBosonMasses,
+    WeinbergAngle,
+    FermiConstant,
+    ElectroweakSector,
+    EW_EXPERIMENTAL,
+)
+
+from .strong_cp import (
+    ThetaAngle,
+    PecceiQuinnSymmetry,
+    AlgorithmicAxion,
+    StrongCPResolution,
+    STRONG_CP_CONSTANTS,
+    QCD_PARAMETERS,
+)
+
+from .quantum_mechanics import (
+    ElementaryAlgorithmicTransformation,
+    QuantumAmplitudeEmergence,
+    BornRule,
+    Decoherence,
+    LindbladEquation,
+    EmergentQuantumMechanics,
+)
+
+from .dark_energy import (
+    HolographicHum,
+    DarkEnergyEquationOfState,
+    VacuumEnergyDensity,
+    CosmologicalEvolution,
+    DarkEnergyModule,
+    compute_dark_energy_summary,
+    DARK_ENERGY_OBSERVATIONS,
+)
+
+from .emergent_spacetime import (
+    LorentzianSignatureEmergence,
+    TimeEmergence,
+    DiffeomorphismInvariance,
+    EmergentSpacetime,
+    compute_spacetime_summary,
+)
+
+from .emergent_qft import (
+    ParticleType,
+    GaugeGroup,
+    EmergentParticle,
+    GravitonIdentification,
+    GaugeBosonIdentification,
+    FermionIdentification,
+    EffectiveLagrangian,
+    EmergentQFT,
+    compute_qft_summary,
+)
+
 # Universal constant from Cosmic Fixed Point
 C_H_V18 = 0.045935703598
 
@@ -131,6 +223,89 @@ __all__ = [
     'compute_all_predictions',
     'ALPHA_INVERSE_CODATA',
     'TOPOLOGICAL_COMPLEXITY',
+    
+    # Topology (Standard Model emergence)
+    'BettiNumberFlow',
+    'InstantonNumberFlow',
+    'VortexWavePattern',
+    'EmergentSpatialManifold',
+    'StandardModelTopology',
+    'SM_GAUGE_GENERATORS',
+    'TOTAL_SM_GENERATORS',
+    'NUM_FERMION_GENERATIONS',
+    
+    # Emergent gravity
+    'EmergentMetric',
+    'EinsteinEquations',
+    'GravitonPropagator',
+    'HigherCurvatureSuppression',
+    'LorentzInvarianceViolation',
+    'compute_emergent_gravity_summary',
+    'PLANCK_LENGTH',
+    'PLANCK_MASS',
+    'PLANCK_ENERGY',
+    'LAMBDA_OBSERVED',
+    'G_NEWTON',
+    
+    # Flavor mixing
+    'CKMMatrix',
+    'PMNSMatrix',
+    'NeutrinoSector',
+    'compute_flavor_mixing_summary',
+    'CKM_EXPERIMENTAL',
+    'PMNS_ANGLES_EXP',
+    'NEUTRINO_MASS_SPLITTINGS',
+    
+    # Electroweak sector
+    'HiggsBoson',
+    'GaugeBosonMasses',
+    'WeinbergAngle',
+    'FermiConstant',
+    'ElectroweakSector',
+    'EW_EXPERIMENTAL',
+    
+    # Strong CP problem
+    'ThetaAngle',
+    'PecceiQuinnSymmetry',
+    'AlgorithmicAxion',
+    'StrongCPResolution',
+    'STRONG_CP_CONSTANTS',
+    'QCD_PARAMETERS',
+    
+    # Emergent quantum mechanics
+    'ElementaryAlgorithmicTransformation',
+    'QuantumAmplitudeEmergence',
+    'BornRule',
+    'Decoherence',
+    'LindbladEquation',
+    'EmergentQuantumMechanics',
+    
+    # Dark energy and Holographic Hum
+    'HolographicHum',
+    'DarkEnergyEquationOfState',
+    'VacuumEnergyDensity',
+    'CosmologicalEvolution',
+    'DarkEnergyModule',
+    'compute_dark_energy_summary',
+    'DARK_ENERGY_OBSERVATIONS',
+    
+    # Emergent spacetime
+    'LorentzianSignatureEmergence',
+    'TimeEmergence',
+    'DiffeomorphismInvariance',
+    'EmergentSpacetime',
+    'compute_spacetime_summary',
+    
+    # Emergent QFT
+    'ParticleType',
+    'GaugeGroup',
+    'EmergentParticle',
+    'GravitonIdentification',
+    'GaugeBosonIdentification',
+    'FermionIdentification',
+    'EffectiveLagrangian',
+    'EmergentQFT',
+    'compute_qft_summary',
     
     # Constants
     'C_H_V18',

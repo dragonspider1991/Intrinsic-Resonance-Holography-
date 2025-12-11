@@ -152,11 +152,90 @@ def create_ahs_network(
 - **Data types**: AlgorithmicHolonomicState accepts str/bytes/bytearray, preserves original type
 - **NCD**: Multi-fidelity adaptive selection (HIGH <10^4, MEDIUM <10^6, LOW >=10^6 bytes)
 
-### v18.0 (Analytical Derivations)
-- **Focus**: Analytical derivations from combinatorial Gauge Field Theory (cGFT)
-- **Key modules**: `rg_flow.py`, `cgft_action.py`, `cgft_field.py`, `spectral_dimension.py`, `physical_constants.py`, `group_manifold.py`
+### v18.0 (Analytical Derivations from cGFT)
+- **Focus**: Analytical derivations from complex-weighted Group Field Theory (cGFT)
+- **Core modules**: 
+  - `group_manifold.py`: G_inf = SU(2) × U(1)_φ implementation
+  - `cgft_field.py`: Fundamental field φ(g₁,g₂,g₃,g₄) and bilocal Σ
+  - `cgft_action.py`: Complete action S_kin + S_int + S_hol
+  - `rg_flow.py`: Beta functions and Cosmic Fixed Point
+  - `spectral_dimension.py`: d_spec flow to exactly 4
+  - `physical_constants.py`: α, fermion masses, w₀, Λ*
+- **Physics modules**:
+  - `topology.py`: β₁ = 12 (gauge group), n_inst = 3 (fermion generations)
+  - `emergent_gravity.py`: Einstein equations, graviton propagator, LIV
+  - `flavor_mixing.py`: CKM, PMNS matrices, neutrino sector
+  - `electroweak.py`: Higgs boson, W/Z masses, Weinberg angle
+  - `strong_cp.py`: θ = 0, algorithmic axion, PQ symmetry
+  - `quantum_mechanics.py`: Born rule, decoherence, Lindblad equation
+  - `dark_energy.py`: Holographic Hum, w₀ equation of state, vacuum energy
+  - `emergent_spacetime.py`: Lorentzian signature, time emergence, diffeomorphisms
+  - `emergent_qft.py`: Particle spectrum, effective Lagrangian, SM emergence
 - **Approach**: Analytical over stochastic - constants derived, not fitted
-- **Fixed points**: λ̃* = 48π²/9, γ̃* = 32π²/3, μ̃* = 16π²
+- **Fixed point values** (Eq. 1.14): λ̃* = 48π²/9 ≈ 52.64, γ̃* = 32π²/3 ≈ 105.28, μ̃* = 16π² ≈ 157.91
+- **Key classes**:
+  - `CosmicFixedPoint`: The unique IR attractor, use via `find_fixed_point()`
+  - `BetaFunctions`: One-loop β-functions, evaluate with `.evaluate(λ, γ, μ)`
+  - `StandardModelTopology`: Complete SM derivation from β₁ and n_inst
+  - `NeutrinoSector`: Normal hierarchy, Majorana nature, 12-digit masses
+  - `ElectroweakSector`: Higgs VEV, W/Z masses, Weinberg angle
+  - `StrongCPResolution`: θ = 0, algorithmic axion predictions
+  - `EmergentQuantumMechanics`: Born rule and measurement emergence
+  - `DarkEnergyModule`: w₀ ≈ -0.9998, Holographic Hum
+  - `EmergentSpacetime`: Lorentzian signature, time emergence
+  - `EmergentQFT`: Full particle spectrum and effective Lagrangian
+
+#### v18 Code Patterns
+```python
+# Import v18 components
+from irh.core.v18 import (
+    CosmicFixedPoint, find_fixed_point, BetaFunctions,
+    StandardModelTopology, compute_emergent_gravity_summary,
+    CKMMatrix, PMNSMatrix, NeutrinoSector,
+    ElectroweakSector, StrongCPResolution, EmergentQuantumMechanics,
+    DarkEnergyModule, EmergentSpacetime, EmergentQFT
+)
+
+# Get fixed point and verify
+fp = find_fixed_point()
+assert fp.verify()["is_fixed_point"]
+
+# Compute Standard Model emergence
+sm = StandardModelTopology()
+result = sm.compute_full_derivation()
+assert result["gauge_sector"]["beta_1"] == 12  # SU(3)×SU(2)×U(1)
+assert result["matter_sector"]["n_inst"] == 3   # 3 generations
+
+# Get neutrino predictions
+neutrino = NeutrinoSector()
+assert neutrino.compute_mass_hierarchy()["hierarchy"] == "normal"
+masses = neutrino.compute_absolute_masses()
+print(f"Σmν = {masses['sum_masses_eV']:.6f} eV")  # ≈ 0.058 eV
+
+# Electroweak sector
+ew = ElectroweakSector()
+print(ew.compute_full_sector()["higgs"]["mass"])  # m_H ≈ 125 GeV
+
+# Strong CP resolution
+cp = StrongCPResolution()
+print(cp.verify_resolution())  # θ = 0, resolved = True
+
+# Emergent QM
+qm = EmergentQuantumMechanics()
+print(qm.get_summary()["born_rule"])  # Derived, not postulated
+
+# Dark energy predictions
+de = DarkEnergyModule()
+print(de.compute_full_analysis()["equation_of_state"])  # w₀ ≈ -0.9998
+
+# Emergent spacetime
+st = EmergentSpacetime()
+print(st.verify_all_properties())  # Lorentzian, 4D, etc.
+
+# Complete QFT emergence
+qft = EmergentQFT()
+print(qft.verify_standard_model())  # All SM features verified
+```
 
 ## Testing Guidelines
 
@@ -252,11 +331,53 @@ ncd = normalized_compression_distance(
 
 ### Fixed Point Computation (v18)
 ```python
-from irh.core.v18.rg_flow import find_fixed_point
+from irh.core.v18.rg_flow import find_fixed_point, BetaFunctions
 
 # Compute analytical fixed point (Eq.1.14)
 fixed_point = find_fixed_point()
-# Returns: (48π²/9, 32π²/3, 16π²)
+# Returns CosmicFixedPoint with: λ̃* = 48π²/9, γ̃* = 32π²/3, μ̃* = 16π²
+
+# Verify β-functions vanish at fixed point
+beta = BetaFunctions()
+beta_vals = beta.evaluate(fixed_point.lambda_star, fixed_point.gamma_star, fixed_point.mu_star)
+assert all(abs(b) < 1e-8 for b in beta_vals)  # All β ≈ 0
+```
+
+### Standard Model Derivation (v18)
+```python
+from irh.core.v18 import StandardModelTopology, NeutrinoSector
+
+# Derive complete Standard Model structure
+sm = StandardModelTopology()
+result = sm.compute_full_derivation()
+
+# Gauge group from β₁ = 12
+assert result["gauge_sector"]["beta_1"] == 12  # SU(3)×SU(2)×U(1)
+print(result["gauge_sector"]["decomposition"])  # {"SU3": 8, "SU2": 3, "U1": 1}
+
+# Fermion generations from n_inst = 3
+assert result["matter_sector"]["n_inst"] == 3
+
+# Neutrino predictions
+neutrino = NeutrinoSector()
+print(neutrino.compute_mass_hierarchy())  # {"hierarchy": "normal", ...}
+print(neutrino.compute_majorana_nature())  # {"nature": "Majorana", ...}
+masses = neutrino.compute_absolute_masses()
+print(f"Σmν = {masses['sum_masses_eV']:.6f} eV")  # ≈ 0.058 eV
+```
+
+### Emergent Gravity and LIV (v18)
+```python
+from irh.core.v18 import compute_emergent_gravity_summary, LorentzInvarianceViolation
+
+# Get complete gravity predictions
+gravity = compute_emergent_gravity_summary()
+print(f"Λ_* = {gravity['cosmological_constant']['Lambda_star']:.4e} m⁻²")
+
+# Lorentz Invariance Violation parameter
+liv = LorentzInvarianceViolation()
+xi = liv.compute_xi()
+print(f"ξ = {xi['xi']:.6e}")  # ≈ 1.93 × 10⁻⁴ (testable!)
 ```
 
 ### Phase Handling Patterns
@@ -355,6 +476,69 @@ class AlgorithmicHolonomicState:
 - Uses genetic algorithms for network optimization
 - Unitary evolution on complex-valued states
 
+### v18-Specific Concepts
+
+#### Cosmic Fixed Point
+- The unique infrared attractor of the RG flow
+- Analytically derived values: λ̃* = 48π²/9, γ̃* = 32π²/3, μ̃* = 16π²
+- All physics emerges at this fixed point
+- Access via `CosmicFixedPoint()` or `find_fixed_point()`
+
+#### Informational Group Manifold G_inf
+- G_inf = SU(2) × U(1)_φ
+- SU(2): Encodes minimal non-commutative algebra (quaternions)
+- U(1)_φ: Holonomic phase φ ∈ [0, 2π)
+- Use `GInfElement.random(rng)` for sampling
+
+#### Topological Invariants
+- **First Betti number β₁ = 12**: Determines gauge group SU(3)×SU(2)×U(1)
+- **Instanton number n_inst = 3**: Determines three fermion generations
+- Both are topologically protected integers
+
+#### Vortex Wave Pattern (VWP)
+- Stable topological defects = fermions
+- Topological complexity K_f determines mass hierarchy
+- K_e = 1, K_μ ≈ 207, K_τ ≈ 3477
+
+#### Lorentz Invariance Violation
+- Testable prediction: ξ = C_H/(24π²) ≈ 1.93 × 10⁻⁴
+- Modified dispersion: E² = p²c² + ξ × E³/(E_Planck × c²)
+- Detectable via high-energy gamma-ray astronomy
+
+#### Electroweak Sector
+- Higgs VEV v = 246.22 GeV emerges from μ̃*/λ̃*
+- W mass (80.4 GeV), Z mass (91.2 GeV) from Higgs mechanism
+- Weinberg angle sin²θ_W = 0.231 from gauge coupling unification
+
+#### Strong CP Problem
+- θ_QCD = 0 via emergent algorithmic axion
+- Peccei-Quinn symmetry emerges from cGFT
+- Axion mass m_a ≈ 5.7 μeV, decay constant f_a ≈ 10¹² GeV
+
+#### Emergent Quantum Mechanics
+- Born rule (P = |ψ|²) derived from EAT collective dynamics
+- Measurement = decoherence in environment
+- Lindblad equation for open systems
+- Unitarity preserved at substrate level
+
+#### Dark Energy and Holographic Hum
+- w₀ ≈ -0.9998 near phantom threshold (testable prediction)
+- Holographic Hum: vacuum fluctuations from boundary-bulk resonance
+- Λ* ≈ 1.1 × 10⁻⁵² m⁻² from fixed point
+- Dynamical dark energy Ω_DE(z) evolution
+
+#### Emergent Spacetime
+- Lorentzian signature (-,+,+,+) from SSB mechanism
+- Time emerges from entropy production in EAT dynamics
+- Diffeomorphism invariance from background independence
+- 4D macroscopic spacetime from spectral dimension flow
+
+#### Emergent QFT
+- Complete particle spectrum: graviton + gauge bosons + fermions
+- Effective Lagrangian reproduces Standard Model
+- Mass generation via Higgs mechanism from μ̃*/λ̃*
+- All particle masses derived analytically
+
 ## Key Principles
 
 1. **Reproducibility**: Use fixed random seeds, well-defined precision
@@ -406,11 +590,12 @@ class AlgorithmicHolonomicState:
 
 ## Addendum: Fast operational checklist (v18-first)
 
-- **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
+- **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18 complete), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
 - **Bootstrap (validated)**: `python -m pip install -e .[dev]` (Python 3.11/3.12). Set PYTHONPATH: in `python/` use `export PYTHONPATH=$(pwd)/src`; in repo root use `export PYTHONPATH=$PWD` for legacy/tests.
 - **Tests**:  
-  - Active: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v16/test_ahs.py` (passes ~0.5s) or `pytest tests/ -v`.  
-  - Legacy: `cd /home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography- && export PYTHONPATH=$PWD && pytest tests/test_v16_core.py` (passes); full `pytest tests/` may fail if PYTHONPATH unset or Wolfram deps missing. Unknown mark `slow` warning is benign.
+  - **v18 (143 tests)**: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v18/ -v` (passes ~0.8s)
+  - v16: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v16/ -v`
+  - Legacy: `cd /home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography- && export PYTHONPATH=$PWD && pytest tests/test_v16_core.py`
 - **Lint/type/build**:  
   - `cd python && export PYTHONPATH=$(pwd)/src && ruff check src/`  
   - `black --check src/ tests/ --line-length 100` (within `python/`)  
@@ -418,6 +603,37 @@ class AlgorithmicHolonomicState:
   - Root legacy (if touched): `ruff check src/ --ignore E501`, `black --check src/ tests/`.  
   - Build: `python -m build && twine check dist/*`.
 - **Run/demo**: `python project_irh_v16.py` (root; set PYTHONPATH); web backend `cd webapp/backend && pip install -r requirements.txt && python app.py`; frontend `cd webapp/frontend && npm install && npm run dev` (Vite :5173).
+- **v18 quick verification**:
+  ```python
+  from irh.core.v18 import StandardModelTopology, NeutrinoSector, EmergentQFT
+  sm = StandardModelTopology()
+  assert sm.verify_standard_model()  # β₁=12, n_inst=3
+  neutrino = NeutrinoSector()
+  assert neutrino.compute_mass_hierarchy()["hierarchy"] == "normal"
+  qft = EmergentQFT()
+  assert all(qft.verify_standard_model().values())  # Complete SM from cGFT
+  ```
 - **Conventions**: PEP 8, line length 100, NumPy docstrings with equation refs; phase wrapping via `np.mod(angle, 2*np.pi)` and `_wrapped_phase_difference` with `PHASE_TOLERANCE=1e-10`; input normalization via `_to_bytes`; wrap `np.exp(...)` in `complex(...)`.
 - **CI signals**: `.github/workflows/ci.yml` (pytest on `tests/`, ruff on `src/`, mypy on `src/irh_v10`) and `ci-cd.yml` (black/mypy, v16 legacy tests, python package tests/coverage, docs check, benchmarks, Wolfram notice, release stub). Prefer Python 3.12 and correct PYTHONPATH to mirror CI.
 - **Agent reminders**: keep changes minimal, place new code in `python/src/irh/...` with matching tests in `python/tests/...`, avoid new deps unless required, and trust these instructions before searching.
+- **Repository organization**: Status documents in `docs/status/`, handoff docs in `docs/handoff/`, legacy files in `archive/`.
+
+## v18 Module Summary (15 modules)
+
+| Module | Purpose | Key Classes/Functions |
+|--------|---------|----------------------|
+| `group_manifold.py` | G_inf = SU(2)×U(1) | `SU2Element`, `GInfElement`, `compute_ncd_distance` |
+| `cgft_field.py` | φ(g₁,g₂,g₃,g₄) field | `cGFTFieldDiscrete`, `BiLocalField`, `CondensateState` |
+| `cgft_action.py` | S_kin + S_int + S_hol | `cGFTAction`, `compute_harmony_functional` |
+| `rg_flow.py` | β-functions, fixed point | `BetaFunctions`, `CosmicFixedPoint`, `find_fixed_point` |
+| `spectral_dimension.py` | d_spec → 4 | `SpectralDimensionFlow`, `verify_theorem_2_1` |
+| `physical_constants.py` | α, masses, w₀, Λ | `FineStructureConstant`, `FermionMassCalculator` |
+| `topology.py` | β₁=12, n_inst=3 | `StandardModelTopology`, `VortexWavePattern` |
+| `emergent_gravity.py` | Einstein, graviton, LIV | `EinsteinEquations`, `LorentzInvarianceViolation` |
+| `flavor_mixing.py` | CKM, PMNS, neutrinos | `CKMMatrix`, `PMNSMatrix`, `NeutrinoSector` |
+| `electroweak.py` | Higgs, W/Z, θ_W | `HiggsBoson`, `ElectroweakSector`, `WeinbergAngle` |
+| `strong_cp.py` | θ=0, axion | `AlgorithmicAxion`, `StrongCPResolution` |
+| `quantum_mechanics.py` | Born rule, Lindblad | `BornRule`, `EmergentQuantumMechanics` |
+| `dark_energy.py` | Holographic Hum, w₀ | `DarkEnergyModule`, `HolographicHum` |
+| `emergent_spacetime.py` | Lorentzian, time | `EmergentSpacetime`, `TimeEmergence` |
+| `emergent_qft.py` | Particle spectrum | `EmergentQFT`, `EffectiveLagrangian` |

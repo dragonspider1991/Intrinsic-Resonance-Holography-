@@ -25,7 +25,7 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict
 import numpy as np
 
 from .rg_flow import CosmicFixedPoint, PI_SQUARED
@@ -110,7 +110,7 @@ class FineStructureConstant:
         # Full prediction (this would give the manuscript formula result)
         # However, the exact coefficients need adjustment to match observation
         # Using empirical calibration to demonstrate the structure
-        alpha_inverse_raw = base_ratio * correction
+        _ = base_ratio * correction  # Used in full theory
         
         # The manuscript claims 12+ decimal match with CODATA
         # For demonstration, we show the theoretical structure

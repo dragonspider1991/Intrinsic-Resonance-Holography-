@@ -25,12 +25,12 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, List, Dict, Tuple
+from typing import Optional, Dict
 import numpy as np
 from numpy.typing import NDArray
 from scipy.integrate import solve_ivp
 
-from .rg_flow import CosmicFixedPoint, PI_SQUARED
+from .rg_flow import CosmicFixedPoint
 
 
 # =============================================================================
