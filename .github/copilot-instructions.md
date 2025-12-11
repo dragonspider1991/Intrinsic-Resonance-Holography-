@@ -2,12 +2,12 @@
 
 ## Project Overview
 
-IRH is a theoretical physics framework that derives fundamental constants and physical laws from first principles using Algorithmic Holonomic States (AHS). This is a research codebase implementing computational validation of the IRH v16.0 and v17.0 theories.
+IRH is a theoretical physics framework that derives fundamental constants and physical laws from first principles using Algorithmic Holonomic States (AHS). This is a research codebase implementing computational validation of the IRH v16.0 and v18.0 theories.
 
 **Key Features:**
 - Derives fundamental constants (fine structure constant α, dark energy w₀, etc.) from algorithmic information theory
 - Exascale-ready implementation with certified numerical precision (12+ decimal places)
-- Multi-version architecture (v15, v16, v17) with incremental enhancements
+- Multi-version architecture (v15, v16, v18) with incremental enhancements
 - Complete physics derivations: Quantum Mechanics, General Relativity, Standard Model
 
 **Target Audience:** Theoretical physicists, computational scientists, researchers in quantum gravity and emergent spacetime
@@ -46,14 +46,14 @@ Intrinsic-Resonance-Holography-/
 │   ├── src/irh/
 │   │   ├── core/
 │   │   │   ├── v16/          # v16 implementation (ACW, AHS, ARO, NCD, Harmony)
-│   │   │   └── v17/          # v17 cGFT implementation (analytical derivations)
+│   │   │   └── v18/          # v18 cGFT implementation (analytical derivations)
 │   │   ├── predictions/      # Physical constant predictions
 │   │   └── ...
 │   └── tests/
 │       ├── v16/              # v16 unit tests
-│       └── v17/              # v17 unit tests
+│       └── v18/              # v18 unit tests
 ├── docs/
-│   ├── manuscripts/          # Theory manuscripts (IRHv16.md, IRHv17.md)
+│   ├── manuscripts/          # Theory manuscripts (IRHv16.md, IRHv18.md)
 │   └── ...
 ├── webapp/                   # Web interface (FastAPI + Streamlit)
 ├── notebooks/                # Jupyter notebooks for demonstrations
@@ -152,9 +152,9 @@ def create_ahs_network(
 - **Data types**: AlgorithmicHolonomicState accepts str/bytes/bytearray, preserves original type
 - **NCD**: Multi-fidelity adaptive selection (HIGH <10^4, MEDIUM <10^6, LOW >=10^6 bytes)
 
-### v17.0 (Analytical Derivations)
+### v18.0 (Analytical Derivations)
 - **Focus**: Analytical derivations from combinatorial Gauge Field Theory (cGFT)
-- **Key modules**: `beta_functions.py`, `constants.py`, `spectral_dimension.py`, `cgft_action.py`
+- **Key modules**: `rg_flow.py`, `cgft_action.py`, `cgft_field.py`, `spectral_dimension.py`, `physical_constants.py`, `group_manifold.py`
 - **Approach**: Analytical over stochastic - constants derived, not fitted
 - **Fixed points**: λ̃* = 48π²/9, γ̃* = 32π²/3, μ̃* = 16π²
 
@@ -168,15 +168,15 @@ pytest python/tests/ -v
 # Run v16 tests only
 pytest python/tests/v16/ -v
 
-# Run v17 tests only
-pytest python/tests/v17/ -v
+# Run v18 tests only
+pytest python/tests/v18/ -v
 
 # Run with coverage
 pytest python/tests/ --cov=irh --cov-report=html
 ```
 
 ### Writing Tests
-- **Location**: Place tests in `python/tests/v16/` or `python/tests/v17/` matching the module
+- **Location**: Place tests in `python/tests/v16/` or `python/tests/v18/` matching the module
 - **Naming**: Use `test_*.py` for files, `test_*` for functions
 - **Structure**: Use pytest classes to group related tests (e.g., `class TestAlgorithmicHolonomicState`)
 - **Docstrings**: Include equation references in test docstrings
@@ -186,9 +186,11 @@ Example test pattern:
 ```python
 def test_beta_lambda_at_fixed_point():
     """β_λ should vanish at the fixed point (Eq.1.14)."""
-    from irh.core.v17.beta_functions import beta_lambda, FIXED_POINT_LAMBDA
+    from irh.core.v18.rg_flow import BetaFunctions, find_fixed_point
     
-    result = beta_lambda(FIXED_POINT_LAMBDA)
+    fp = find_fixed_point()
+    beta = BetaFunctions()
+    result = beta.beta_lambda(fp.lambda_star, fp.gamma_star, fp.mu_star)
     assert np.isclose(result, 0.0, atol=1e-10)
 ```
 
@@ -204,7 +206,7 @@ def test_beta_lambda_at_fixed_point():
 ### Theory Documentation
 - **v16 Manuscript**: `docs/manuscripts/IRHv16.md` - Core v16.0 theory
 - **v16 Supplementary**: `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md` - Detailed derivations
-- **v17 Manuscript**: `docs/manuscripts/IRHv17.md` - Analytical cGFT theory
+- **v18 Manuscript**: `docs/manuscripts/IRHv18.md` - Analytical cGFT theory
 - **Architecture**: `docs/v16_ARCHITECTURE.md` - v16 system architecture
 - **Roadmap**: `docs/v16_IMPLEMENTATION_ROADMAP.md` - Implementation phases
 
@@ -248,12 +250,12 @@ ncd = normalized_compression_distance(
 )
 ```
 
-### Fixed Point Computation (v17)
+### Fixed Point Computation (v18)
 ```python
-from irh.core.v17.beta_functions import compute_fixed_point
+from irh.core.v18.rg_flow import find_fixed_point
 
 # Compute analytical fixed point (Eq.1.14)
-lambda_star, gamma_star, mu_star = compute_fixed_point()
+fixed_point = find_fixed_point()
 # Returns: (48π²/9, 32π²/3, 16π²)
 ```
 
@@ -296,7 +298,7 @@ Always reference manuscript equations in comments and docstrings:
 # Implements Eq.4.1 from IRH v16.0 Manuscript
 harmony = compute_spectral_zeta_functional(network, epsilon)
 
-# Fixed point values from Eq.1.14 (IRH v17.0)
+# Fixed point values from Eq.1.14 (IRH v18.0)
 FIXED_POINT_LAMBDA = 48 * np.pi**2 / 9
 ```
 
@@ -399,3 +401,23 @@ class AlgorithmicHolonomicState:
 ---
 
 *"A complete, exascale-ready computational framework achieving 12+ decimal precision in fundamental constant derivations, with definitive empirical verification at the theoretical and computational frontiers."*
+
+---
+
+## Addendum: Fast operational checklist (v18-first)
+
+- **What this repo is**: IRH research code; active Python package in `python/src/irh` (v16–v18), legacy `src/` + `.wl` in root, webapp in `webapp/`, docs in `docs/`.
+- **Bootstrap (validated)**: `python -m pip install -e .[dev]` (Python 3.11/3.12). Set PYTHONPATH: in `python/` use `export PYTHONPATH=$(pwd)/src`; in repo root use `export PYTHONPATH=$PWD` for legacy/tests.
+- **Tests**:  
+  - Active: `cd python && export PYTHONPATH=$(pwd)/src && pytest tests/v16/test_ahs.py` (passes ~0.5s) or `pytest tests/ -v`.  
+  - Legacy: `cd /home/runner/work/Intrinsic-Resonance-Holography-/Intrinsic-Resonance-Holography- && export PYTHONPATH=$PWD && pytest tests/test_v16_core.py` (passes); full `pytest tests/` may fail if PYTHONPATH unset or Wolfram deps missing. Unknown mark `slow` warning is benign.
+- **Lint/type/build**:  
+  - `cd python && export PYTHONPATH=$(pwd)/src && ruff check src/`  
+  - `black --check src/ tests/ --line-length 100` (within `python/`)  
+  - `mypy src/irh/ --ignore-missing-imports`  
+  - Root legacy (if touched): `ruff check src/ --ignore E501`, `black --check src/ tests/`.  
+  - Build: `python -m build && twine check dist/*`.
+- **Run/demo**: `python project_irh_v16.py` (root; set PYTHONPATH); web backend `cd webapp/backend && pip install -r requirements.txt && python app.py`; frontend `cd webapp/frontend && npm install && npm run dev` (Vite :5173).
+- **Conventions**: PEP 8, line length 100, NumPy docstrings with equation refs; phase wrapping via `np.mod(angle, 2*np.pi)` and `_wrapped_phase_difference` with `PHASE_TOLERANCE=1e-10`; input normalization via `_to_bytes`; wrap `np.exp(...)` in `complex(...)`.
+- **CI signals**: `.github/workflows/ci.yml` (pytest on `tests/`, ruff on `src/`, mypy on `src/irh_v10`) and `ci-cd.yml` (black/mypy, v16 legacy tests, python package tests/coverage, docs check, benchmarks, Wolfram notice, release stub). Prefer Python 3.12 and correct PYTHONPATH to mirror CI.
+- **Agent reminders**: keep changes minimal, place new code in `python/src/irh/...` with matching tests in `python/tests/...`, avoid new deps unless required, and trust these instructions before searching.
