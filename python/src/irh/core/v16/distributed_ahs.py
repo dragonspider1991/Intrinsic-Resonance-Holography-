@@ -25,7 +25,10 @@ from pathlib import Path
 import pickle
 import hashlib
 import json
-from datetime import datetime, UTC
+from datetime import datetime, timezone
+
+# Python 3.10 compatibility: datetime.UTC only exists in 3.11+
+UTC = timezone.utc
 
 from .ahs import AlgorithmicHolonomicState
 
