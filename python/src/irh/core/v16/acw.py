@@ -109,6 +109,17 @@ class AlgorithmicCoherenceWeight:
                 f"±{self.error_bound:.2e}, method='{self.method}')")
 
 
+def _to_bytes(value: Union[str, bytes, bytearray]) -> bytes:
+    """Normalize binary inputs to bytes."""
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, bytearray):
+        return bytes(value)
+    if isinstance(value, str):
+        return value.encode("ascii")
+    raise TypeError("Value must be str, bytes, or bytearray")
+
+
 def compute_ncd_magnitude(
     binary1: Union[str, bytes, bytearray],
     binary2: Union[str, bytes, bytearray],
@@ -152,8 +163,10 @@ def compute_ncd_magnitude(
     if method != "lzw":
         raise NotImplementedError(f"Method '{method}' not yet implemented. Use 'lzw'.")
     
+    # Normalize to bytes
     bytes1 = _to_bytes(binary1)
     bytes2 = _to_bytes(binary2)
+    
     # Special case: identical strings
     if bytes1 == bytes2:
         return (0.0, 0.0)
