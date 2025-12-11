@@ -79,6 +79,41 @@ from .physical_constants import (
     TOPOLOGICAL_COMPLEXITY,
 )
 
+from .topology import (
+    BettiNumberFlow,
+    InstantonNumberFlow,
+    VortexWavePattern,
+    EmergentSpatialManifold,
+    StandardModelTopology,
+    SM_GAUGE_GENERATORS,
+    TOTAL_SM_GENERATORS,
+    NUM_FERMION_GENERATIONS,
+)
+
+from .emergent_gravity import (
+    EmergentMetric,
+    EinsteinEquations,
+    GravitonPropagator,
+    HigherCurvatureSuppression,
+    LorentzInvarianceViolation,
+    compute_emergent_gravity_summary,
+    PLANCK_LENGTH,
+    PLANCK_MASS,
+    PLANCK_ENERGY,
+    LAMBDA_OBSERVED,
+    G_NEWTON,
+)
+
+from .flavor_mixing import (
+    CKMMatrix,
+    PMNSMatrix,
+    NeutrinoSector,
+    compute_flavor_mixing_summary,
+    CKM_EXPERIMENTAL,
+    PMNS_ANGLES_EXP,
+    NEUTRINO_MASS_SPLITTINGS,
+)
+
 # Universal constant from Cosmic Fixed Point
 C_H_V18 = 0.045935703598
 
@@ -131,6 +166,38 @@ __all__ = [
     'compute_all_predictions',
     'ALPHA_INVERSE_CODATA',
     'TOPOLOGICAL_COMPLEXITY',
+    
+    # Topology (Standard Model emergence)
+    'BettiNumberFlow',
+    'InstantonNumberFlow',
+    'VortexWavePattern',
+    'EmergentSpatialManifold',
+    'StandardModelTopology',
+    'SM_GAUGE_GENERATORS',
+    'TOTAL_SM_GENERATORS',
+    'NUM_FERMION_GENERATIONS',
+    
+    # Emergent gravity
+    'EmergentMetric',
+    'EinsteinEquations',
+    'GravitonPropagator',
+    'HigherCurvatureSuppression',
+    'LorentzInvarianceViolation',
+    'compute_emergent_gravity_summary',
+    'PLANCK_LENGTH',
+    'PLANCK_MASS',
+    'PLANCK_ENERGY',
+    'LAMBDA_OBSERVED',
+    'G_NEWTON',
+    
+    # Flavor mixing
+    'CKMMatrix',
+    'PMNSMatrix',
+    'NeutrinoSector',
+    'compute_flavor_mixing_summary',
+    'CKM_EXPERIMENTAL',
+    'PMNS_ANGLES_EXP',
+    'NEUTRINO_MASS_SPLITTINGS',
     
     # Constants
     'C_H_V18',

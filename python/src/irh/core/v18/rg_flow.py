@@ -26,7 +26,7 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List, Dict
+from typing import Optional, Tuple, Dict
 import numpy as np
 from numpy.typing import NDArray
 from scipy.integrate import solve_ivp

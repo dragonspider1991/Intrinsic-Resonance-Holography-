@@ -25,11 +25,11 @@ References:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List, Dict, Callable
+from typing import Optional, Tuple, List, Dict
 import numpy as np
 from numpy.typing import NDArray
 
-from .group_manifold import GInfElement, SU2Element, U1Element, haar_integrate_ginf
+from .group_manifold import GInfElement
 
 
 # =============================================================================
