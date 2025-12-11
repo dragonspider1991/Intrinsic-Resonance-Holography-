@@ -42,11 +42,18 @@ from webapp.backend.visualization import (
 )
 from webapp.backend.integration import IRHSimulation, run_full_simulation
 
+# Import v17.0 routes
+try:
+    from webapp.backend.v17_routes import router as v17_router
+    V17_AVAILABLE = True
+except ImportError:
+    V17_AVAILABLE = False
+
 # Initialize FastAPI app
 app = FastAPI(
     title="IRH Web API",
-    description="REST API for Intrinsic Resonance Holography Test Suite",
-    version="1.0.0",
+    description="REST API for Intrinsic Resonance Holography Test Suite (including v17.0)",
+    version="1.1.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
 )
@@ -95,6 +102,10 @@ if os.getenv("ENV") == "production":
 
 jobs_db: Dict[str, Dict[str, Any]] = {}
 websocket_connections: Dict[str, WebSocket] = {}
+
+# Register v17.0 routes if available
+if V17_AVAILABLE:
+    app.include_router(v17_router)
 
 
 # ============================================================================

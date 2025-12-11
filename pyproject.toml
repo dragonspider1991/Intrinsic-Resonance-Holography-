@@ -3,9 +3,9 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "irh-v10"
-version = "10.0.0"
-description = "Intrinsic Resonance Holography v10.0: Cymatic Resonance - A parameter-free Theory of Everything"
+name = "irh"
+version = "17.0.0"
+description = "Intrinsic Resonance Holography v17.0: The Unified Theory of Emergent Reality - Analytically derived constants from cGFT"
 readme = "README.md"
 authors = [
     {name = "Brandon D. McCrary", email = "brandonmccrary.research@gmail.com"},
@@ -29,6 +29,8 @@ dependencies = [
     "qutip>=5.0.0",
     "matplotlib>=3.7.0",
     "tqdm>=4.65.0",
+    "sympy>=1.12",
+    "mpmath>=1.3.0",
 ]
 
 [project.optional-dependencies]
@@ -38,6 +40,17 @@ dev = [
     "black>=22.0.0",
     "flake8>=4.0.0",
     "mypy>=0.950",
+    "ruff>=0.1.0",
+]
+webapp = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "streamlit>=1.28.0",
+    "pydantic>=2.0.0",
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
 ]
 
 [project.urls]
