@@ -18,7 +18,7 @@ IRH is a theoretical physics framework that derives fundamental constants and ph
 - **Python**: 3.11, 3.12 (primary implementation language)
 - **NumPy**: >=1.24.0 (numerical computations)
 - **SciPy**: >=1.11.0 (scientific computing, optimization)
-- **NetworkX**: >=3.1 (graph-based algorithms for Cymantic Resonance Networks)
+- **NetworkX**: >=3.1 (graph-based algorithms for Cymatic Resonance Networks)
 - **QuTip**: >=5.0.0 (quantum mechanics simulations)
 - **SymPy**: >=1.12 (symbolic mathematics)
 - **mpmath**: >=1.3.0 (arbitrary precision arithmetic)
@@ -378,7 +378,7 @@ class AlgorithmicHolonomicState:
 
 ### Python Compatibility
 - Support Python 3.11 and 3.12
-- Use `datetime.timezone.utc` (not `datetime.UTC`) for 3.10 compatibility
+- Use `datetime.timezone.utc` (not `datetime.UTC`) for broader compatibility
 - Test with both supported versions in CI
 
 ## Warnings and Known Issues
