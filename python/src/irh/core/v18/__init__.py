@@ -10,6 +10,8 @@ Modules:
     - cgft_field: Fundamental field φ(g₁,g₂,g₃,g₄) and bilocal Σ
     - cgft_action: S_kin + S_int + S_hol action terms
     - rg_flow: Beta functions and Cosmic Fixed Point
+    - spectral_dimension: d_spec flow to exactly 4
+    - physical_constants: α, fermion masses, w₀, Λ*
 
 Key Classes:
     - GInfElement: Element of informational group manifold
@@ -58,6 +60,25 @@ from .rg_flow import (
     compute_C_H_certified,
 )
 
+from .spectral_dimension import (
+    SpectralDimensionFlow,
+    compute_spectral_dimension_heat_kernel,
+    AsymptoticSafetySignature,
+    verify_theorem_2_1,
+    D_SPEC_ONE_LOOP,
+    D_SPEC_IR,
+)
+
+from .physical_constants import (
+    FineStructureConstant,
+    FermionMassCalculator,
+    DarkEnergyPrediction,
+    CosmologicalConstantPrediction,
+    compute_all_predictions,
+    ALPHA_INVERSE_CODATA,
+    TOPOLOGICAL_COMPLEXITY,
+)
+
 # Universal constant from Cosmic Fixed Point
 C_H_V18 = 0.045935703598
 
@@ -93,6 +114,23 @@ __all__ = [
     'RGFlowSolution',
     'integrate_rg_flow',
     'compute_C_H_certified',
+    
+    # Spectral dimension
+    'SpectralDimensionFlow',
+    'compute_spectral_dimension_heat_kernel',
+    'AsymptoticSafetySignature',
+    'verify_theorem_2_1',
+    'D_SPEC_ONE_LOOP',
+    'D_SPEC_IR',
+    
+    # Physical constants
+    'FineStructureConstant',
+    'FermionMassCalculator',
+    'DarkEnergyPrediction',
+    'CosmologicalConstantPrediction',
+    'compute_all_predictions',
+    'ALPHA_INVERSE_CODATA',
+    'TOPOLOGICAL_COMPLEXITY',
     
     # Constants
     'C_H_V18',

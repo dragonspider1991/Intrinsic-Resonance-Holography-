@@ -66,13 +66,14 @@ class SU2Element:
     def _normalize(self) -> None:
         """Ensure quaternion has unit norm."""
         norm = np.sqrt(self.q0**2 + self.q1**2 + self.q2**2 + self.q3**2)
-        if norm > 1e-10:
+        if norm > 1e-8:  # More robust threshold
             self.q0 /= norm
             self.q1 /= norm
             self.q2 /= norm
             self.q3 /= norm
         else:
-            # Default to identity if degenerate
+            # If input is degenerate (near zero), default to identity
+            # This is a safety fallback - callers should avoid such inputs
             self.q0, self.q1, self.q2, self.q3 = 1.0, 0.0, 0.0, 0.0
     
     @property
