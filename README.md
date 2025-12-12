@@ -281,7 +281,6 @@ Open http://localhost:5173 for interactive visualization.
 |----------|-------------|
 | [IRHv18.md](docs/manuscripts/IRHv18.md) | Definitive theoretical formulation (CURRENT) |
 | [IRHv16.md](docs/manuscripts/IRHv16.md) | Legacy implementation basis (DEPRECATED) |
-| [HarmonyOptimizer Numerical Methods](docs/HarmonyOptimizer_Numerical_Methods.md) | Public numerical workflow, truncation, and fixed-point certification |
 | [v18 Implementation Plan](docs/v18_IMPLEMENTATION_PLAN.md) | Development roadmap |
 | [Notebooks README](notebooks/README.md) | Interactive notebook documentation |
 | [CONTRIBUTING](CONTRIBUTING.md) | Contribution guidelines |
