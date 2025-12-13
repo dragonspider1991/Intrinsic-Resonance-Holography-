@@ -3,10 +3,10 @@ Spectral Dimension for IRH v18.0
 ================================
 
 Implements the spectral dimension flow from UV to IR as described
-in IRHv18.md Section 2.1.
+in IRH18.md Section 2.1.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 2.1: Exact emergence of 4D spacetime
     - Eq. 2.8: Flow equation for d_spec(k)
     - Eq. 2.9: d_spec(k→0) = 4.0000000000(1)
@@ -17,7 +17,7 @@ Key Results:
     - IR: d_spec → 4 exactly (graviton fluctuations)
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §2.1: Asymptotic-safety mechanism
         - §2.1.2: Exact flow equation
         - Theorem 2.1: Exact 4D spacetime
@@ -70,8 +70,8 @@ class SpectralDimensionFlow:
         fixed_point: Reference to Cosmic Fixed Point
         
     References:
-        IRHv18.md §2.1: Spectral dimension emergence
-        IRHv18.md Theorem 2.1: Exact d_spec = 4
+        IRH18.md §2.1: Spectral dimension emergence
+        IRH18.md Theorem 2.1: Exact d_spec = 4
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -290,8 +290,8 @@ class AsymptoticSafetySignature:
     quantum gravity as realized in IRH v18.0.
     
     References:
-        IRHv18.md §2.1.1: Asymptotic-safety mechanism
-        IRHv18.md §2.1.3: Graviton loop correction
+        IRH18.md §2.1.1: Asymptotic-safety mechanism
+        IRH18.md §2.1.3: Graviton loop correction
     """
     
     def check_signature(

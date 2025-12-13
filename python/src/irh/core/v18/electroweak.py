@@ -9,7 +9,7 @@ Implements the electroweak sector derivation from the cGFT:
 - Weinberg (weak mixing) angle
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 3.3: Emergent Local Gauge Invariance
     - Section 3.3.1: Electroweak Symmetry Breaking
     - Theorem 3.3: Gauge boson masses
@@ -22,7 +22,7 @@ Key Results:
     - Weinberg angle: sin²θ_W = 0.23122(4)
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §3.3: Local Gauge Invariance and Higgs Sector
         - §3.3.1: EWSB and Gauge Boson Masses
         - Theorem 3.3: W/Z mass predictions
@@ -70,8 +70,8 @@ class HiggsBoson:
     and its mass arises from fluctuations around this condensate.
     
     References:
-        IRHv18.md §3.3.1: EWSB from cGFT
-        IRHv18.md Eq. 3.9-3.10: Higgs mass derivation
+        IRH18.md §3.3.1: EWSB from cGFT
+        IRH18.md Eq. 3.9-3.10: Higgs mass derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -80,7 +80,7 @@ class HiggsBoson:
         """
         Compute Higgs vacuum expectation value.
         
-        From IRHv18.md Eq. 3.9:
+        From IRH18.md Eq. 3.9:
         v² = μ̃*/λ̃* × M_Pl² (with appropriate rescaling)
         
         Returns:
@@ -108,7 +108,7 @@ class HiggsBoson:
         """
         Compute Higgs boson mass.
         
-        From IRHv18.md Eq. 3.10:
+        From IRH18.md Eq. 3.10:
         m_H² = 2λ̃* × v²/(16π²)
         
         Returns:
@@ -170,8 +170,8 @@ class GaugeBosonMasses:
     m_Z = √(g₁² + g₂²)v/2
     
     References:
-        IRHv18.md §3.3.1: Gauge boson mass derivation
-        IRHv18.md Theorem 3.3: Mass predictions
+        IRH18.md §3.3.1: Gauge boson mass derivation
+        IRH18.md Theorem 3.3: Mass predictions
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -274,8 +274,8 @@ class WeinbergAngle:
     At the Cosmic Fixed Point, this ratio is uniquely determined.
     
     References:
-        IRHv18.md §3.3.1: Weinberg angle prediction
-        IRHv18.md Eq. 3.11: sin²θ_W derivation
+        IRH18.md §3.3.1: Weinberg angle prediction
+        IRH18.md Eq. 3.11: sin²θ_W derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -345,7 +345,7 @@ class FermiConstant:
     G_F/√2 = g₂²/(8m_W²) = 1/(2v²)
     
     References:
-        IRHv18.md §3.3.1: Fermi constant derivation
+        IRH18.md §3.3.1: Fermi constant derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -387,7 +387,7 @@ class ElectroweakSector:
     - Fermi constant
     
     References:
-        IRHv18.md §3.3: Complete electroweak phenomenology
+        IRH18.md §3.3: Complete electroweak phenomenology
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

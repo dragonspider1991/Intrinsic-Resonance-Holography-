@@ -9,7 +9,7 @@ Implements the emergent QFT from cGFT condensate:
 - Renormalization and running couplings
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 6: Emergent QFT from cGFT
     - Section 6.1: Particle identification
     - Section 6.2: Effective Lagrangian
@@ -21,7 +21,7 @@ Key Results:
     - Standard Model Lagrangian emerges at low energies
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §6: Emergent QFT
         - §6.1-6.2: Particles and Lagrangian
 """
@@ -97,8 +97,8 @@ class GravitonIdentification:
     condensate structure.
     
     References:
-        IRHv18.md §6.1: Graviton identification
-        IRHv18.md §2.2, Appendix C
+        IRH18.md §6.1: Graviton identification
+        IRH18.md §2.2, Appendix C
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -133,8 +133,8 @@ class GaugeBosonIdentification:
     manifold M³ (β₁ = 12).
     
     References:
-        IRHv18.md §6.1: Gauge boson identification
-        IRHv18.md §3.1, Appendix D.1, §3.3
+        IRH18.md §6.1: Gauge boson identification
+        IRH18.md §3.1, Appendix D.1, §3.3
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -206,8 +206,8 @@ class FermionIdentification:
     specific instanton class with topological complexity K_f.
     
     References:
-        IRHv18.md §6.1: Fermion identification
-        IRHv18.md §3.1, Appendix D.2, Appendix E
+        IRH18.md §6.1: Fermion identification
+        IRH18.md §3.1, Appendix D.2, Appendix E
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -276,7 +276,7 @@ class EffectiveLagrangian:
     L = L_gravity + L_SM + L_Higgs + L_Yukawa
     
     References:
-        IRHv18.md §6.2: Effective Lagrangian construction
+        IRH18.md §6.2: Effective Lagrangian construction
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -357,7 +357,7 @@ class EmergentQFT:
     - S-matrix elements
     
     References:
-        IRHv18.md §6: Complete emergent QFT
+        IRH18.md §6: Complete emergent QFT
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

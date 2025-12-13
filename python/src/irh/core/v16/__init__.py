@@ -12,7 +12,7 @@ as specified in docs/manuscripts/IRHv16.md and companion volumes.
 DEPRECATION NOTICE:
     v16 is maintained for backward compatibility only.
     New development should use v18.0 (irh.core.v18).
-    See docs/manuscripts/IRHv18.md for the current theoretical framework.
+    See docs/manuscripts/IRH18.md for the current theoretical framework.
 
 THEORETICAL COMPLIANCE:
     All implementations reference and validate against docs/manuscripts/IRHv16.md
@@ -33,7 +33,7 @@ Implementation Status:
 
 References:
     IRHv16.md: Main manuscript (deprecated)
-    IRHv18.md: Current manuscript
+    IRH18.md: Current manuscript
     [IRH-MATH-2025-01] - The Algebra of Algorithmic Holonomic States
     [IRH-COMP-2025-02] - Exascale HarmonyOptimizer Architecture
 """
@@ -44,7 +44,7 @@ warnings.warn(
     "irh.core.v16 is deprecated since v18.0.0. "
     "Use irh.core.v18 for the current implementation with complete "
     "Standard Model emergence from cGFT. "
-    "See docs/manuscripts/IRHv18.md for the current theoretical framework.",
+    "See docs/manuscripts/IRH18.md for the current theoretical framework.",
     DeprecationWarning,
     stacklevel=2,
 )

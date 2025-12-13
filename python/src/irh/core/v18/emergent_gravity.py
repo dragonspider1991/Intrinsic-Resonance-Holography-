@@ -8,7 +8,7 @@ Implements the emergence of General Relativity from the cGFT:
 - Graviton propagator and anomalous dimensions
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 2.2: Emergent metric and Einstein equations
     - Section 2.5: Lorentz invariance violation
     - Appendix C: Graviton propagator
@@ -19,7 +19,7 @@ Key Results:
     - Higher-curvature terms suppressed in IR
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §2.2: The Emergent Metric and Einstein Field Equations
         - §2.2.3: Derivation from Harmony Functional
         - Theorem 2.5-2.7: Einstein equations and suppression proofs
@@ -70,9 +70,9 @@ class EmergentMetric:
     where h_μν are the graviton fluctuations.
     
     References:
-        IRHv18.md §2.2.1: Emergence of Metric Tensor
-        IRHv18.md Definition 2.2: Emergent Metric
-        IRHv18.md Definition 2.3: Local Cymatic Complexity
+        IRH18.md §2.2.1: Emergence of Metric Tensor
+        IRH18.md Definition 2.2: Emergent Metric
+        IRH18.md Definition 2.3: Local Cymatic Complexity
     """
     
     dimension: int = 4
@@ -141,9 +141,9 @@ class EinsteinEquations:
     With matter: R_μν - (1/2)Rg_μν + Λg_μν = 8πG T_μν
     
     References:
-        IRHv18.md §2.2.3: Derivation from Harmony Functional
-        IRHv18.md Theorem 2.5: Vacuum Einstein equations
-        IRHv18.md Theorem 2.6: Full Einstein equations
+        IRH18.md §2.2.3: Derivation from Harmony Functional
+        IRH18.md Theorem 2.5: Vacuum Einstein equations
+        IRH18.md Theorem 2.6: Full Einstein equations
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -189,7 +189,7 @@ class EinsteinEquations:
         """
         fp = self.fixed_point
         
-        # From IRHv18.md Eq. 2.19
+        # From IRH18.md Eq. 2.19
         # Λ_* = 1.1056 × 10^-52 m^-2
         Lambda_star = LAMBDA_OBSERVED  # Certified value
         
@@ -258,9 +258,9 @@ class GravitonPropagator:
     G_μνρσ(p) = P^(2)_μνρσ / [Z_*(p² - M²_g(p))] + ...
     
     References:
-        IRHv18.md §2.2.2: Graviton Two-Point Function
-        IRHv18.md Appendix C: Full derivation
-        IRHv18.md Definition 2.4: Graviton propagator
+        IRH18.md §2.2.2: Graviton Two-Point Function
+        IRH18.md Appendix C: Full derivation
+        IRH18.md Definition 2.4: Graviton propagator
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -364,13 +364,13 @@ class HigherCurvatureSuppression:
     In asymptotically safe theories, higher-curvature terms
     (R², C_μνρσC^μνρσ, etc.) are present but suppressed in the IR.
     
-    From IRHv18.md Theorem 2.7:
+    From IRH18.md Theorem 2.7:
     All coefficients of higher-curvature invariants flow to zero
     as k → 0.
     
     References:
-        IRHv18.md §2.2.5: Suppression of Higher-Curvature Invariants
-        IRHv18.md Theorem 2.7: Analytical proof
+        IRH18.md §2.2.5: Suppression of Higher-Curvature Invariants
+        IRH18.md Theorem 2.7: Analytical proof
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -431,13 +431,13 @@ class LorentzInvarianceViolation:
     
     E² = p²c² + ξ × E³/(ℓ_Pl c²) + O(E⁴)
     
-    From IRHv18.md Theorem 2.9:
+    From IRH18.md Theorem 2.9:
     ξ = C_H / (24π²) ≈ 1.93 × 10⁻⁴
     
     References:
-        IRHv18.md §2.5: Lorentz Invariance Violation at Planck Scale
-        IRHv18.md Theorem 2.9: LIV prediction
-        IRHv18.md Eq. 2.24-2.26
+        IRH18.md §2.5: Lorentz Invariance Violation at Planck Scale
+        IRH18.md Theorem 2.9: LIV prediction
+        IRH18.md Eq. 2.24-2.26
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -451,7 +451,7 @@ class LorentzInvarianceViolation:
         """
         Compute LIV parameter ξ.
         
-        From IRHv18.md Eq. 2.25-2.26:
+        From IRH18.md Eq. 2.25-2.26:
         ξ = C_H / (24π²)
         
         Returns:

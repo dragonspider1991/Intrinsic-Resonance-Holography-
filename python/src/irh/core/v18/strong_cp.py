@@ -9,7 +9,7 @@ Implements the algorithmic axion mechanism that resolves the strong CP problem:
 - CP conservation at the strong scale
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 3.4: Resolution of the Strong CP Problem
     - Theorem 3.5: θ = 0 from algorithmic axion
     - Equations 3.11-3.12: Axion mass and coupling
@@ -20,7 +20,7 @@ Key Results:
     - Axion-photon coupling: g_aγγ ≈ 10^-16 GeV^-1
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §3.4: Strong CP Problem Resolution
         - Appendix D.2: Instanton topology
 """
@@ -73,8 +73,8 @@ class ThetaAngle:
     In IRH v18.0, θ is dynamically set to zero by the algorithmic axion.
     
     References:
-        IRHv18.md §3.4: θ dynamics
-        IRHv18.md Appendix D.2: Instanton contributions
+        IRH18.md §3.4: θ dynamics
+        IRH18.md Appendix D.2: Instanton contributions
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -143,7 +143,7 @@ class PecceiQuinnSymmetry:
     broken, giving rise to the algorithmic axion.
     
     References:
-        IRHv18.md §3.4: PQ symmetry emergence
+        IRH18.md §3.4: PQ symmetry emergence
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -211,8 +211,8 @@ class AlgorithmicAxion:
     Minimization sets θ_eff = a/f_a → 0.
     
     References:
-        IRHv18.md §3.4: Algorithmic axion
-        IRHv18.md Eq. 3.11-3.12: Mass and coupling
+        IRH18.md §3.4: Algorithmic axion
+        IRH18.md Eq. 3.11-3.12: Mass and coupling
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -221,7 +221,7 @@ class AlgorithmicAxion:
         """
         Compute algorithmic axion mass.
         
-        From IRHv18.md Eq. 3.11:
+        From IRH18.md Eq. 3.11:
         m_a = (Λ_QCD² / f_a) × √(m_u m_d / (m_u + m_d)²) × f_π m_π
         
         Returns:
@@ -260,7 +260,7 @@ class AlgorithmicAxion:
         """
         Compute axion-photon coupling g_aγγ.
         
-        From IRHv18.md Eq. 3.12:
+        From IRH18.md Eq. 3.12:
         g_aγγ = (α_EM/2πf_a) × (E/N - 1.92)
         
         where E/N is the model-dependent anomaly ratio.
@@ -334,8 +334,8 @@ class StrongCPResolution:
     the Cosmic Fixed Point.
     
     References:
-        IRHv18.md §3.4: Complete resolution
-        IRHv18.md Theorem 3.5: θ = 0 proof
+        IRH18.md §3.4: Complete resolution
+        IRH18.md Theorem 3.5: θ = 0 proof
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

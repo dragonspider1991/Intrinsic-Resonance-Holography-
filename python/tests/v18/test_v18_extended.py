@@ -8,7 +8,7 @@ Tests for:
 - emergent_qft.py: Particle spectrum, effective Lagrangian
 
 References:
-    docs/manuscripts/IRHv18.md
+    docs/manuscripts/IRH18.md
 """
 
 import pytest

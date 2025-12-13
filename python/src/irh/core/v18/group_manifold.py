@@ -3,10 +3,10 @@ Group Manifold for IRH v18.0 cGFT
 =================================
 
 Implements the informational group manifold G_inf = SU(2) × U(1)_φ
-as defined in IRHv18.md Section 1.1.
+as defined in IRH18.md Section 1.1.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 1.1: The Fundamental Field and the Informational Group Manifold
     - Appendix A: Construction of the NCD-Induced Metric on G_inf
 
@@ -16,7 +16,7 @@ Key Concepts:
     - G_inf = SU(2) × U(1)_φ: Compact Lie group of primordial informational DOFs
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §1.1: G_inf definition
         - §1.1.1: cGFT Action components
         - Appendix A.1-A.3: Binary encoding and NCD metric
@@ -40,7 +40,7 @@ class SU2Element:
     Element of SU(2) represented as a unit quaternion.
     
     SU(2) encodes the minimal non-commutative algebra of Elementary
-    Algorithmic Transformations (EATs) as per IRHv18.md Theorem 1.5.
+    Algorithmic Transformations (EATs) as per IRH18.md Theorem 1.5.
     
     The quaternion representation q = q₀ + iq₁ + jq₂ + kq₃ satisfies
     q₀² + q₁² + q₂² + q₃² = 1 (unit sphere S³).
@@ -49,7 +49,7 @@ class SU2Element:
         q0, q1, q2, q3: Quaternion components (real, i, j, k)
         
     References:
-        IRHv18.md §1.1: SU(2) encodes minimal non-commutative algebra
+        IRH18.md §1.1: SU(2) encodes minimal non-commutative algebra
         Appendix A.1: Quaternion encoding for NCD computation
     """
     
@@ -190,7 +190,7 @@ class SU2Element:
         """
         Encode SU(2) element as binary string for NCD computation.
         
-        As per IRHv18.md Appendix A.1, each quaternion component is
+        As per IRH18.md Appendix A.1, each quaternion component is
         represented with fixed-point precision.
         
         Args:
@@ -239,8 +239,8 @@ class U1Element:
         phi: Holonomic phase in radians [0, 2π)
         
     References:
-        IRHv18.md §1.1: U(1)_φ carries intrinsic holonomic phase
-        IRHv18.md §1.1.1: Phase factor e^{i(φ₁+φ₂+φ₃-φ₄)} in kernel
+        IRH18.md §1.1: U(1)_φ carries intrinsic holonomic phase
+        IRH18.md §1.1.1: Phase factor e^{i(φ₁+φ₂+φ₃-φ₄)} in kernel
     """
     
     phi: float = 0.0
@@ -323,9 +323,9 @@ class GInfElement:
         u1: U(1)_φ component (holonomic phase)
         
     References:
-        IRHv18.md §1.1: G_inf = SU(2) × U(1)_φ definition
-        IRHv18.md Theorem 1.5: Axiomatic uniqueness of G_inf
-        IRHv18.md Appendix A: NCD metric construction
+        IRH18.md §1.1: G_inf = SU(2) × U(1)_φ definition
+        IRH18.md Theorem 1.5: Axiomatic uniqueness of G_inf
+        IRH18.md Appendix A: NCD metric construction
     """
     
     su2: SU2Element = field(default_factory=SU2Element.identity)
@@ -384,7 +384,7 @@ class GInfElement:
         """
         Encode G_inf element as composite binary string.
         
-        As per IRHv18.md Appendix A.1, the encoding is:
+        As per IRH18.md Appendix A.1, the encoding is:
         b(g) = Enc_SU2(u) ∘ b(φ)
         
         Total length N_B = M + R where M = 4 × su2_bits, R = u1_bits
@@ -421,7 +421,7 @@ def compute_ncd(x: bytes, y: bytes) -> float:
     
     Uses zlib (LZ77) as the universal compressor, which is proven
     to give compressor-independent results at the fixed point
-    (IRHv18.md Appendix A.4, Theorem A.1).
+    (IRH18.md Appendix A.4, Theorem A.1).
     
     Args:
         x, y: Binary strings to compare
@@ -430,8 +430,8 @@ def compute_ncd(x: bytes, y: bytes) -> float:
         NCD value in [0, 1]
         
     References:
-        IRHv18.md Appendix A.2: NCD definition
-        IRHv18.md Theorem A.1: Compressor-independence
+        IRH18.md Appendix A.2: NCD definition
+        IRH18.md Theorem A.1: Compressor-independence
     """
     if len(x) == 0 and len(y) == 0:
         return 0.0
@@ -468,7 +468,7 @@ def compute_ncd_distance(g1: GInfElement, g2: GInfElement) -> float:
         NCD-induced distance
         
     References:
-        IRHv18.md Appendix A.3: Bi-invariant distance construction
+        IRH18.md Appendix A.3: Bi-invariant distance construction
     """
     # Compute g1 * g2^{-1}
     g_diff = g1 * g2.inverse()

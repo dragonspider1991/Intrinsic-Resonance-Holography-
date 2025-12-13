@@ -47,7 +47,7 @@ Quick Start:
     >>> assert fp.verify()["is_fixed_point"]
 
 References:
-    docs/manuscripts/IRHv18.md: Complete theoretical framework
+    docs/manuscripts/IRH18.md: Complete theoretical framework
     docs/v18_IMPLEMENTATION_PLAN.md: Implementation roadmap
 """
 

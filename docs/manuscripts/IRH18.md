@@ -573,9 +573,9 @@ $$
 $$
 
 Using the analytically computed fixed-point values
-$\tilde\mu_*=16\pi^2$,
-$G_*^{-1} = \frac{3}{4\pi} \tilde\lambda_* = 16\pi^2$,
-$\Lambda_{\text{UV}} = \ell_0^{-1}$ (the cGFT cutoff, identified with the Planck scale),
+$$\tilde\mu_*=16\pi^2$$,
+$$G_*^{-1} = \frac{3}{4\pi} \tilde\lambda_* = 16\pi^2$$,
+$$\Lambda_{\text{UV}} = \ell_0^{-1}$$ (the cGFT cutoff, identified with the Planck scale),
 and the observed horizon size $N_{\text{obs}} \simeq 10^{122}$, we obtain
 
 $$

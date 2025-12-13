@@ -3,10 +3,10 @@ cGFT Action for IRH v18.0
 =========================
 
 Implements the complete cGFT action S[φ,φ̄] = S_kin + S_int + S_hol
-as defined in IRHv18.md Section 1.1.1.
+as defined in IRH18.md Section 1.1.1.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Eq. 1.1: Kinetic term with group Laplacian
     - Eq. 1.2-1.3: Interaction term with NCD-weighted kernel
     - Eq. 1.4: Holographic measure term
@@ -17,7 +17,7 @@ Key Components:
     - S_hol: Combinatorial boundary regulator (Axiom 3)
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §1.1.1: The cGFT Action (Equations 1.1-1.4)
         - Appendix G: Weyl ordering for Laplacian
         - Appendix A: NCD metric in kernel
@@ -53,8 +53,8 @@ class cGFTCouplings:
         mu: Holographic measure coupling (boundary regulator)
         
     References:
-        IRHv18.md Eq. 1.14: Fixed point values
-        IRHv18.md §1.2: RG flow
+        IRH18.md Eq. 1.14: Fixed point values
+        IRH18.md §1.2: RG flow
     """
     
     lambda_: float = 1.0  # Interaction coupling
@@ -67,7 +67,7 @@ class cGFTCouplings:
         Return the Cosmic Fixed Point coupling values.
         
         These are the unique infrared-attractive fixed point values
-        derived analytically in IRHv18.md Eq. 1.14.
+        derived analytically in IRH18.md Eq. 1.14.
         """
         pi_sq = np.pi**2
         return cls(
@@ -109,8 +109,8 @@ class InteractionKernel:
         gamma: NCD kernel coupling
         
     References:
-        IRHv18.md Eq. 1.3: Kernel definition
-        IRHv18.md Appendix A: NCD distance
+        IRH18.md Eq. 1.3: Kernel definition
+        IRH18.md Appendix A: NCD distance
     """
     
     gamma: float = 1.0
@@ -279,8 +279,8 @@ class cGFTAction:
     Harmony Functional for the bilocal field Σ (Theorem 1.1).
     
     References:
-        IRHv18.md §1.1.1: Complete action definition
-        IRHv18.md Theorem 1.1: Emergence of Harmony Functional
+        IRH18.md §1.1.1: Complete action definition
+        IRH18.md Theorem 1.1: Emergence of Harmony Functional
     """
     
     def __init__(self, couplings: Optional[cGFTCouplings] = None):

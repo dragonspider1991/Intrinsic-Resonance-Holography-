@@ -1,7 +1,7 @@
 # IRH v18.0 Implementation Plan: Multi-Phase Roadmap
 
 **Document Version**: 1.0  
-**Based on**: IRHv18.md (December 10, 2025)  
+**Based on**: IRH18.md (December 10, 2025)  
 **Status**: Strategic Implementation Blueprint for Copilot Agent Sessions
 
 ---
@@ -77,7 +77,7 @@ IRH v18.0 represents the **definitive theoretical formulation** of Intrinsic Res
 ## Phase 1: cGFT Core Infrastructure (Sessions 3-7)
 
 ### Theoretical Foundation
-From IRHv18.md Section 1.1:
+From IRH18.md Section 1.1:
 - **Group Manifold**: G_inf = SU(2) × U(1)_φ
 - **Fundamental Field**: φ(g₁,g₂,g₃,g₄) ∈ ℂ (4-valent vertex)
 - **Action Components**: S_kin + S_int + S_hol
@@ -173,7 +173,7 @@ From IRHv18.md Section 1.1:
 ## Phase 2: Renormalization Group Engine (Sessions 8-13)
 
 ### Theoretical Foundation
-From IRHv18.md Sections 1.2-1.4:
+From IRH18.md Sections 1.2-1.4:
 - **Wetterich Equation** (Eq. 1.12)
 - **Beta Functions** (Eq. 1.13)
 - **Fixed Point Values** (Eq. 1.14)
@@ -276,7 +276,7 @@ From IRHv18.md Sections 1.2-1.4:
 ## Phase 3: Emergent Spacetime (Sessions 14-17)
 
 ### Theoretical Foundation
-From IRHv18.md Sections 2.1-2.5:
+From IRH18.md Sections 2.1-2.5:
 - **Spectral Dimension Flow** (Eq. 2.8-2.9)
 - **Emergent Metric** (Eq. 2.10)
 - **Einstein Field Equations** (Theorems 2.5-2.6)
@@ -350,7 +350,7 @@ From IRHv18.md Sections 2.1-2.5:
 ## Phase 4: Standard Model Topology (Sessions 18-22)
 
 ### Theoretical Foundation
-From IRHv18.md Section 3.1 and Appendix D:
+From IRH18.md Section 3.1 and Appendix D:
 - **First Betti Number** β₁* = 12 (Theorem 3.1)
 - **Instanton Number** n_inst* = 3 (Theorem 3.2)
 - **Gauge Group** SU(3)×SU(2)×U(1)
@@ -436,7 +436,7 @@ From IRHv18.md Section 3.1 and Appendix D:
 ## Phase 5: Fermion Sector (Sessions 23-26)
 
 ### Theoretical Foundation
-From IRHv18.md Sections 3.2-3.4 and Appendix E:
+From IRH18.md Sections 3.2-3.4 and Appendix E:
 - **Topological Complexity** K_f (Definition 3.1)
 - **Fine Structure Constant** α⁻¹ = 137.035999084(1)
 - **Fermion Masses** (Table 3.1)
@@ -511,7 +511,7 @@ From IRHv18.md Sections 3.2-3.4 and Appendix E:
 ## Phase 6: Cosmological Predictions (Sessions 27-29)
 
 ### Theoretical Foundation
-From IRHv18.md Sections 2.3-2.4:
+From IRH18.md Sections 2.3-2.4:
 - **Holographic Hum** ρ_hum (Eq. 2.17)
 - **Cosmological Constant** Λ* (Eq. 2.19)
 - **Dark Energy EoS** w₀ = -0.91234567(8) (Eq. 2.23)
@@ -565,7 +565,7 @@ From IRHv18.md Sections 2.3-2.4:
 ## Phase 7: Quantum Mechanics Emergence (Sessions 30-32)
 
 ### Theoretical Foundation
-From IRHv18.md Section 5 and Appendix I:
+From IRH18.md Section 5 and Appendix I:
 - **Wave Interference** → Quantum Amplitudes
 - **Born Rule** from phase history statistics
 - **Lindblad Equation** from decoherence
@@ -774,7 +774,7 @@ The implementation is certified when:
 ```
 [ ] Review previous session deliverables
 [ ] Check test suite status
-[ ] Review relevant IRHv18.md sections
+[ ] Review relevant IRH18.md sections
 [ ] Set up development environment
 [ ] Create feature branch
 ```
