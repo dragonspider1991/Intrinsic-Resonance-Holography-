@@ -8,7 +8,7 @@ Tests for:
 - quantum_mechanics.py: Born rule, decoherence, Lindblad
 
 References:
-    docs/manuscripts/IRHv18.md
+    docs/manuscripts/IRH18.md
 """
 
 import pytest

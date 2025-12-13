@@ -7,7 +7,7 @@ Implements the topological derivations from the Cosmic Fixed Point:
 - Instanton number n_inst = 3 (fermion generations)
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 3.1.1: Emergence of gauge symmetries from β₁
     - Section 3.1.2: Emergence of fermion generations from n_inst
     - Appendix D.1: Proof of β₁ = 12
@@ -18,7 +18,7 @@ Key Results:
     - n_inst* = 3 → exactly three fermion generations
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §3.1: Emergence of Standard Model from topology
         - Theorem 3.1: Fixed-point First Betti Number
         - Theorem 3.2: Fixed-point Instanton Number
@@ -65,9 +65,9 @@ class BettiNumberFlow:
     - 1 cycle → U(1) hypercharge
     
     References:
-        IRHv18.md §3.1.1: Gauge symmetries from β₁
-        IRHv18.md Theorem 3.1: β₁* = 12
-        IRHv18.md Appendix D.1: Explicit construction
+        IRH18.md §3.1.1: Gauge symmetries from β₁
+        IRH18.md Theorem 3.1: β₁* = 12
+        IRH18.md Appendix D.1: Explicit construction
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -80,7 +80,7 @@ class BettiNumberFlow:
         emergent spatial manifold M³, which is uniquely specified
         by the fixed-point couplings.
         
-        From IRHv18.md Theorem 3.1:
+        From IRH18.md Theorem 3.1:
         β₁* = 12 (analytically proven in Appendix D.1)
         
         Returns:
@@ -105,7 +105,7 @@ class BettiNumberFlow:
             },
             "total_generators": sum([8, 3, 1]),
             "matches_SM": beta_1_star == TOTAL_SM_GENERATORS,
-            "theorem": "Theorem 3.1 (IRHv18.md)",
+            "theorem": "Theorem 3.1 (IRH18.md)",
             "precision": "exact (topological invariant)"
         }
     
@@ -149,9 +149,9 @@ class InstantonNumberFlow:
     charge, preventing decay into lighter generations.
     
     References:
-        IRHv18.md §3.1.2: Fermion generations from n_inst
-        IRHv18.md Theorem 3.2: n_inst* = 3
-        IRHv18.md Appendix D.2: Instanton solutions
+        IRH18.md §3.1.2: Fermion generations from n_inst
+        IRH18.md Theorem 3.2: n_inst* = 3
+        IRH18.md Appendix D.2: Instanton solutions
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -163,7 +163,7 @@ class InstantonNumberFlow:
         The instanton number is determined by the topological
         properties of stable defect configurations in the condensate.
         
-        From IRHv18.md Theorem 3.2:
+        From IRH18.md Theorem 3.2:
         n_inst* = 3 (analytically proven in Appendix D.2)
         
         Returns:
@@ -183,7 +183,7 @@ class InstantonNumberFlow:
                                  "Second (μ, νμ, c, s)", 
                                  "Third (τ, ντ, t, b)"],
             "matches_observed": n_inst_star == NUM_FERMION_GENERATIONS,
-            "theorem": "Theorem 3.2 (IRHv18.md)",
+            "theorem": "Theorem 3.2 (IRH18.md)",
             "mechanism": "Topologically protected Vortex Wave Patterns",
             "precision": "exact (topological invariant)"
         }
@@ -243,8 +243,8 @@ class VortexWavePattern:
         complexity: Topological complexity K_f (minimal crossing number)
         
     References:
-        IRHv18.md §3.2.1: Topological Complexity Operator
-        IRHv18.md Appendix E.1: Derivation of K_f
+        IRH18.md §3.2.1: Topological Complexity Operator
+        IRH18.md Appendix E.1: Derivation of K_f
     """
     
     generation: int
@@ -265,7 +265,7 @@ class VortexWavePattern:
         if generation not in [1, 2, 3]:
             raise ValueError(f"Generation must be 1, 2, or 3, got {generation}")
         
-        # Topological complexities from IRHv18.md Eq. 3.3
+        # Topological complexities from IRH18.md Eq. 3.3
         complexities = {
             1: 1.0,
             2: 206.768283,
@@ -307,8 +307,8 @@ class EmergentSpatialManifold:
         - Admits exactly 3 stable instanton classes
         
     References:
-        IRHv18.md §3.1: Emergence from cGFT
-        IRHv18.md Appendix D.1: Construction of M³
+        IRH18.md §3.1: Emergence from cGFT
+        IRH18.md Appendix D.1: Construction of M³
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -382,9 +382,9 @@ class StandardModelTopology:
     - Matter content: 3 generations of fermions
     
     References:
-        IRHv18.md §3.1: Full derivation
-        IRHv18.md Theorem 3.1: β₁ = 12
-        IRHv18.md Theorem 3.2: n_inst = 3
+        IRH18.md §3.1: Full derivation
+        IRH18.md Theorem 3.1: β₁ = 12
+        IRH18.md Theorem 3.2: n_inst = 3
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

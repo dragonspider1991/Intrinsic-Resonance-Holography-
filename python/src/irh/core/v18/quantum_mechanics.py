@@ -9,7 +9,7 @@ Implements the emergence of quantum mechanics from cGFT:
 - Wave function collapse dynamics
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 5.0: Emergent Quantum Mechanics
     - Theorem 5.1: Born rule derivation
     - Theorem 5.2: Lindblad equation
@@ -21,7 +21,7 @@ Key Results:
     - Unitarity is preserved at the substrate level
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §5.0: Emergent QM and Measurement Process
         - Appendix F: Decoherence derivation
 """
@@ -54,8 +54,8 @@ class ElementaryAlgorithmicTransformation:
     - Quantum amplitudes emerge from collective EAT behavior
     
     References:
-        IRHv18.md §5.0: EATs as basis of QM
-        IRHv18.md Theorem 1.5: EAT algebra = SU(2)
+        IRH18.md §5.0: EATs as basis of QM
+        IRH18.md Theorem 1.5: EAT algebra = SU(2)
     """
     
     amplitude: complex = 1.0
@@ -114,7 +114,7 @@ class QuantumAmplitudeEmergence:
     where α labels different EAT contributions.
     
     References:
-        IRHv18.md §5.0: Amplitude emergence
+        IRH18.md §5.0: Amplitude emergence
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -196,7 +196,7 @@ class BornRule:
     The Born rule (P = |ψ|²) is not postulated but derived from
     the collective dynamics of EATs at the Cosmic Fixed Point.
     
-    Theorem 5.1 (IRHv18.md):
+    Theorem 5.1 (IRH18.md):
     In the thermodynamic limit of the cGFT condensate, the
     probability for finding a system in state |n⟩ given
     preparation in state |ψ⟩ is:
@@ -206,8 +206,8 @@ class BornRule:
     This emerges as the harmonic average over all EAT configurations.
     
     References:
-        IRHv18.md §5.0: Born rule derivation
-        IRHv18.md Theorem 5.1: Rigorous proof
+        IRH18.md §5.0: Born rule derivation
+        IRH18.md Theorem 5.1: Rigorous proof
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -293,7 +293,7 @@ class BornRule:
             "step_4": "Harmonic average gives |⟨n|ψ⟩|² for transition amplitude",
             "step_5": "Normalization ∑_n |⟨n|ψ⟩|² = 1 follows from trace constraint",
             "conclusion": "Born rule emerges from information optimization",
-            "theorem": "Theorem 5.1 (IRHv18.md)"
+            "theorem": "Theorem 5.1 (IRH18.md)"
         }
 
 
@@ -316,8 +316,8 @@ class Decoherence:
     where off-diagonal elements decay exponentially.
     
     References:
-        IRHv18.md §5.0: Measurement process
-        IRHv18.md Appendix F: Decoherence derivation
+        IRH18.md §5.0: Measurement process
+        IRH18.md Appendix F: Decoherence derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -425,13 +425,13 @@ class LindbladEquation:
     
     dρ/dt = -i[H,ρ] + ∑_k γ_k (L_k ρ L_k† - ½{L_k†L_k, ρ})
     
-    Theorem 5.2 (IRHv18.md):
+    Theorem 5.2 (IRH18.md):
     The Lindblad equation is the unique CPTP dynamics arising
     from the Harmony Functional in the Markovian limit.
     
     References:
-        IRHv18.md §5.0: Lindblad emergence
-        IRHv18.md Theorem 5.2: Derivation
+        IRH18.md §5.0: Lindblad emergence
+        IRH18.md Theorem 5.2: Derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -556,7 +556,7 @@ class EmergentQuantumMechanics:
     - Lindblad dynamics for open systems
     
     References:
-        IRHv18.md §5.0: Complete QM emergence
+        IRH18.md §5.0: Complete QM emergence
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -584,7 +584,7 @@ class EmergentQuantumMechanics:
             },
             "lindblad": {
                 "emergence": "Markovian limit of cGFT dynamics",
-                "theorem": "Theorem 5.2 (IRHv18.md)"
+                "theorem": "Theorem 5.2 (IRH18.md)"
             },
             "status": "Quantum mechanics fully derived from IRH v18.0"
         }

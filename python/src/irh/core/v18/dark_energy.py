@@ -9,7 +9,7 @@ Implements the dark energy predictions from the cGFT:
 - Cosmological evolution
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 2.3: Dynamically Quantized Holographic Hum
     - Section 2.3.1-2.3.3: Holographic Hum and w₀
     - Eq. 2.23-2.24: Exact w₀ derivation
@@ -20,7 +20,7 @@ Key Results:
     - Dark energy is dynamical, not a bare cosmological constant
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §2.3: The Holographic Hum
         - §2.3.3: Equation of State w₀
 """
@@ -67,8 +67,8 @@ class HolographicHum:
     which manifests as dark energy in the emergent spacetime.
     
     References:
-        IRHv18.md §2.3.1: Holographic Hum as fixed-point vacuum
-        IRHv18.md Eq. 2.20: Hum definition
+        IRH18.md §2.3.1: Holographic Hum as fixed-point vacuum
+        IRH18.md Eq. 2.20: Hum definition
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -141,8 +141,8 @@ class DarkEnergyEquationOfState:
     This prediction is testable by precision cosmology.
     
     References:
-        IRHv18.md §2.3.3: w₀ derivation
-        IRHv18.md Eq. 2.23-2.24
+        IRH18.md §2.3.3: w₀ derivation
+        IRH18.md Eq. 2.23-2.24
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -240,8 +240,8 @@ class VacuumEnergyDensity:
     constant problem by deriving Λ from first principles.
     
     References:
-        IRHv18.md §2.3.1: Vacuum energy from fixed point
-        IRHv18.md Eq. 2.21-2.22
+        IRH18.md §2.3.1: Vacuum energy from fixed point
+        IRH18.md Eq. 2.21-2.22
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -309,7 +309,7 @@ class CosmologicalEvolution:
     the IRH dark energy predictions.
     
     References:
-        IRHv18.md §2.3: Dark energy dynamics
+        IRH18.md §2.3: Dark energy dynamics
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -395,7 +395,7 @@ class DarkEnergyModule:
     - Cosmological evolution
     
     References:
-        IRHv18.md §2.3: Complete dark energy derivation
+        IRH18.md §2.3: Complete dark energy derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

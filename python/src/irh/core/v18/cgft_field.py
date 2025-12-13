@@ -3,10 +3,10 @@ cGFT Field for IRH v18.0
 ========================
 
 Implements the fundamental complex scalar field φ(g₁,g₂,g₃,g₄) ∈ ℂ
-and the bilocal field Σ(g,g') as defined in IRHv18.md Section 1.1.
+and the bilocal field Σ(g,g') as defined in IRH18.md Section 1.1.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 1.1: Fundamental field on G_inf^4
     - Section 1.1.2: Bilocal field definition
     - Theorem 1.1: Harmony Functional from cGFT
@@ -17,7 +17,7 @@ Key Concepts:
     - Bilocal field: Σ(g,g') = emergent edge representation
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §1.1: Field definition
         - §1.1.2: Σ(g,g') definition (Eq. for bilocal field)
         - Theorem 1.1: Effective action derivation
@@ -53,8 +53,8 @@ class cGFTField:
         gauge_invariant: Whether to enforce gauge invariance
         
     References:
-        IRHv18.md §1.1: φ(g₁,g₂,g₃,g₄) ∈ ℂ definition
-        IRHv18.md §1.1.1: Gauge invariance
+        IRH18.md §1.1: φ(g₁,g₂,g₃,g₄) ∈ ℂ definition
+        IRH18.md §1.1.1: Gauge invariance
     """
     
     _values: Dict[Tuple, complex] = field(default_factory=dict)
@@ -229,8 +229,8 @@ class BiLocalField:
         values: Dictionary mapping (g, g') pairs to complex values
         
     References:
-        IRHv18.md §1.1.2: Definition via trace over internal indices
-        IRHv18.md Theorem 1.1: 1PI effective action for Σ
+        IRH18.md §1.1.2: Definition via trace over internal indices
+        IRH18.md Theorem 1.1: 1PI effective action for Σ
     """
     
     _values: Dict[Tuple[bytes, bytes], complex] = field(default_factory=dict)
@@ -335,8 +335,8 @@ class CondensateState:
         order_parameter: Magnitude of condensate
         
     References:
-        IRHv18.md §2.2.1: Emergent metric from condensate
-        IRHv18.md §3.2: Higgs VEV as condensate order parameter
+        IRH18.md §2.2.1: Emergent metric from condensate
+        IRH18.md §3.2: Higgs VEV as condensate order parameter
     """
     
     _condensate_field: cGFTFieldDiscrete = None

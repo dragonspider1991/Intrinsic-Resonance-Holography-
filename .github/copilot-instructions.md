@@ -53,7 +53,7 @@ Intrinsic-Resonance-Holography-/
 │       ├── v16/              # v16 unit tests
 │       └── v18/              # v18 unit tests
 ├── docs/
-│   ├── manuscripts/          # Theory manuscripts (IRHv16.md, IRHv18.md)
+│   ├── manuscripts/          # Theory manuscripts (IRHv16.md, IRH18.md)
 │   └── ...
 ├── webapp/                   # Web interface (FastAPI + Streamlit)
 ├── notebooks/                # Jupyter notebooks for demonstrations
@@ -285,7 +285,7 @@ def test_beta_lambda_at_fixed_point():
 ### Theory Documentation
 - **v16 Manuscript**: `docs/manuscripts/IRHv16.md` - Core v16.0 theory
 - **v16 Supplementary**: `docs/manuscripts/IRHv16_Supplementary_Vol_1-5.md` - Detailed derivations
-- **v18 Manuscript**: `docs/manuscripts/IRHv18.md` - Analytical cGFT theory
+- **v18 Manuscript**: `docs/manuscripts/IRH18.md` - Analytical cGFT theory
 - **Architecture**: `docs/v16_ARCHITECTURE.md` - v16 system architecture
 - **Roadmap**: `docs/v16_IMPLEMENTATION_ROADMAP.md` - Implementation phases
 

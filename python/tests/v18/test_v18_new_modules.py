@@ -8,7 +8,7 @@ Tests for the new v18 modules:
 - flavor_mixing.py: CKM, PMNS, neutrinos
 
 References:
-    docs/manuscripts/IRHv18.md
+    docs/manuscripts/IRH18.md
 """
 
 import pytest

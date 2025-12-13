@@ -9,7 +9,7 @@ Implements the emergence of spacetime properties from cGFT:
 - Reparametrization invariance
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 2.4: Emergence of Lorentzian Spacetime
     - Appendix H: Analytical proofs
     - Theorem 2.8: Reparametrization invariance
@@ -20,7 +20,7 @@ Key Results:
     - Time has preferred direction (arrow of time)
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §2.4: Lorentzian Spacetime Emergence
         - Appendix H.1: Lorentzian signature proof
         - Appendix H.2: Diffeomorphism invariance proof
@@ -55,8 +55,8 @@ class LorentzianSignatureEmergence:
     4. Lorentzian signature emerges
     
     References:
-        IRHv18.md §2.4.1: Lorentzian signature from SSB
-        IRHv18.md Appendix H.1: Analytical proof
+        IRH18.md §2.4.1: Lorentzian signature from SSB
+        IRH18.md Appendix H.1: Analytical proof
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -92,7 +92,7 @@ class LorentzianSignatureEmergence:
             "mechanism": "Phase factor e^{i(φ₁+φ₂+φ₃-φ₄)} distinguishes timelike direction",
             "goldstone_mode": "None (discrete symmetry)",
             "verified": True,
-            "theorem": "Appendix H.1 (IRHv18.md)"
+            "theorem": "Appendix H.1 (IRH18.md)"
         }
     
     def compute_effective_metric(self) -> NDArray[np.float64]:
@@ -140,8 +140,8 @@ class TimeEmergence:
     The "Timelike Progression Vector" encodes the arrow of time.
     
     References:
-        IRHv18.md §2.4.2: Time emergence
-        IRHv18.md Appendix F: Conceptual lexicon
+        IRH18.md §2.4.2: Time emergence
+        IRH18.md Appendix F: Conceptual lexicon
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -230,9 +230,9 @@ class DiffeomorphismInvariance:
     of the condensate that leave the Harmony Functional invariant.
     
     References:
-        IRHv18.md §2.4.2: Reparametrization invariance
-        IRHv18.md Theorem 2.8: Diffeomorphism proof
-        IRHv18.md Appendix H.2: Detailed derivation
+        IRH18.md §2.4.2: Reparametrization invariance
+        IRH18.md Theorem 2.8: Diffeomorphism proof
+        IRH18.md Appendix H.2: Detailed derivation
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -249,7 +249,7 @@ class DiffeomorphismInvariance:
             "statement": "Arbitrary coordinate transformations on emergent spacetime "
                         "correspond to continuous deformations of the cGFT condensate "
                         "that leave the Harmony Functional invariant.",
-            "proof_location": "Appendix H.2 (IRHv18.md)",
+            "proof_location": "Appendix H.2 (IRH18.md)",
             "status": "Analytically proven",
             "verified": True
         }
@@ -304,7 +304,7 @@ class EmergentSpacetime:
     - Causality structure
     
     References:
-        IRHv18.md §2.4: Complete spacetime emergence
+        IRH18.md §2.4: Complete spacetime emergence
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)

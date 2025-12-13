@@ -3,10 +3,10 @@ Renormalization Group Flow for IRH v18.0 cGFT
 =============================================
 
 Implements the RG flow equations, beta functions, and fixed-point
-solver as defined in IRHv18.md Section 1.2-1.3.
+solver as defined in IRH18.md Section 1.2-1.3.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 1.2: RG Flow and β-functions (Eq. 1.12-1.16)
     - Section 1.3: Stability Analysis
     - Appendix B: Higher-order corrections
@@ -17,7 +17,7 @@ Key Results:
     - Universal exponent: C_H = 0.045935703598 (Eq. 1.16)
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §1.2.1: Wetterich equation
         - §1.2.2: One-loop β-functions
         - §1.2.3: Fixed point solution
@@ -61,7 +61,7 @@ class BetaFunctions:
     """
     One-loop β-functions for the cGFT couplings.
     
-    From IRHv18.md Eq. 1.13:
+    From IRH18.md Eq. 1.13:
     β_λ = (d_λ - 4)λ̃ + (9/8π²)λ̃²
     β_γ = (d_γ - 2)γ̃ + (3/4π²)λ̃γ̃
     β_μ = (d_μ - 6)μ̃ + (1/2π²)λ̃μ̃
@@ -167,8 +167,8 @@ class CosmicFixedPoint:
         C_H: Universal exponent
         
     References:
-        IRHv18.md Eq. 1.14: Fixed point values
-        IRHv18.md Eq. 1.16: C_H derivation
+        IRH18.md Eq. 1.14: Fixed point values
+        IRH18.md Eq. 1.16: C_H derivation
     """
     
     lambda_star: float = 48 * PI_SQUARED / 9
@@ -180,7 +180,7 @@ class CosmicFixedPoint:
         """
         Compute universal exponent C_H = 3λ̃*/2γ̃*.
         
-        From IRHv18.md Eq. 1.15-1.16:
+        From IRH18.md Eq. 1.15-1.16:
         C_H = β_λ/β_γ at fixed point = 3λ̃*/2γ̃*
         """
         return (3 * self.lambda_star) / (2 * self.gamma_star)
@@ -265,14 +265,14 @@ class StabilityAnalysis:
     Computes the stability matrix (Jacobian) and its eigenvalues
     to determine attractiveness properties.
     
-    From IRHv18.md Section 1.3:
+    From IRH18.md Section 1.3:
     - λ₁ = 6 (relevant, positive)
     - λ₂ = 2 (relevant, positive)
     - λ₃ = -4/3 (irrelevant, negative)
     
     References:
-        IRHv18.md §1.3.1: Stability matrix computation
-        IRHv18.md §1.3.2: Eigenvalues and attractiveness
+        IRH18.md §1.3.1: Stability matrix computation
+        IRH18.md §1.3.2: Eigenvalues and attractiveness
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -317,7 +317,7 @@ class StabilityAnalysis:
         """
         Compute eigenvalues (critical exponents) of stability matrix.
         
-        Expected values from IRHv18.md §1.3.2:
+        Expected values from IRH18.md §1.3.2:
         λ₁ = 6, λ₂ = 2, λ₃ = -4/3
         """
         M = self.compute_stability_matrix()
@@ -473,7 +473,7 @@ def compute_C_H_certified() -> Dict[str, any]:
     """
     Compute certified value of universal exponent C_H.
     
-    From IRHv18.md Eq. 1.15-1.16, C_H is defined as the ratio
+    From IRH18.md Eq. 1.15-1.16, C_H is defined as the ratio
     of beta function contributions at the fixed point.
     
     The certified value C_H = 0.045935703598 has been validated
@@ -484,7 +484,7 @@ def compute_C_H_certified() -> Dict[str, any]:
     """
     fp = CosmicFixedPoint()
     
-    # Certified value from IRHv18.md Eq. 1.16
+    # Certified value from IRH18.md Eq. 1.16
     # This value is the result of extensive numerical validation
     C_H_certified = 0.045935703598
     

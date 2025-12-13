@@ -3,10 +3,10 @@ Physical Constants for IRH v18.0
 ================================
 
 Analytical computation of fundamental physical constants from the
-Cosmic Fixed Point as described in IRHv18.md Section 3.
+Cosmic Fixed Point as described in IRH18.md Section 3.
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Section 3.2: Fine-structure constant (Eq. 3.4-3.5)
     - Section 3.2.3: Fermion masses (Eq. 3.6-3.8)
     - Section 2.3: Dark energy equation of state (Eq. 2.22-2.23)
@@ -17,7 +17,7 @@ Key Results:
     - All fermion masses to experimental precision
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §3.2.2: Exact prediction of α
         - §3.2.3-3.2.4: Fermion masses
         - §2.3.3: Equation of state w₀
@@ -75,15 +75,15 @@ class FineStructureConstant:
     """
     Analytical computation of fine-structure constant α.
     
-    From IRHv18.md Eq. 3.4:
+    From IRH18.md Eq. 3.4:
     1/α* = (4π²γ̃*/λ̃*) × (1 + μ̃*/48π²)
     
     The correction term (1 + μ̃*/48π²) arises from vacuum polarization
     by holographic fluctuations.
     
     References:
-        IRHv18.md §3.2.2: Exact prediction of α
-        IRHv18.md Eq. 3.4-3.5
+        IRH18.md §3.2.2: Exact prediction of α
+        IRH18.md Eq. 3.4-3.5
     """
     
     fixed_point: CosmicFixedPoint = None
@@ -140,7 +140,7 @@ class FermionMassCalculator:
     """
     Compute fermion masses from topological complexity.
     
-    From IRHv18.md Eq. 3.6-3.8:
+    From IRH18.md Eq. 3.6-3.8:
     y_f = √2 × K_f × √λ̃*
     v* = √(μ̃*/λ̃*) × ℓ₀⁻¹
     m_f = y_f × v*
@@ -149,9 +149,9 @@ class FermionMassCalculator:
     of the fermionic Vortex Wave Pattern.
     
     References:
-        IRHv18.md §3.2.1: Topological complexity
-        IRHv18.md §3.2.3-3.2.4: Mass computation
-        IRHv18.md Table 3.1: Mass predictions
+        IRH18.md §3.2.1: Topological complexity
+        IRH18.md §3.2.3-3.2.4: Mass computation
+        IRH18.md Table 3.1: Mass predictions
     """
     
     fixed_point: CosmicFixedPoint = None
@@ -261,14 +261,14 @@ class DarkEnergyPrediction:
     """
     Compute dark energy equation of state w₀.
     
-    From IRHv18.md Eq. 2.21-2.23:
+    From IRH18.md Eq. 2.21-2.23:
     w(z) = -1 + (μ̃*/96π²) × 1/(1+z)
     w₀ = w(z=0) = -1 + μ̃*/96π² = -1 + 1/6 = -5/6 (one-loop)
     w₀ = -0.91234567(8) (full non-perturbative)
     
     References:
-        IRHv18.md §2.3.3: Equation of state derivation
-        IRHv18.md Eq. 2.22-2.23
+        IRH18.md §2.3.3: Equation of state derivation
+        IRH18.md Eq. 2.22-2.23
     """
     
     fixed_point: CosmicFixedPoint = None
@@ -337,15 +337,15 @@ class CosmologicalConstantPrediction:
     """
     Compute cosmological constant Λ* from holographic hum.
     
-    From IRHv18.md Eq. 2.19:
+    From IRH18.md Eq. 2.19:
     Λ* = 1.1056 × 10⁻⁵² m⁻²
     
     This arises from the Dynamically Quantized Holographic Hum,
     the residual vacuum energy after exact cancellation.
     
     References:
-        IRHv18.md §2.3.1: Holographic Hum
-        IRHv18.md §2.3.2: Exact formula
+        IRH18.md §2.3.1: Holographic Hum
+        IRH18.md §2.3.2: Exact formula
     """
     
     def compute_lambda(self) -> Dict[str, float]:
@@ -355,7 +355,7 @@ class CosmologicalConstantPrediction:
         Returns:
             Dictionary with Λ* prediction
         """
-        # Certified value from IRHv18.md
+        # Certified value from IRH18.md
         lambda_predicted = 1.1056e-52  # m⁻²
         
         # Observed value

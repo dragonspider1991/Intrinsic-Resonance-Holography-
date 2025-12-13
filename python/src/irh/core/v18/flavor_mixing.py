@@ -9,7 +9,7 @@ Implements the derivation of flavor mixing matrices and neutrino sector:
 - CP violation phases
 
 THEORETICAL COMPLIANCE:
-    This implementation strictly follows docs/manuscripts/IRHv18.md
+    This implementation strictly follows docs/manuscripts/IRH18.md
     - Appendix E.2: CKM and PMNS matrices
     - Appendix E.3: Neutrino sector
     - Section 3.2: Fermion masses from topology
@@ -21,7 +21,7 @@ Key Results:
     - 12-digit precision for neutrino masses
 
 References:
-    docs/manuscripts/IRHv18.md:
+    docs/manuscripts/IRH18.md:
         - §3.2.3-3.2.4: Fermion masses
         - Appendix E.2: Flavor mixing from topology
         - Appendix E.3: Complete neutrino sector
@@ -95,8 +95,8 @@ class CKMMatrix:
     where U_u diagonalizes up-type masses and U_d down-type.
     
     References:
-        IRHv18.md Appendix E.2: CKM from topology
-        IRHv18.md §3.2: Flavor mixing mechanism
+        IRH18.md Appendix E.2: CKM from topology
+        IRH18.md §3.2: Flavor mixing mechanism
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -115,7 +115,7 @@ class CKMMatrix:
         # from which mixing angles can be derived via overlap integrals
         fp = self.fixed_point  # noqa: F841
         
-        # From IRHv18.md, angles are derived from fixed-point topology
+        # From IRH18.md, angles are derived from fixed-point topology
         # The exact values match experimental data
         theta_12 = 0.227366  # Cabibbo angle
         theta_23 = 0.04054
@@ -238,8 +238,8 @@ class PMNSMatrix:
     where the diagonal phases are Majorana phases.
     
     References:
-        IRHv18.md Appendix E.2: PMNS from topology
-        IRHv18.md Appendix E.3: Neutrino sector
+        IRH18.md Appendix E.2: PMNS from topology
+        IRH18.md Appendix E.3: Neutrino sector
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -248,7 +248,7 @@ class PMNSMatrix:
         """
         Compute PMNS mixing angles from fixed point.
         
-        From IRHv18.md, analytically predicted with 12-digit precision.
+        From IRH18.md, analytically predicted with 12-digit precision.
         
         Note: The values below are certified predictions from the manuscript.
         The derivation involves overlap integrals of topological defect
@@ -257,7 +257,7 @@ class PMNSMatrix:
         Returns:
             Dictionary with mixing angles
         """
-        # Certified predictions from IRHv18.md Appendix E.3
+        # Certified predictions from IRH18.md Appendix E.3
         # These match experimental values to within uncertainties
         # The consecutive digits are from the analytical derivation
         sin2_theta_12 = 0.306123456789
@@ -282,14 +282,14 @@ class PMNSMatrix:
         """
         Compute Dirac CP phase δ_CP for neutrinos.
         
-        Note: This is a certified prediction from IRHv18.md Appendix E.3.
+        Note: This is a certified prediction from IRH18.md Appendix E.3.
         The value emerges from the complex phases in the U(1)_φ factor
         of the cGFT and the relative orientation of topological defects.
         
         Returns:
             Dictionary with CP phase
         """
-        # Certified prediction from IRHv18.md Appendix E.3
+        # Certified prediction from IRH18.md Appendix E.3
         # The value is derived from fixed-point topology, not fitted
         delta_CP = 1.321234567890  # radians (≈ 75.7°)
         
@@ -394,8 +394,8 @@ class NeutrinoSector:
     - 12-digit precision predictions
     
     References:
-        IRHv18.md Appendix E.3: Complete neutrino sector
-        IRHv18.md §3.2: Mass generation mechanism
+        IRH18.md Appendix E.3: Complete neutrino sector
+        IRH18.md §3.2: Mass generation mechanism
     """
     
     fixed_point: CosmicFixedPoint = field(default_factory=CosmicFixedPoint)
@@ -404,7 +404,7 @@ class NeutrinoSector:
         """
         Determine neutrino mass hierarchy.
         
-        From IRHv18.md: Normal hierarchy is analytically proven.
+        From IRH18.md: Normal hierarchy is analytically proven.
         
         Returns:
             Dictionary with hierarchy information
@@ -420,7 +420,7 @@ class NeutrinoSector:
         """
         Compute absolute neutrino masses.
         
-        From IRHv18.md certified predictions.
+        From IRH18.md certified predictions.
         
         Note: The sum of masses is determined by the fixed-point couplings
         through the holographic measure term μ̃*. The individual masses
@@ -429,7 +429,7 @@ class NeutrinoSector:
         Returns:
             Dictionary with masses in eV
         """
-        # Sum of neutrino masses - certified prediction from IRHv18.md
+        # Sum of neutrino masses - certified prediction from IRH18.md
         # Derived from μ̃* through the seesaw-like mechanism in Appendix E.3
         sum_masses = 0.058145672301  # eV
         
@@ -466,7 +466,7 @@ class NeutrinoSector:
         """
         Determine Dirac vs Majorana nature.
         
-        From IRHv18.md: Neutrinos are analytically proven to be Majorana.
+        From IRH18.md: Neutrinos are analytically proven to be Majorana.
         
         Returns:
             Dictionary with nature determination

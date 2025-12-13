@@ -181,7 +181,7 @@ Intrinsic-Resonance-Holography-/
 │       └── v16/               # v16 tests (deprecated)
 ├── docs/
 │   ├── manuscripts/           # Theory manuscripts
-│   │   ├── IRHv18.md         # v18 definitive formulation (CURRENT)
+│   │   ├── IRH18.md         # v18 definitive formulation (CURRENT)
 │   │   └── IRHv16.md         # v16 theoretical framework (deprecated)
 │   ├── status/               # Phase status documents
 │   └── handoff/              # Agent handoff documents
@@ -279,7 +279,7 @@ Open http://localhost:5173 for interactive visualization.
 
 | Document | Description |
 |----------|-------------|
-| [IRHv18.md](docs/manuscripts/IRHv18.md) | Definitive theoretical formulation (CURRENT) |
+| [IRH18.md](docs/manuscripts/IRH18.md) | Definitive theoretical formulation (CURRENT) |
 | [IRHv16.md](docs/manuscripts/IRHv16.md) | Legacy implementation basis (DEPRECATED) |
 | [HarmonyOptimizer Numerical Methods](docs/HarmonyOptimizer_Numerical_Methods.md) | Public numerical workflow, truncation, and fixed-point certification |
 | [v18 Implementation Plan](docs/v18_IMPLEMENTATION_PLAN.md) | Development roadmap |
