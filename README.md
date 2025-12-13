@@ -85,6 +85,24 @@ print('✅ QFT emergence verified:', all(qft.verify_standard_model().values()))
 
 ---
 
+## 📜 Manuscript Alignment
+
+**Governing Theory**: `IRH20.3.md` (root) — The Unified Theory of Emergent Reality
+
+**Prior Baseline**: `docs/manuscripts/IRH18.md`
+
+**Traceability**: `docs/manuscripts/IRH20.3_traceability.md` — Equation-to-code mapping
+
+### Key IRH20.3 Updates (Sec. 1.3, 2.3)
+
+| Quantity | IRH20.3 Value | IRH18 Value | Equation |
+|----------|---------------|-------------|----------|
+| **w₀** (dark energy EoS) | **-0.91234567(8)** | -0.9998 | Eq. 2.23 |
+| **Stability eigenvalues** | **10, 4, 14/3** (all positive) | 6, 2, -4/3 | Sec. 1.3.2 |
+| **IR attractiveness** | **All 3 couplings relevant** | 2 relevant, 1 irrelevant | Sec. 1.3.2 |
+
+---
+
 ## 🔬 Key Predictions
 
 From the **Cosmic Fixed Point** — the unique global attractor:
@@ -99,7 +117,7 @@ From the **Cosmic Fixed Point** — the unique global attractor:
 | **m_H** (Higgs mass) | 125.25(10) GeV | 125.25(17) GeV | ✅ Derived |
 | **sin²θ_W** (Weinberg) | 0.231 | 0.23122(4) | ✅ Derived |
 | **Σmν** (neutrino sum) | 0.058 eV | < 0.12 eV | ✅ Normal hierarchy |
-| **w₀** (dark energy EoS) | -0.9998 | -0.827(63) | 🔬 Testable |
+| **w₀** (dark energy EoS) | **-0.91234567(8)** | -1.03(3) | 🔬 Testable |
 | **ξ** (LIV parameter) | 1.93×10⁻⁴ | — | 🔬 Testable |
 
 ---
@@ -149,10 +167,10 @@ print(f"Resolved: {resolution['resolved']}")  # True
 ```python
 from irh.core.v18 import DarkEnergyModule, EmergentSpacetime, EmergentQFT
 
-# Dark energy predictions
+# Dark energy predictions (IRH20.3 Eq. 2.23)
 de = DarkEnergyModule()
 analysis = de.compute_full_analysis()
-print(f"w₀ = {analysis['equation_of_state']['w0']:.4f}")  # -0.9998
+print(f"w₀ = {analysis['equation_of_state']['w0']:.8f}")  # -0.91234567 (not -1!)
 
 # Emergent spacetime
 st = EmergentSpacetime()
@@ -179,10 +197,12 @@ Intrinsic-Resonance-Holography-/
 │   └── tests/
 │       ├── v18/               # v18 tests (143 passing)
 │       └── v16/               # v16 tests (deprecated)
+├── IRH20.3.md                 # Governing theory document (current)
 ├── docs/
 │   ├── manuscripts/           # Theory manuscripts
-│   │   ├── IRH18.md         # v18 definitive formulation (CURRENT)
-│   │   └── IRHv16.md         # v16 theoretical framework (deprecated)
+│   │   ├── IRH18.md           # v18 baseline (prior)
+│   │   ├── IRH20.3_traceability.md  # Eq. → code → test mapping
+│   │   └── IRHv16.md          # v16 (deprecated)
 │   ├── status/               # Phase status documents
 │   └── handoff/              # Agent handoff documents
 ├── notebooks/                 # Interactive notebooks
