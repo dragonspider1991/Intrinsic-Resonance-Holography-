@@ -29,6 +29,7 @@ import sys
 import os
 import json
 import logging
+import shutil
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List, Optional
@@ -41,6 +42,23 @@ repo_root = Path(__file__).parent
 sys.path.insert(0, str(repo_root / 'python' / 'src'))
 
 import numpy as np
+
+# =============================================================================
+# Constants for Verification
+# =============================================================================
+
+# Universal constant C_H (certified value from IRH20.3.md Eq. 1.16)
+# This is derived from the Cosmic Fixed Point via HarmonyOptimizer
+C_H_CERTIFIED = 0.045935703598
+
+# Verification tolerances
+TOLERANCE_RELATIVE = 1e-6  # Default relative tolerance for comparisons
+TOLERANCE_STRICT = 1e-8    # Stricter tolerance for β-functions at fixed point
+TOLERANCE_NUMERICAL = 0.01  # Tolerance for numerical integration results
+
+# Monte Carlo sampling
+DEFAULT_RNG_SEED = 42      # For reproducible random sampling
+MC_SAMPLES_DEFAULT = 10000  # Default Monte Carlo sample size
 
 # =============================================================================
 # Output Directory and Logging Setup
@@ -261,7 +279,6 @@ class VerificationTracker:
             f.write(f"- **Pass Rate:** {100*summary['passed_checks']/max(1,summary['total_checks']):.1f}%\n")
         
         # Also write to latest
-        import shutil
         shutil.copy(DISCREPANCIES_FILE, LATEST_DISCREPANCIES)
 
 
@@ -319,7 +336,7 @@ class TheoryPrinter:
         if expected is not None:
             print(f"      Expected: {expected}")
             if isinstance(value, (int, float)) and isinstance(expected, (int, float)):
-                match = "✓ MATCH" if np.isclose(value, expected, rtol=1e-6) else "✗ MISMATCH"
+                match = "✓ MATCH" if np.isclose(value, expected, rtol=TOLERANCE_RELATIVE) else "✗ MISMATCH"
                 print(f"      Status:   {match}")
         if precision:
             print(f"      Precision: {precision}")
@@ -392,7 +409,7 @@ def verify_informational_group_manifold():
     TheoryPrinter.result("U(1)_φ identity phase", u1_identity.phi, expected=0.0)
     
     # Create random elements to demonstrate structure
-    rng = np.random.default_rng(42)
+    rng = np.random.default_rng(DEFAULT_RNG_SEED)
     ginf_random = GInfElement.random(rng)
     
     TheoryPrinter.result("Random G_inf element (SU(2) part)", ginf_random.su2.quaternion)
@@ -569,9 +586,6 @@ def verify_universal_constant_C_H():
     
     TheoryPrinter.computation("Computing C_H from certified fixed-point analysis")
     
-    # The certified value from HarmonyOptimizer numerical analysis
-    C_H_certified = 0.045935703598
-    
     # Note: The manuscript's simplified formula 3λ̃*/2γ̃* is a first-order approximation
     # The full computation involves additional corrections from the β-function ratio
     # that are captured in the HarmonyOptimizer's certified value
@@ -585,7 +599,7 @@ def verify_universal_constant_C_H():
     
     TheoryPrinter.result(
         "C_H (certified)",
-        f"{C_H_certified:.12f}",
+        f"{C_H_CERTIFIED:.12f}",
         precision="12+ decimal places (certified by HarmonyOptimizer)"
     )
     
@@ -596,11 +610,11 @@ def verify_universal_constant_C_H():
     )
     
     # Verify the code uses the certified value
-    matches = np.isclose(certified_result['C_H'], C_H_certified, rtol=1e-10)
+    matches = np.isclose(certified_result['C_H'], C_H_CERTIFIED, rtol=1e-10)
     
     if matches:
         TheoryPrinter.success(
-            "Universal constant C_H = 0.045935703598 certified to 12+ decimal precision"
+            f"Universal constant C_H = {C_H_CERTIFIED} certified to 12+ decimal precision"
         )
     
     return matches
@@ -1037,12 +1051,11 @@ def verify_lorentz_invariance_violation():
     
     TheoryPrinter.computation("Computing LIV parameter ξ from C_H")
     
-    C_H = 0.045935703598
-    xi_expected = C_H / (24 * PI_SQUARED)
+    xi_expected = C_H_CERTIFIED / (24 * PI_SQUARED)
     
     result = liv.compute_xi()
     
-    TheoryPrinter.step(1, f"C_H = {C_H:.12f}")
+    TheoryPrinter.step(1, f"C_H = {C_H_CERTIFIED:.12f}")
     TheoryPrinter.step(2, f"24π² = {24 * PI_SQUARED:.10f}")
     TheoryPrinter.step(3, f"ξ = C_H/(24π²) = {xi_expected:.10e}")
     
@@ -1114,11 +1127,11 @@ def verify_emergent_quantum_mechanics():
     # Verify Born rule with Monte Carlo
     TheoryPrinter.computation("Verifying Born rule with Monte Carlo sampling")
     
-    rng = np.random.default_rng(42)
+    rng = np.random.default_rng(DEFAULT_RNG_SEED)
     psi = rng.standard_normal(4) + 1j * rng.standard_normal(4)
     psi = psi / np.linalg.norm(psi)
     
-    verification = born.verify_born_rule(psi, num_samples=10000, rng=rng)
+    verification = born.verify_born_rule(psi, num_samples=MC_SAMPLES_DEFAULT, rng=rng)
     
     TheoryPrinter.result(
         "Born rule verified (Monte Carlo)?",
