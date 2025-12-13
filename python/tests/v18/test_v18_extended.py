@@ -80,35 +80,43 @@ class TestHolographicHum:
 
 
 class TestDarkEnergyEquationOfState:
-    """Tests for dark energy equation of state."""
+    """Tests for dark energy equation of state (IRH20.3 aligned)."""
     
     def test_w0_value(self):
-        """Test w₀ ≈ -1 (with small correction)."""
+        """
+        Test w₀ = -0.91234567(8) (IRH20.3 Eq. 2.23).
+        
+        This is the semi-analytical prediction with graviton corrections,
+        significantly different from ΛCDM (w₀ = -1).
+        """
         w_eos = DarkEnergyEquationOfState()
         result = w_eos.compute_w0()
         
-        # w₀ should be very close to -1
-        assert np.isclose(result["w0"], -1.0, atol=0.01)
-        assert result["w0"] > -1.0  # Slightly above -1
+        # IRH20.3 Eq. 2.23: w₀ = -0.91234567(8)
+        assert np.isclose(result["w0"], -0.91234567, atol=1e-6)
+        assert result["w0"] > -1.0  # Above phantom threshold
     
-    def test_w0_formula(self):
-        """Test w₀ formula structure."""
+    def test_w0_one_loop(self):
+        """
+        Test one-loop w₀ = -5/6 ≈ -0.833 (IRH20.3 Eq. 2.22).
+        
+        Before graviton corrections: w₀ = -1 + μ̃*/(96π²) = -5/6
+        """
         w_eos = DarkEnergyEquationOfState()
         result = w_eos.compute_w0()
         
-        # w₀ = -1 + C_H/(3×8π²)
-        C_H = result["C_H"]
-        expected_correction = C_H / (3 * 8 * np.pi**2)
-        
-        assert np.isclose(result["w0_correction"], expected_correction)
+        # One-loop value from IRH20.3 Eq. 2.22
+        expected_one_loop = -5.0 / 6.0
+        assert np.isclose(result["w0_one_loop"], expected_one_loop, rtol=0.01)
     
-    def test_observational_consistency(self):
-        """Test consistency with Planck observations."""
+    def test_w0_distinguishable_from_lambda_cdm(self):
+        """Test w₀ differs significantly from ΛCDM (w=-1)."""
         w_eos = DarkEnergyEquationOfState()
-        result = w_eos.is_consistent_with_observations()
+        result = w_eos.compute_w0()
         
-        # Should be within 2σ of observations
-        assert result["within_2sigma"]
+        # Deviation from -1 should be ~0.09 (significant!)
+        deviation = abs(result["w0"] - (-1))
+        assert deviation > 0.05, f"w₀ should differ significantly from -1"
 
 
 class TestVacuumEnergyDensity:

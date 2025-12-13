@@ -8,10 +8,15 @@ full ontological and mathematical closure.
 This is the **current and recommended** IRH implementation.
 Previous versions (v16, v17) are deprecated.
 
-Key Achievements:
+**Governing Theory**: IRH20.3.md (root) - The Unified Theory of Emergent Reality
+**Prior Baseline**: docs/manuscripts/IRH18.md
+
+Key Achievements (IRH20.3):
     - 12+ decimal precision in fundamental constant derivation
     - Complete Standard Model emergence from topology (β₁=12, n_inst=3)
     - Analytical derivations without free parameters
+    - w₀ = -0.91234567(8) dark energy equation of state (Eq. 2.23)
+    - Stability eigenvalues: 10, 4, 14/3 - all positive (Sec. 1.3.2)
     - 143 passing tests validating all physics modules
 
 Modules:
@@ -47,8 +52,9 @@ Quick Start:
     >>> assert fp.verify()["is_fixed_point"]
 
 References:
-    docs/manuscripts/IRH18.md: Complete theoretical framework
-    docs/v18_IMPLEMENTATION_PLAN.md: Implementation roadmap
+    IRH20.3.md (root): Governing theory document
+    docs/manuscripts/IRH18.md: Prior baseline
+    docs/manuscripts/IRH20.3_traceability.md: Equation-to-code mapping
 """
 
 # Version info
@@ -89,6 +95,9 @@ from .rg_flow import (
     RGFlowSolution,
     integrate_rg_flow,
     compute_C_H_certified,
+    STABILITY_EIGENVALUE_1,
+    STABILITY_EIGENVALUE_2,
+    STABILITY_EIGENVALUE_3,
 )
 
 from .spectral_dimension import (
@@ -180,6 +189,9 @@ from .dark_energy import (
     DarkEnergyModule,
     compute_dark_energy_summary,
     DARK_ENERGY_OBSERVATIONS,
+    W0_IRH20_3,
+    W0_IRH20_3_UNCERTAINTY,
+    W0_ONE_LOOP,
 )
 
 from .emergent_spacetime import (
@@ -207,141 +219,131 @@ C_H_V18 = 0.045935703598
 
 __all__ = [
     # Group manifold
-    'SU2Element',
-    'U1Element',
-    'GInfElement',
-    'compute_ncd',
-    'compute_ncd_distance',
-    'haar_integrate_su2',
-    'haar_integrate_ginf',
-    
+    "SU2Element",
+    "U1Element",
+    "GInfElement",
+    "compute_ncd",
+    "compute_ncd_distance",
+    "haar_integrate_su2",
+    "haar_integrate_ginf",
     # cGFT field
-    'cGFTField',
-    'cGFTFieldDiscrete',
-    'BiLocalField',
-    'CondensateState',
-    'compute_fluctuation_field',
-    
+    "cGFTField",
+    "cGFTFieldDiscrete",
+    "BiLocalField",
+    "CondensateState",
+    "compute_fluctuation_field",
     # cGFT action
-    'cGFTCouplings',
-    'InteractionKernel',
-    'cGFTAction',
-    'compute_effective_laplacian',
-    'compute_harmony_functional',
-    
+    "cGFTCouplings",
+    "InteractionKernel",
+    "cGFTAction",
+    "compute_effective_laplacian",
+    "compute_harmony_functional",
     # RG flow
-    'BetaFunctions',
-    'CosmicFixedPoint',
-    'find_fixed_point',
-    'StabilityAnalysis',
-    'RGFlowSolution',
-    'integrate_rg_flow',
-    'compute_C_H_certified',
-    
+    "BetaFunctions",
+    "CosmicFixedPoint",
+    "find_fixed_point",
+    "StabilityAnalysis",
+    "RGFlowSolution",
+    "integrate_rg_flow",
+    "compute_C_H_certified",
+    "STABILITY_EIGENVALUE_1",
+    "STABILITY_EIGENVALUE_2",
+    "STABILITY_EIGENVALUE_3",
     # Spectral dimension
-    'SpectralDimensionFlow',
-    'compute_spectral_dimension_heat_kernel',
-    'AsymptoticSafetySignature',
-    'verify_theorem_2_1',
-    'D_SPEC_ONE_LOOP',
-    'D_SPEC_IR',
-    
+    "SpectralDimensionFlow",
+    "compute_spectral_dimension_heat_kernel",
+    "AsymptoticSafetySignature",
+    "verify_theorem_2_1",
+    "D_SPEC_ONE_LOOP",
+    "D_SPEC_IR",
     # Physical constants
-    'FineStructureConstant',
-    'FermionMassCalculator',
-    'DarkEnergyPrediction',
-    'CosmologicalConstantPrediction',
-    'compute_all_predictions',
-    'ALPHA_INVERSE_CODATA',
-    'TOPOLOGICAL_COMPLEXITY',
-    
+    "FineStructureConstant",
+    "FermionMassCalculator",
+    "DarkEnergyPrediction",
+    "CosmologicalConstantPrediction",
+    "compute_all_predictions",
+    "ALPHA_INVERSE_CODATA",
+    "TOPOLOGICAL_COMPLEXITY",
     # Topology (Standard Model emergence)
-    'BettiNumberFlow',
-    'InstantonNumberFlow',
-    'VortexWavePattern',
-    'EmergentSpatialManifold',
-    'StandardModelTopology',
-    'SM_GAUGE_GENERATORS',
-    'TOTAL_SM_GENERATORS',
-    'NUM_FERMION_GENERATIONS',
-    
+    "BettiNumberFlow",
+    "InstantonNumberFlow",
+    "VortexWavePattern",
+    "EmergentSpatialManifold",
+    "StandardModelTopology",
+    "SM_GAUGE_GENERATORS",
+    "TOTAL_SM_GENERATORS",
+    "NUM_FERMION_GENERATIONS",
     # Emergent gravity
-    'EmergentMetric',
-    'EinsteinEquations',
-    'GravitonPropagator',
-    'HigherCurvatureSuppression',
-    'LorentzInvarianceViolation',
-    'compute_emergent_gravity_summary',
-    'PLANCK_LENGTH',
-    'PLANCK_MASS',
-    'PLANCK_ENERGY',
-    'LAMBDA_OBSERVED',
-    'G_NEWTON',
-    
+    "EmergentMetric",
+    "EinsteinEquations",
+    "GravitonPropagator",
+    "HigherCurvatureSuppression",
+    "LorentzInvarianceViolation",
+    "compute_emergent_gravity_summary",
+    "PLANCK_LENGTH",
+    "PLANCK_MASS",
+    "PLANCK_ENERGY",
+    "LAMBDA_OBSERVED",
+    "G_NEWTON",
     # Flavor mixing
-    'CKMMatrix',
-    'PMNSMatrix',
-    'NeutrinoSector',
-    'compute_flavor_mixing_summary',
-    'CKM_EXPERIMENTAL',
-    'PMNS_ANGLES_EXP',
-    'NEUTRINO_MASS_SPLITTINGS',
-    
+    "CKMMatrix",
+    "PMNSMatrix",
+    "NeutrinoSector",
+    "compute_flavor_mixing_summary",
+    "CKM_EXPERIMENTAL",
+    "PMNS_ANGLES_EXP",
+    "NEUTRINO_MASS_SPLITTINGS",
     # Electroweak sector
-    'HiggsBoson',
-    'GaugeBosonMasses',
-    'WeinbergAngle',
-    'FermiConstant',
-    'ElectroweakSector',
-    'EW_EXPERIMENTAL',
-    
+    "HiggsBoson",
+    "GaugeBosonMasses",
+    "WeinbergAngle",
+    "FermiConstant",
+    "ElectroweakSector",
+    "EW_EXPERIMENTAL",
     # Strong CP problem
-    'ThetaAngle',
-    'PecceiQuinnSymmetry',
-    'AlgorithmicAxion',
-    'StrongCPResolution',
-    'STRONG_CP_CONSTANTS',
-    'QCD_PARAMETERS',
-    
+    "ThetaAngle",
+    "PecceiQuinnSymmetry",
+    "AlgorithmicAxion",
+    "StrongCPResolution",
+    "STRONG_CP_CONSTANTS",
+    "QCD_PARAMETERS",
     # Emergent quantum mechanics
-    'ElementaryAlgorithmicTransformation',
-    'QuantumAmplitudeEmergence',
-    'BornRule',
-    'Decoherence',
-    'LindbladEquation',
-    'EmergentQuantumMechanics',
-    
+    "ElementaryAlgorithmicTransformation",
+    "QuantumAmplitudeEmergence",
+    "BornRule",
+    "Decoherence",
+    "LindbladEquation",
+    "EmergentQuantumMechanics",
     # Dark energy and Holographic Hum
-    'HolographicHum',
-    'DarkEnergyEquationOfState',
-    'VacuumEnergyDensity',
-    'CosmologicalEvolution',
-    'DarkEnergyModule',
-    'compute_dark_energy_summary',
-    'DARK_ENERGY_OBSERVATIONS',
-    
+    "HolographicHum",
+    "DarkEnergyEquationOfState",
+    "VacuumEnergyDensity",
+    "CosmologicalEvolution",
+    "DarkEnergyModule",
+    "compute_dark_energy_summary",
+    "DARK_ENERGY_OBSERVATIONS",
+    "W0_IRH20_3",
+    "W0_IRH20_3_UNCERTAINTY",
+    "W0_ONE_LOOP",
     # Emergent spacetime
-    'LorentzianSignatureEmergence',
-    'TimeEmergence',
-    'DiffeomorphismInvariance',
-    'EmergentSpacetime',
-    'compute_spacetime_summary',
-    
+    "LorentzianSignatureEmergence",
+    "TimeEmergence",
+    "DiffeomorphismInvariance",
+    "EmergentSpacetime",
+    "compute_spacetime_summary",
     # Emergent QFT
-    'ParticleType',
-    'GaugeGroup',
-    'EmergentParticle',
-    'GravitonIdentification',
-    'GaugeBosonIdentification',
-    'FermionIdentification',
-    'EffectiveLagrangian',
-    'EmergentQFT',
-    'compute_qft_summary',
-    
+    "ParticleType",
+    "GaugeGroup",
+    "EmergentParticle",
+    "GravitonIdentification",
+    "GaugeBosonIdentification",
+    "FermionIdentification",
+    "EffectiveLagrangian",
+    "EmergentQFT",
+    "compute_qft_summary",
     # Constants
-    'C_H_V18',
-    
+    "C_H_V18",
     # Version info
-    '__version__',
-    '__status__',
+    "__version__",
+    "__status__",
 ]

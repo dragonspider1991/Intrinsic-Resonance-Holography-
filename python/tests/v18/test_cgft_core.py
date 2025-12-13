@@ -312,19 +312,27 @@ class TestRGFlow:
         assert verification["is_fixed_point"]
     
     def test_stability_eigenvalues(self):
-        """Test stability matrix eigenvalues."""
+        """
+        Test stability matrix eigenvalues (IRH20.3 Sec. 1.3.2).
+        
+        From IRH20.3: eigenvalues are λ₁=10, λ₂=4, λ₃=14/3 ≈ 4.67
+        All positive → IR-attractive for all couplings.
+        """
         stability = StabilityAnalysis()
         eigenvalues = stability.compute_eigenvalues()
         
-        # Sort eigenvalues
-        eigenvalues = np.sort(eigenvalues)[::-1]
+        # Sort eigenvalues (descending)
+        eigenvalues = np.sort(np.real(eigenvalues))[::-1]
         
-        # Expected: 6, 2, -4/3
-        expected = [6.0, 2.0, -4/3]
+        # IRH20.3 Sec. 1.3.2 expected eigenvalues
+        expected = [10.0, 14.0/3, 4.0]  # 10, 4.67, 4
         
         for i, (actual, exp) in enumerate(zip(eigenvalues, expected)):
             assert np.isclose(actual, exp, rtol=0.01), \
                 f"Eigenvalue {i}: expected {exp}, got {actual}"
+        
+        # All eigenvalues should be positive (IRH20.3)
+        assert np.all(np.real(eigenvalues) > 0), "All eigenvalues should be positive"
     
     def test_globally_attractive(self):
         """Test fixed point is globally attractive."""
